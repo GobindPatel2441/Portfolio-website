@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="gold">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Gobind Patel | AI & Systems Architect Portfolio</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Gobind Patel — B.Tech Computer Science & Engineering (AI/ML) at Sri Sri University. Architecting Emotion-Aware Multimodal AI, Production RAG Pipelines, and Enterprise Core Java Systems." />
+  <meta name="keywords" content="Gobind Patel, AI Engineer, Machine Learning, Generative AI, RAG, Sentix, LangChain, FAISS, Groq, DeepFace, Java, Python, Flask, FastAPI, Portfolio, Bhubaneswar" />
+  <meta name="author" content="Gobind Patel" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Gobind Patel | AI & Systems Architect" />
+  <meta property="og:description" content="Explore flagship projects including Sentix Emotion AI, Medical RAG Assistant, and the CHAKRAVYUH 1.0 National Hackathon 2nd Prize Memory Continuity System." />
+  <meta property="og:image" content="assets/gobind-patel.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2308080a'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='44' fill='%23D4AF37'>GP</text></svg>" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css?v=4" />
+  <link rel="stylesheet" href="css/components.css?v=9" />
+  <link rel="stylesheet" href="css/animations.css?v=4" />
+  <link rel="stylesheet" href="css/responsive.css?v=6" />
+  <link rel="stylesheet" href="css/ambient-audio.css?v=1" />
+</head>
+<body>
+
+  <!-- Interactive Constellation & Dot-Matrix Background Layer -->
+  <canvas id="interactive-matrix-canvas"></canvas>
+  <div class="ambient-noise-overlay"></div>
+  <div class="ambient-glow-orb ambient-glow-1"></div>
+  <div class="ambient-glow-orb ambient-glow-2"></div>
+
+  <!-- Vertical Section Indicator Dock (Right Edge) -->
+  <aside class="section-nav-dock" aria-label="Section Navigation">
+    <a href="#hero" class="section-nav-item active" title="00 Hero">
+      <span class="section-nav-label">00 // INTRO</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#about" class="section-nav-item" title="01 About">
+      <span class="section-nav-label">01 // ABOUT</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#projects" class="section-nav-item" title="02 Projects">
+      <span class="section-nav-label">02 // WORK</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#ai-terminal" class="section-nav-item" title="03 AI Lab">
+      <span class="section-nav-label">03 // AI LAB</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#skills" class="section-nav-item" title="04 Skills">
+      <span class="section-nav-label">04 // MATRIX</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#experience" class="section-nav-item" title="05 Timeline">
+      <span class="section-nav-label">05 // TIMELINE</span>
+      <span class="section-nav-dot"></span>
+    </a>
+    <a href="#contact" class="section-nav-item" title="06 Contact">
+      <span class="section-nav-label">06 // CONTACT</span>
+      <span class="section-nav-dot"></span>
+    </a>
+  </aside>
+
+  <!-- =================================================================
+       1. FLOATING NAVIGATION BAR WITH ATMOSPHERE SWITCHER
+       ================================================================= -->
+  <header class="navbar-wrapper">
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="#hero" class="nav-brand" aria-label="Gobind Patel Home">
+        <div class="brand-monogram">
+          <img src="assets/gp-logo-animated.gif" alt="GP. Logo" class="brand-monogram-gif" width="34" height="34" />
+        </div>
+        <span>GOBIND</span>
+      </a>
+
+      <ul class="nav-links" id="nav-links-menu" role="menubar">
+        <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
+        <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
+        <li role="none"><a href="#ai-terminal" class="nav-link" role="menuitem">AI Lab</a></li>
+        <li role="none"><a href="#skills" class="nav-link" role="menuitem">Skills</a></li>
+        <li role="none"><a href="#experience" class="nav-link" role="menuitem">Timeline</a></li>
+        <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+        <li class="mobile-drawer-actions" role="none">
+          <button class="btn btn-secondary btn-sm mobile-cmd-btn" onclick="window.CommandMenu && window.CommandMenu.toggle(); document.querySelector('.nav-links').classList.remove('mobile-open'); document.body.classList.remove('nav-drawer-open');">
+            <span>⌘K COMMAND MENU</span>
+          </button>
+          <a href="#contact" class="btn btn-primary btn-sm view-resume-btn" onclick="document.querySelector('.nav-links').classList.remove('mobile-open'); document.body.classList.remove('nav-drawer-open');">
+            <span>RESUME (PDF) ↓</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Interactive Atmosphere Theme Switcher Dock -->
+        <div class="theme-switcher-dock" title="Switch Atmospheric Palette">
+          <button class="theme-btn theme-btn-gold active" data-theme="gold" title="Cinematic Gold (Editorial)" aria-label="Cinematic Gold Theme"></button>
+          <button class="theme-btn theme-btn-obsidian" data-theme="obsidian" title="Obsidian Noir (Minimalist)" aria-label="Obsidian Theme"></button>
+          <button class="theme-btn theme-btn-emerald" data-theme="emerald" title="Emerald Horizon (Jade)" aria-label="Emerald Theme"></button>
+          <button class="theme-btn theme-btn-cyber" data-theme="cyber" title="Celestial Cobalt (Navy)" aria-label="Cyber Cobalt Theme"></button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-toggle" class="btn-icon mobile-menu-toggle" style="display: none;" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="nav-links-menu">
+          <svg class="hamburger-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg class="close-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- =================================================================
+         2. HERO SECTION (MONUMENTAL CONDENSED TYPOGRAPHY)
+         ================================================================= -->
+    <section id="hero" class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Hero Left Column -->
+          <div class="hero-content">
+            <div class="hero-status-pill reveal-init delay-1">
+              <span class="status-dot"></span>
+              <span>AVAILABLE FOR AI/ML & SOFTWARE ROLES • CLASS OF 2027</span>
+            </div>
+
+            <!-- Monumental Condensed Title with Pure CSS Multi-Phrase Typing Engine -->
+            <h1 class="hero-title-monumental">
+              <span class="title-line-1 reveal-init delay-1">I ARCHITECT</span>
+              <div class="css-typewriter-wrapper reveal-init delay-2">
+                <!-- Zero-Layout-Shift Ghost Width Reservation -->
+                <span class="css-typewriter-ghost">CORE JAVA ARCHITECTURES.</span>
+                <span class="css-typewriter-phrase phrase-1">INTELLIGENT SYSTEMS.</span>
+                <span class="css-typewriter-phrase phrase-2">MULTIMODAL AI AGENTS.</span>
+                <span class="css-typewriter-phrase phrase-3">CLINICAL RAG ENGINES.</span>
+                <span class="css-typewriter-phrase phrase-4">CORE JAVA ARCHITECTURES.</span>
+              </div>
+            </h1>
+
+            <!-- Subtitle Technologies -->
+            <div class="hero-eyebrow-tech reveal-init delay-2">
+              <span>AI & GENERATIVE SYSTEMS</span>
+              <span class="bullet-dot">•</span>
+              <span>CORE JAVA & DISTRIBUTED BACKEND</span>
+              <span class="bullet-dot">•</span>
+              <span>FULL STACK</span>
+            </div>
+
+            <!-- Bespoke Human Narrative -->
+            <p class="hero-editorial-desc reveal-init delay-3">
+              I'm <strong>Gobind Patel</strong> — a B.Tech Computer Science & Engineering (AI/ML) scholar at <strong>Sri Sri University</strong> (CGPA: 8.89). I bridge multimodal vision telemetry with empathetic LLM reasoning, high-throughput vector RAG pipelines, and resilient enterprise architectures.
+            </p>
+
+            <div class="hero-ctas reveal-init delay-4">
+              <a href="#projects" class="btn btn-primary">
+                <span>EXPLORE MY WORK ↗</span>
+              </a>
+
+              <a href="#ai-terminal" class="btn btn-terminal">
+                <span>INTERACTIVE AI LAB ↗</span>
+              </a>
+
+              <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-secondary">
+                <span>DOWNLOAD RESUME ↓</span>
+              </a>
+            </div>
+
+            <!-- 4-Item Concise Metrics Strip -->
+            <div class="hero-stats">
+              <div class="stat-item reveal-init delay-1">
+                <div class="stat-value" data-target="8.89" data-decimal="true">8.89</div>
+                <div class="stat-label">B.Tech CGPA</div>
+              </div>
+              <div class="stat-item reveal-init delay-2">
+                <div class="stat-value" data-target="2" data-suffix="nd Prize">2nd Prize</div>
+                <div class="stat-label">Chakravyuh Hackathon</div>
+              </div>
+              <div class="stat-item reveal-init delay-3">
+                <div class="stat-value" data-target="11" data-suffix="+">11+</div>
+                <div class="stat-label">Indic Dialects AI</div>
+              </div>
+              <div class="stat-item reveal-init delay-4">
+                <div class="stat-value" data-target="15" data-suffix="ms">&lt; 15ms</div>
+                <div class="stat-label">FAISS Vector Latency</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Right Column: Cinematic Portrait Frame -->
+          <div class="portrait-container reveal-init reveal-right delay-1">
+            <div class="portrait-conic-glow"></div>
+
+            <div class="liquid-glass-card">
+              <div class="glass-specular"></div>
+
+              <div class="portrait-img-wrapper">
+                <img src="assets/gobind-patel.png" alt="Gobind Patel" class="portrait-img" />
+              </div>
+
+              <!-- Floating Trophy Badge -->
+              <div class="portrait-floating-badge badge-top-right floating-anim-1 reveal-init delay-3">
+                <div class="badge-icon-box">🏆</div>
+                <div>
+                  <div class="badge-text-title">2ND PRIZE WINNER</div>
+                  <div class="badge-text-sub">CHAKRAVYUH 1.0 (36h Hackathon)</div>
+                </div>
+              </div>
+
+              <!-- Floating Tech Badge -->
+              <div class="portrait-floating-badge badge-bottom-left floating-anim-2 reveal-init delay-4">
+                <div class="badge-icon-box">⚡</div>
+                <div>
+                  <div class="badge-text-title">AI/ML & CORE JAVA</div>
+                  <div class="badge-text-sub">LangChain • FAISS • PyTorch</div>
+                </div>
+              </div>
+
+              <!-- Glass Mode Controls -->
+              <div class="portrait-card-footer">
+                <span class="glass-shading-label">Glass Shading</span>
+                <div class="glass-modes-toggle">
+                  <button class="mode-btn active" data-mode="crystal">Crystal</button>
+                  <button class="mode-btn" data-mode="frosted">Frosted</button>
+                  <button class="mode-btn" data-mode="holo">Holo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         ACETERNITY INFINITE TECH TICKER RIBBON
+         Hardware-accelerated continuous 60 FPS marquee loop
+         ================================================================= -->
+    <div class="marquee-ribbon-wrapper reveal-init delay-1" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-item"><span class="marquee-dot"></span><span>LLAMA 3 (OLLAMA)</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>68-PT DEEPFACE TELEMETRY</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>FAISS VECTOR RAG</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>CORE JAVA OOP &amp; DESIGN PATTERNS</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>CHAKRAVYUH 1.0 2ND PRIZE</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>FASTAPI &amp; FLASK MICROSERVICES</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>NLLB-200 11 INDIC DIALECTS</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>GROQ LPU 150+ TOK/S</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>DOCKER CONTAINERIZATION</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>SRI SRI UNIVERSITY CGPA 8.89</span></div>
+        <!-- Duplicate for seamless infinite loop -->
+        <div class="marquee-item"><span class="marquee-dot"></span><span>LLAMA 3 (OLLAMA)</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>68-PT DEEPFACE TELEMETRY</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>FAISS VECTOR RAG</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>CORE JAVA OOP &amp; DESIGN PATTERNS</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>CHAKRAVYUH 1.0 2ND PRIZE</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>FASTAPI &amp; FLASK MICROSERVICES</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>NLLB-200 11 INDIC DIALECTS</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>GROQ LPU 150+ TOK/S</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>DOCKER CONTAINERIZATION</span></div>
+        <div class="marquee-item"><span class="marquee-dot"></span><span>SRI SRI UNIVERSITY CGPA 8.89</span></div>
+      </div>
+    </div>
+
+    <!-- =================================================================
+         3. SECTION 01: ABOUT ME (EDITORIAL PHILOSOPHY)
+         ================================================================= -->
+    <section id="about" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">01 / ABOUT ME</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">I DON'T JUST WRITE CODE.</span>
+          <span class="title-line-2">I BUILD WHAT'S NEXT.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Specializing in multimodal deep learning pipelines, high-throughput vector RAG architectures, and enterprise software engineering.
+        </p>
+
+        <!-- 3-Pillar Architectural Breakdown -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+          
+          <div class="timeline-card spotlight-card reveal-init reveal-scale delay-1">
+            <div style="font-family: var(--font-monumental); font-size: 2.2rem; color: var(--accent-primary); line-height: 0.8; margin-bottom: 0.75rem;">01</div>
+            <h3 style="font-family: var(--font-monumental); font-size: 1.6rem; color: #fff; text-transform: uppercase; margin-bottom: 0.75rem;">Multimodal Vision & Empathy</h3>
+            <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.75;">
+              In <strong>Sentix</strong>, I synchronized facial landmark emotion detection (DeepFace) with Llama 3 empathy generation via Ollama, combined with bidirectional NLLB-200 translation across 11 Indian languages to make AI emotionally and culturally perceptive.
+            </p>
+          </div>
+
+          <div class="timeline-card spotlight-card reveal-init reveal-scale delay-2">
+            <div style="font-family: var(--font-monumental); font-size: 2.2rem; color: var(--accent-primary); line-height: 0.8; margin-bottom: 0.75rem;">02</div>
+            <h3 style="font-family: var(--font-monumental); font-size: 1.6rem; color: #fff; text-transform: uppercase; margin-bottom: 0.75rem;">Sub-Second Clinical RAG</h3>
+            <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.75;">
+              In my <strong>Medical AI Assistant</strong>, I engineered high-speed retrieval pipelines leveraging FAISS vector similarity and HuggingFace sentence-transformers paired with Groq-accelerated LPU inference (150+ tokens/sec) for verified, hallucination-resistant clinical synthesis.
+            </p>
+          </div>
+
+          <div class="timeline-card spotlight-card reveal-init reveal-scale delay-3">
+            <div style="font-family: var(--font-monumental); font-size: 2.2rem; color: var(--accent-primary); line-height: 0.8; margin-bottom: 0.75rem;">03</div>
+            <h3 style="font-family: var(--font-monumental); font-size: 1.6rem; color: #fff; text-transform: uppercase; margin-bottom: 0.75rem;">Core Java & System Rigor</h3>
+            <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.75;">
+              Beyond machine learning models, I possess strong fundamentals in <strong>Core Java</strong> (OOP, Polymorphism, Collections, Singleton & Factory Design Patterns), Python backend microservices with FastAPI and Flask, Docker containerization, and relational SQL databases.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Academic Foundations Banner -->
+        <div class="reveal-init delay-3" style="margin-top: 2.5rem; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: var(--radius-lg); padding: clamp(1.25rem, 3vw, 2.25rem); backdrop-filter: blur(16px);">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div>
+              <div style="font-family: var(--font-editorial); font-size: 0.68rem; letter-spacing: 0.25em; color: var(--accent-primary); text-transform: uppercase; margin-bottom: 0.35rem;">University Education</div>
+              <div style="font-family: var(--font-monumental); font-size: 1.75rem; color: #fff; text-transform: uppercase; line-height: 1;">B.Tech in Computer Science & Engineering (AI/ML)</div>
+              <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.4rem;">Sri Sri University, Cuttack (2023–2027)</div>
+              <div style="margin-top: 0.75rem; display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; background: rgba(212,175,55,0.08); border: 1px solid var(--border-subtle); color: var(--accent-highlight); padding: 0.25rem 0.75rem; border-radius: var(--radius-full);">CGPA: 8.89 / 10 (Up to 6th Semester)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-editorial); font-size: 0.68rem; letter-spacing: 0.25em; color: var(--accent-primary); text-transform: uppercase; margin-bottom: 0.35rem;">Academic Foundations</div>
+              <div style="font-family: var(--font-monumental); font-size: 1.75rem; color: #fff; text-transform: uppercase; line-height: 1;">Sai International School, Bhubaneswar</div>
+              <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.4rem;">Class XII (Science CBSE, 2023): <strong style="color: var(--accent-highlight);">86%</strong></div>
+              <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.2rem;">Class X (CBSE, 2021): <strong style="color: var(--accent-highlight);">94.2%</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================
+         4. SECTION 02: SELECTED WORK (STRUCTURED METRICS GRID)
+         ================================================================= -->
+    <section id="projects" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">02 / SELECTED WORK</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">FLAGSHIP</span>
+          <span class="title-line-2">ARCHITECTURES.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Production-grade neural empathy systems, accelerated clinical retrieval, and national hackathon-winning architectures.
+        </p>
+
+        <!-- Fluid Project Chapter Showcase (Ported from ex/cinematic-portfolio ScrollStack) -->
+        <div class="scroll-stack-scroller">
+          <div class="scroll-stack-inner">
+            
+            <!-- PROJECT 01: SENTIX -->
+            <article class="project-card scroll-stack-card" data-project-id="sentix" id="project-sentix">
+              <!-- Top Gold Rim Light Flare & Focal Sweep -->
+              <div class="card-rim-light"></div>
+              <div class="card-focal-sweep" aria-hidden="true"></div>
+              
+              <!-- Minimal L-Corner Brackets -->
+              <div class="corner-bracket bracket-tl"></div>
+              <div class="corner-bracket bracket-tr"></div>
+              <div class="corner-bracket bracket-bl"></div>
+              <div class="corner-bracket bracket-br"></div>
+
+              <!-- Oversized Background Watermark Number -->
+              <span class="project-watermark-num">01</span>
+
+              <div class="project-visual-col">
+                <div class="project-clip-reveal" data-project-target="sentix" title="Click to view Sentix architecture breakdown">
+                  <img src="assets/project-sentix.jpg" alt="Sentix Multilingual Empathy Companion" class="project-clip-img" />
+                  <div class="project-overlay-btn">
+                    <div class="overlay-badge">
+                      <span>EXPLORE ARCHITECTURE ↗</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-info-col">
+                <span class="project-category-tag"><span class="project-tag-num">01 //</span> MULTIMODAL AI / MAJOR PROJECT (GROUP 4) • 2026</span>
+                <h3 class="project-title">Sentix — Emotion-Aware Multilingual Companion</h3>
+
+                <p class="project-desc">
+                  An empathetic AI companion bridging human emotion and artificial intelligence. Unifies real-time webcam facial emotion recognition (DeepFace), bidirectional translation across 11 Indian languages (NLLB-200 distilled 600M), and empathetic response conditioning powered by Llama 3 via local Ollama with low-latency sentence streaming.
+                </p>
+
+                <!-- Live Subsystem Pipeline Flow Strip -->
+                <div class="card-micro-pipeline" title="Real-Time Data Pipeline Architecture">
+                  <span class="card-micro-pill">📹 OpenCV 30FPS</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🎭 DeepFace Vision</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🌐 NLLB-200 11L</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🧠 Ollama Llama 3</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">⚡ Stream &lt;45ms</span>
+                </div>
+
+                <!-- 3-Item Metrics Grid -->
+                <div class="project-metrics-grid">
+                  <div class="metric-box">
+                    <span class="metric-label">FACIAL VISION</span>
+                    <span class="metric-val">DeepFace Webcam</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">INDIC LANGUAGES</span>
+                    <span class="metric-val">11 Dialects NLLB</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">INFERENCE ENGINE</span>
+                    <span class="metric-val">Llama 3 (Ollama)</span>
+                  </div>
+                </div>
+
+                <div class="tech-tags-list">
+                  <span class="tech-tag">Python 3.10+</span>
+                  <span class="tech-tag">Flask</span>
+                  <span class="tech-tag">DeepFace</span>
+                  <span class="tech-tag">Llama 3 (Ollama)</span>
+                  <span class="tech-tag">NLLB-200</span>
+                  <span class="tech-tag">OpenCV</span>
+                  <span class="tech-tag">PyTorch</span>
+                </div>
+
+                <div class="project-actions">
+                  <button class="btn btn-primary btn-sm" data-project-target="sentix">
+                    <span>ARCHITECTURE & CASE STUDY ↗</span>
+                  </button>
+                  <a href="#ai-terminal" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-target=\'sentix-tab\']').click()">
+                    <span>TRY IN AI LAB ↗</span>
+                  </a>
+                  <a href="https://github.com/GobindPatel2441/Sentix-Real-time-Emotion-Aware-Multilingual-Empathy-Companion" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                    <span>GITHUB ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PROJECT 02: MEDICAL AI ASSISTANT -->
+            <article class="project-card reversed scroll-stack-card" data-project-id="medical" id="project-medical">
+              <!-- Top Gold Rim Light Flare & Focal Sweep -->
+              <div class="card-rim-light"></div>
+              <div class="card-focal-sweep" aria-hidden="true"></div>
+              
+              <!-- Minimal L-Corner Brackets -->
+              <div class="corner-bracket bracket-tl"></div>
+              <div class="corner-bracket bracket-tr"></div>
+              <div class="corner-bracket bracket-bl"></div>
+              <div class="corner-bracket bracket-br"></div>
+
+              <!-- Oversized Background Watermark Number -->
+              <span class="project-watermark-num">02</span>
+
+              <div class="project-visual-col">
+                <div class="project-clip-reveal" data-project-target="medical" title="Click to view Medical RAG architecture breakdown">
+                  <img src="assets/project-medical.jpg" alt="Medical AI Assistant RAG with FAISS and Groq" class="project-clip-img" />
+                  <div class="project-overlay-btn">
+                    <div class="overlay-badge">
+                      <span>EXPLORE ARCHITECTURE ↗</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-info-col">
+                <span class="project-category-tag"><span class="project-tag-num">02 //</span> CLINICAL RAG / VECTOR SEARCH & GROQ LPU • 2026</span>
+                <h3 class="project-title">Medical AI Assistant — Clinical RAG with FAISS & Groq</h3>
+
+                <p class="project-desc">
+                  A production-grade clinical AI assistant built with Flask, LangChain, and HuggingFace Sentence Transformers. Employs a local FAISS vector store for sub-15ms medical literature retrieval and Groq LPU inference (150+ tok/s) with Flask session-based multi-turn conversation memory.
+                </p>
+
+                <!-- Live Subsystem Pipeline Flow Strip -->
+                <div class="card-micro-pipeline" title="Real-Time Clinical RAG Pipeline Architecture">
+                  <span class="card-micro-pill">🩺 Ingest &amp; Session</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🧬 MiniLM-L6-v2 384D</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">⚡ FAISS &lt;15ms</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">⚡ Groq LPU 150+ T/s</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🛡️ Zero Hallucination</span>
+                </div>
+
+                <!-- 3-Item Metrics Grid -->
+                <div class="project-metrics-grid">
+                  <div class="metric-box">
+                    <span class="metric-label">VECTOR RETRIEVAL</span>
+                    <span class="metric-val">FAISS &lt; 15ms</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">INFERENCE SPEED</span>
+                    <span class="metric-val">150+ tok/s Groq</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">SESSION MEMORY</span>
+                    <span class="metric-val">Flask State Track</span>
+                  </div>
+                </div>
+
+                <div class="tech-tags-list">
+                  <span class="tech-tag">Flask</span>
+                  <span class="tech-tag">LangChain</span>
+                  <span class="tech-tag">FAISS</span>
+                  <span class="tech-tag">MiniLM-L6-v2</span>
+                  <span class="tech-tag">Groq API</span>
+                  <span class="tech-tag">Python</span>
+                </div>
+
+                <div class="project-actions">
+                  <button class="btn btn-primary btn-sm" data-project-target="medical">
+                    <span>ARCHITECTURE & CASE STUDY ↗</span>
+                  </button>
+                  <a href="#ai-terminal" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-target=\'medical-tab\']').click()">
+                    <span>TRY IN AI LAB ↗</span>
+                  </a>
+                  <a href="https://github.com/GobindPatel2441/Medical-AI-Assistant" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                    <span>GITHUB ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PROJECT 03: HUMAN-AI MEMORY CONTINUITY SYSTEM -->
+            <article class="project-card scroll-stack-card" data-project-id="chakravyuh" id="project-chakravyuh">
+              <!-- Top Gold Rim Light Flare & Focal Sweep -->
+              <div class="card-rim-light"></div>
+              <div class="card-focal-sweep" aria-hidden="true"></div>
+              
+              <!-- Minimal L-Corner Brackets -->
+              <div class="corner-bracket bracket-tl"></div>
+              <div class="corner-bracket bracket-tr"></div>
+              <div class="corner-bracket bracket-bl"></div>
+              <div class="corner-bracket bracket-br"></div>
+
+              <!-- Oversized Background Watermark Number -->
+              <span class="project-watermark-num">03</span>
+
+              <div class="project-visual-col">
+                <div class="project-clip-reveal" data-project-target="chakravyuh" title="Click to view Hackathon Winning Architecture">
+                  <img src="assets/project-chakravyuh.jpg" alt="Human-AI Memory Continuity System - 2nd Prize Chakravyuh 1.0" class="project-clip-img" />
+                  <div class="project-overlay-btn">
+                    <div class="overlay-badge">
+                      <span>EXPLORE ARCHITECTURE ↗</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-info-col">
+                <span class="project-category-tag"><span class="project-tag-num">03 //</span> LOCAL-FIRST AI / HACKATHON 2ND PRIZE • JAN 2026</span>
+                <h3 class="project-title">Decision Diary — Human-AI Memory Continuity System</h3>
+
+                <p class="project-desc">
+                  A local-first decision reflection app engineered under a 36-hour sprint for the GITA Chakravyuh Hackathon (2nd Prize Winner). Powered by React 19, TypeScript, and local Ollama (Llama 3.1:8B), it guides users through complex choices, infers structured decision summaries, and stores reusable memory cards via browser vector persistence (thinkly_memories / thinkly_vectors).
+                </p>
+
+                <!-- Live Subsystem Pipeline Flow Strip -->
+                <div class="card-micro-pipeline" title="Real-Time Local-First Memory Architecture">
+                  <span class="card-micro-pill">💬 Guided Dialogue</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🖥️ React 19 / Vite</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">🦙 Ollama Llama 3.1:8B</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">📑 5-Field Inferrer</span>
+                  <span class="card-micro-arrow">→</span>
+                  <span class="card-micro-pill">💾 thinkly_vectors</span>
+                </div>
+
+                <!-- 3-Item Metrics Grid -->
+                <div class="project-metrics-grid">
+                  <div class="metric-box">
+                    <span class="metric-label">HACKATHON AWARD</span>
+                    <span class="metric-val">2nd Prize Winner</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">LOCAL AI INFERENCE</span>
+                    <span class="metric-val">Ollama Llama 3.1:8B</span>
+                  </div>
+                  <div class="metric-box">
+                    <span class="metric-label">BROWSER PERSISTENCE</span>
+                    <span class="metric-val">thinkly_vectors</span>
+                  </div>
+                </div>
+
+                <div class="tech-tags-list">
+                  <span class="tech-tag">React 19</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag">Vite</span>
+                  <span class="tech-tag">Ollama (Llama 3.1:8B)</span>
+                  <span class="tech-tag">Tailwind CSS</span>
+                  <span class="tech-tag">Vector Memory</span>
+                </div>
+
+                <div class="project-actions">
+                  <button class="btn btn-primary btn-sm" data-project-target="chakravyuh">
+                    <span>ARCHITECTURE & CASE STUDY ↗</span>
+                  </button>
+                  <a href="#ai-terminal" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-target=\'memory-tab\']').click()">
+                    <span>TRY IN AI LAB ↗</span>
+                  </a>
+                  <a href="https://github.com/GobindPatel2441" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                    <span>GITHUB ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Scroll Runway Sentinel to trigger clean unpinning -->
+            <div class="scroll-stack-end"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         5. SECTION 03: INTERACTIVE AI LAB & TERMINAL
+         ================================================================= -->
+    <section id="ai-terminal" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">03 / INTERACTIVE AI LAB</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">LIVE NEURAL</span>
+          <span class="title-line-2">CONSOLE.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Directly execute interactive simulations of my deep learning models, clinical RAG search, and memory continuity logic.
+        </p>
+
+        <div class="ai-terminal-wrapper reveal-init reveal-scale delay-2">
+          <div class="terminal-header">
+            <div class="terminal-controls">
+              <span class="term-dot term-dot-red"></span>
+              <span class="term-dot term-dot-yellow"></span>
+              <span class="term-dot term-dot-green"></span>
+              <span style="font-family: var(--font-mono); font-size: 0.775rem; color: var(--text-dim); margin-left: 0.5rem;">gobind-patel@neural-cluster:~$</span>
+            </div>
+
+            <div class="terminal-tabs">
+              <button class="term-tab active" data-target="sentix-tab">
+                <span>01. SENTIX EMPATHY</span>
+              </button>
+              <button class="term-tab" data-target="medical-tab">
+                <span>02. MEDICAL FAISS RAG</span>
+              </button>
+              <button class="term-tab" data-target="memory-tab">
+                <span>03. MEMORY CONTINUITY</span>
+              </button>
+            </div>
+
+            <div class="terminal-badge">ONLINE • 60 FPS</div>
+          </div>
+
+          <div class="terminal-body">
+            
+            <!-- SENTIX SIMULATION PANEL -->
+            <div id="sentix-tab" class="terminal-tab-panel active">
+              <div class="sim-grid">
+                
+                <div class="sim-panel">
+                  <div class="sim-panel-title">
+                    <span>DETECTED MICRO-EXPRESSION</span>
+                    <span style="color: var(--text-dim);">DeepFace v0.9</span>
+                  </div>
+
+                  <div class="sim-button-group">
+                    <button class="sim-choice-btn sentix-emotion-btn selected" data-emotion="anxious">Overwhelmed / Anxious</button>
+                    <button class="sim-choice-btn sentix-emotion-btn" data-emotion="confused">Perplexed / Confused</button>
+                    <button class="sim-choice-btn sentix-emotion-btn" data-emotion="joyful">Delighted / Joyful</button>
+                    <button class="sim-choice-btn sentix-emotion-btn" data-emotion="exhausted">Fatigued / Low Energy</button>
+                  </div>
+
+                  <div class="sim-panel-title" style="margin-top: 1.25rem;">
+                    <span>MULTILINGUAL EMISSION (NLLB-200)</span>
+                  </div>
+
+                  <div class="sim-button-group">
+                    <button class="sim-choice-btn sentix-lang-btn selected" data-lang="hi">Hindi (हिन्दी)</button>
+                    <button class="sim-choice-btn sentix-lang-btn" data-lang="or">Odia (ଓଡ଼ିଆ)</button>
+                    <button class="sim-choice-btn sentix-lang-btn" data-lang="bn">Bengali (বাংলা)</button>
+                    <button class="sim-choice-btn sentix-lang-btn" data-lang="te">Telugu (తెలుగు)</button>
+                    <button class="sim-choice-btn sentix-lang-btn" data-lang="ta">Tamil (தமிழ்)</button>
+                    <button class="sim-choice-btn sentix-lang-btn" data-lang="en">English</button>
+                  </div>
+
+                  <div class="sim-meter-group" style="margin-top: 1.25rem;">
+                    <div class="sim-meter-item">
+                      <div class="sim-meter-header">
+                        <span>Emotional Valence (Sentiment Polarity)</span>
+                        <span id="sentix-valence-val" style="color: var(--accent-primary);">-0.68</span>
+                      </div>
+                      <div class="sim-bar-bg">
+                        <div id="sentix-valence-fill" class="sim-bar-fill" style="width: 32%;"></div>
+                      </div>
+                    </div>
+
+                    <div class="sim-meter-item">
+                      <div class="sim-meter-header">
+                        <span>Arousal Level (Activation Energy)</span>
+                        <span id="sentix-arousal-val" style="color: var(--accent-secondary);">0.82</span>
+                      </div>
+                      <div class="sim-bar-bg">
+                        <div id="sentix-arousal-fill" class="sim-bar-fill" style="width: 82%;"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top: 1.5rem;">
+                    <button id="run-sentix-sim" class="btn btn-primary" style="width: 100%;">
+                      <span>RUN SENTIX EMPATHY INFERENCE ↗</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sim-stream-output">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                      <span style="font-size: 0.725rem; color: var(--accent-primary); font-family: var(--font-editorial); letter-spacing: 0.15em;">[LLAMA-3 8B VIA OLLAMA • SENTENCE STREAM]</span>
+                      <span id="sentix-latency" style="font-size: 0.75rem; color: #34d399;">34ms latency</span>
+                    </div>
+
+                    <div class="terminal-line" style="color: var(--text-dim); font-size: 0.8rem;">
+                      &gt; Facial landmarks verified: 68 points tracked.<br/>
+                      &gt; Conditioned empathy prompt injected.<br/>
+                      &gt; Output translated via NLLB-200 distillation.<br/>
+                    </div>
+
+                    <div style="margin-top: 1rem; color: #f8fafc; font-size: 0.95rem; line-height: 1.7; min-height: 100px;">
+                      <span id="sentix-stream-text">नमस्ते। आपके चेहरे के भाव और शब्दों से मैं समझ सकता हूँ कि आप काफी तनाव और दबाव महसूस कर रहे हैं। गहरी सांस लें, सब ठीक हो जाएगा। बताइए, मैं आपकी किस तरह मदद कर सकता हूँ?</span>
+                      <span class="terminal-cursor"></span>
+                    </div>
+                  </div>
+
+                  <div style="font-size: 0.725rem; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem; display: flex; justify-content: space-between;">
+                    <span>Safety Layer: ACTIVE</span>
+                    <span>11 Indic Dialects Loaded</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- MEDICAL RAG PANEL -->
+            <div id="medical-tab" class="terminal-tab-panel">
+              <div class="sim-grid">
+                
+                <div class="sim-panel">
+                  <div class="sim-panel-title">
+                    <span>CLINICAL QUERY & RETRIEVAL</span>
+                    <span style="color: var(--text-dim);">FAISS + Groq</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;">
+                    <button class="sim-choice-btn medical-query-btn selected" data-query="hypertension" style="text-align: left;">
+                      1. Stage 2 Hypertension with Renal Impairment
+                    </button>
+                    <button class="sim-choice-btn medical-query-btn" data-query="chestpain" style="text-align: left;">
+                      2. Atypical Acute Chest Pain Risk Protocol
+                    </button>
+                    <button class="sim-choice-btn medical-query-btn" data-query="metformin" style="text-align: left;">
+                      3. Metformin & Radiocontrast Media Interactions
+                    </button>
+                  </div>
+
+                  <div class="sim-panel-title">
+                    <span>FAISS TOP-K DOCUMENT EMBEDDINGS</span>
+                  </div>
+
+                  <div id="med-docs-list">
+                    <div class="sub-tag" style="color: var(--accent-primary); margin-bottom: 4px;">✓ Doc_402: ACC/AHA Stage 2 Guideline (2024)</div>
+                    <div class="sub-tag" style="color: var(--accent-primary); margin-bottom: 4px;">✓ Doc_118: ACEi vs ARB in Renal Preservation</div>
+                    <div class="sub-tag" style="color: var(--accent-primary); margin-bottom: 4px;">✓ Doc_089: Microalbuminuria Screening Protocol</div>
+                  </div>
+
+                  <div style="margin-top: 1.5rem;">
+                    <button id="run-med-sim" class="btn btn-primary" style="width: 100%;">
+                      <span>QUERY CLINICAL KNOWLEDGE BASE ↗</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sim-stream-output">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                      <span id="med-vector-score" style="font-size: 0.75rem; color: var(--accent-primary); font-family: var(--font-editorial); letter-spacing: 0.12em;">0.964 COSINE SIMILARITY</span>
+                      <span id="med-groq-speed" style="font-size: 0.75rem; color: #34d399;">154.2 tokens/sec</span>
+                    </div>
+
+                    <pre id="med-stream-text" style="font-family: var(--font-mono); font-size: 0.825rem; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap;">[FAISS Retrieved 3 Chunks • Groq Inference Time: 182ms]
+CLINICAL EVIDENCE SYNTHESIS:
+1. First-line therapy warrants an ACE Inhibitor (e.g., Lisinopril 10mg) or ARB (Losartan 50mg) to confer renal hemodynamic protection.
+2. Target BP: &lt;130/80 mmHg per updated guideline standards.
+3. Monitor serum creatinine and potassium levels at 2 weeks post-initiation.
+4. Dietary sodium restriction (&lt;2,000 mg/day) and structured aerobic activity recommended.</pre>
+                  </div>
+
+                  <div style="font-size: 0.725rem; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem; display: flex; justify-content: space-between;">
+                    <span>Hallucination Guard: STRICT</span>
+                    <span>Session Memory: ACTIVE</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 2D Latent Embedding Space Visualizer (FAISS Projection) -->
+              <div class="vector-space-visualizer-container" style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                  <div>
+                    <span style="font-family: var(--font-editorial); font-size: 0.75rem; letter-spacing: 0.18em; color: var(--accent-highlight); text-transform: uppercase;">
+                      2D LATENT EMBEDDING SPACE (FAISS INDEX PROJECTION)
+                    </span>
+                    <span style="font-size: 0.65rem; color: var(--text-dim); margin-left: 0.5rem; font-family: var(--font-mono);">[MiniLM-L6-v2 • 384-d ➔ 2D PCA • Cosine Nearest Neighbors]</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-muted);">
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D4AF37;"></span> Query (Q)</span>
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #38bdf8;"></span> Top Chunks</span>
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.25);"></span> Corpus Index</span>
+                  </div>
+                </div>
+
+                <div style="position: relative; width: 100%; height: 210px; background: rgba(6, 7, 10, 0.75); border: 1px solid var(--border-subtle); border-radius: 8px; overflow: hidden;">
+                  <canvas id="vector-space-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+                  <div id="vector-tooltip" style="position: absolute; pointer-events: none; opacity: 0; background: rgba(15, 17, 23, 0.95); border: 1px solid var(--accent-primary); border-radius: 6px; padding: 6px 10px; font-size: 0.7rem; font-family: var(--font-mono); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 10; transition: opacity 0.15s ease;"></div>
+                  <div style="position: absolute; bottom: 8px; right: 10px; font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-dim); pointer-events: none;">
+                    Click or drag anywhere in latent space to probe vector cosine distances
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MEMORY CONTINUITY PANEL -->
+            <div id="memory-tab" class="terminal-tab-panel">
+              <div class="sim-grid">
+                
+                <div class="sim-panel">
+                  <div class="sim-panel-title">
+                    <span>CHAKRAVYUH 1.0 ARCHITECTURE</span>
+                    <span style="color: var(--accent-primary);">🏆 2nd Prize</span>
+                  </div>
+
+                  <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.65; margin-bottom: 1.25rem;">
+                    Test the multi-session context persistence engine. Demonstrates how contextual memory graph nodes prevent model amnesia during interruptions or multi-agent handoffs.
+                  </p>
+
+                  <div style="background: rgba(0,0,0,0.45); border-radius: 6px; padding: 1rem; border: 1px solid var(--border-subtle); margin-bottom: 1.25rem;">
+                    <div style="font-size: 0.7rem; font-family: var(--font-editorial); letter-spacing: 0.2em; color: var(--text-dim); margin-bottom: 0.35rem;">GRAPH TOPOLOGY</div>
+                    <div id="memory-graph-state" style="color: var(--accent-highlight); font-size: 0.85rem; font-weight: 600;">
+                      3 Active Nodes • Edge Weight: 0.98
+                    </div>
+                  </div>
+
+                  <button id="trigger-memory-test" class="btn btn-primary" style="width: 100%;">
+                    <span>TRIGGER NEXT CONTINUITY CYCLE ↗</span>
+                  </button>
+                </div>
+
+                <div class="sim-stream-output">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                      <span style="font-size: 0.75rem; color: var(--accent-primary); font-family: var(--font-editorial); letter-spacing: 0.15em;">CHAKRAVYUH 1.0 TEMPORAL LOG</span>
+                      <span style="font-size: 0.75rem; color: #34d399;">36h Sprint Benchmark</span>
+                    </div>
+
+                    <div id="memory-continuity-log" style="max-height: 240px; overflow-y: auto;">
+                      <div style="margin-bottom: 8px; font-size: 0.85rem;">
+                        <span style="color: var(--accent-primary); font-weight: bold;">[SYSTEM INIT]</span>
+                        <span style="color: #cbd5e1;"> Context Graph active. Sri Sri University Team Innovastra.</span>
+                        <span style="color: #64748b; font-size: 0.75rem;">(Latency: 14ms)</span>
+                      </div>
+                      <div style="margin-bottom: 8px; font-size: 0.85rem;">
+                        <span style="color: var(--accent-secondary); font-weight: bold;">[PERSISTENCE READY]</span>
+                        <span style="color: #cbd5e1;"> Click "Trigger Next Continuity Cycle" to simulate multi-turn state handoffs.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="font-size: 0.725rem; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem; display: flex; justify-content: space-between;">
+                    <span>Zero Context Drift Guarantee</span>
+                    <span>36-Hour Hackathon Proven</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================
+         6. SECTION 04: BENTO GRID SKILLS MATRIX
+         (Inspired by ex/cinematic-portfolio SkillsSection)
+         ================================================================= -->
+    <section id="skills" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">04 / TECH MATRIX</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">TECHNICAL</span>
+          <span class="title-line-2">PROFICIENCY.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Architecting robust solutions across artificial intelligence, enterprise Core Java systems, and resilient cloud architectures.
+        </p>
+
+        <!-- Asymmetrical 4-Quadrant Bento Grid -->
+        <div class="bento-skills-grid">
+          
+          <!-- BENTO CARD 1: AI & GENERATIVE AI (SPAN 7) -->
+          <div class="bento-skill-card bento-card-7 spotlight-card reveal-init reveal-left delay-1">
+            <div>
+              <div class="bento-header">
+                <div>
+                  <h3 class="bento-title">AI & Generative Systems</h3>
+                  <div style="font-family: var(--font-editorial); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-primary); text-transform: uppercase; margin-top: 0.25rem;">NEURAL PIPELINES & MULTIMODAL AGENTS</div>
+                </div>
+                <span class="bento-badge">INTELLIGENCE</span>
+              </div>
+
+              <p class="bento-desc">
+                Specialized in orchestrating end-to-end RAG pipelines with LangChain and FAISS, local LLM quantization with Ollama, real-time facial micro-expression telemetry via DeepFace, and multilingual Indic translation with NLLB-200.
+              </p>
+
+              <div class="bento-tags">
+                <span class="tech-tag">RAG Pipelines</span>
+                <span class="tech-tag">LangChain</span>
+                <span class="tech-tag">FAISS Vector DB</span>
+                <span class="tech-tag">Groq LPU API</span>
+                <span class="tech-tag">DeepFace</span>
+                <span class="tech-tag">Llama 3 (Ollama)</span>
+                <span class="tech-tag">NLLB-200</span>
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">OpenCV</span>
+              </div>
+            </div>
+
+            <div class="bento-stat-strip">
+              <span>STREAM LATENCY: &lt; 45ms</span>
+              <span>11 INDIC DIALECTS</span>
+            </div>
+          </div>
+
+          <!-- BENTO CARD 2: CORE JAVA (SPAN 5) -->
+          <div class="bento-skill-card bento-card-5 spotlight-card reveal-init reveal-right delay-2">
+            <div>
+              <div class="bento-header">
+                <div>
+                  <h3 class="bento-title">Core Java Mastery</h3>
+                  <div style="font-family: var(--font-editorial); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-primary); text-transform: uppercase; margin-top: 0.25rem;">ENTERPRISE ARCHITECTURE</div>
+                </div>
+                <span class="bento-badge">CORE PILLAR</span>
+              </div>
+
+              <p class="bento-desc">
+                Comprehensive foundation in Object-Oriented Programming, Polymorphism, Abstraction, Collections Framework, and production design patterns including Singleton and Factory Methods.
+              </p>
+
+              <div class="bento-tags">
+                <span class="tech-tag">OOP & Inheritance</span>
+                <span class="tech-tag">Polymorphism</span>
+                <span class="tech-tag">Factory Method</span>
+                <span class="tech-tag">Singleton Pattern</span>
+                <span class="tech-tag">Collections Framework</span>
+                <span class="tech-tag">Abstract Classes</span>
+                <span class="tech-tag">Autoboxing</span>
+              </div>
+            </div>
+
+            <div class="bento-stat-strip">
+              <span>DESIGN PATTERNS: PRODUCTION</span>
+              <span>TYPE SAFETY: STRICT</span>
+            </div>
+          </div>
+
+          <!-- BENTO CARD 3: BACKEND & INFRASTRUCTURE (SPAN 5) -->
+          <div class="bento-skill-card bento-card-5 spotlight-card reveal-init reveal-left delay-2">
+            <div>
+              <div class="bento-header">
+                <div>
+                  <h3 class="bento-title">Backend & Cloud</h3>
+                  <div style="font-family: var(--font-editorial); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-primary); text-transform: uppercase; margin-top: 0.25rem;">HIGH-CONCURRENCY APIS</div>
+                </div>
+                <span class="bento-badge">PERSISTENCE</span>
+              </div>
+
+              <p class="bento-desc">
+                Engineering performant REST microservices with FastAPI and Flask, Dockerized deployment environments, relational schema optimization, and session state continuity.
+              </p>
+
+              <div class="bento-tags">
+                <span class="tech-tag">FastAPI</span>
+                <span class="tech-tag">Flask</span>
+                <span class="tech-tag">REST APIs</span>
+                <span class="tech-tag">Docker</span>
+                <span class="tech-tag">MySQL</span>
+                <span class="tech-tag">Session Memory</span>
+              </div>
+            </div>
+
+            <div class="bento-stat-strip">
+              <span>SCHEMA DESIGN: ACID</span>
+              <span>CONTAINERIZED: DOCKER</span>
+            </div>
+          </div>
+
+          <!-- BENTO CARD 4: WEB & DELIVERY (SPAN 7) -->
+          <div class="bento-skill-card bento-card-7 spotlight-card reveal-init reveal-right delay-3">
+            <div>
+              <div class="bento-header">
+                <div>
+                  <h3 class="bento-title">Engineering Tools & Web</h3>
+                  <div style="font-family: var(--font-editorial); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent-primary); text-transform: uppercase; margin-top: 0.25rem;">PRODUCTION DELIVERY ECOSYSTEM</div>
+                </div>
+                <span class="bento-badge">DELIVERY</span>
+              </div>
+
+              <p class="bento-desc">
+                Modern client-side engineering with responsive HTML5/CSS3, JavaScript, WebGL canvas shaders, Git version control, Google Colab GPU workflows, and Antigravity IDE pairing.
+              </p>
+
+              <div class="bento-tags">
+                <span class="tech-tag">HTML5 / CSS3</span>
+                <span class="tech-tag">Modern JavaScript</span>
+                <span class="tech-tag">WebGL / Canvas</span>
+                <span class="tech-tag">Git / GitHub</span>
+                <span class="tech-tag">VS Code</span>
+                <span class="tech-tag">Antigravity IDE</span>
+                <span class="tech-tag">Google Colab</span>
+              </div>
+            </div>
+
+            <div class="bento-stat-strip">
+              <span>RESPONSIVE: 100% MOBILE-FIRST</span>
+              <span>BUILD RIGOR: VERIFIED</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         7. SECTION 05: TRACK RECORD & TIMELINE
+         ================================================================= -->
+    <section id="experience" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">05 / TRACK RECORD</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">HONORS &</span>
+          <span class="title-line-2">MILESTONES.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Competitive hackathon accolades, government-accredited technology credentials, and software engineering internships.
+        </p>
+
+        <div class="timeline-container">
+          <div class="timeline-line"></div>
+
+          <!-- MILESTONE 1: CHAKRAVYUH HACKATHON -->
+          <div class="timeline-item reveal-init reveal-left delay-1">
+            <div class="timeline-node"></div>
+            <div class="timeline-card award-highlight border-beam-card">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-title">🏆 2nd Prize Winner — CHAKRAVYUH 1.0 National Hackathon</h3>
+                  <div class="timeline-org">Team Innovastra • Sri Sri University • GITA Autonomous College, Bhubaneswar</div>
+                </div>
+                <span class="timeline-period">JANUARY 2026</span>
+              </div>
+              <p class="timeline-desc">
+                Won 2nd Prize among national collegiate competitors in a grueling 36-hour sprint. Engineered the <strong>Human-AI Memory Continuity System</strong>, designing real-time temporal context graphs and state snapshotting to guarantee zero context amnesia across distributed AI interactions.
+              </p>
+              <div class="tech-tags-list" style="margin-bottom: 0;">
+                <span class="tech-tag" style="border-color: var(--accent-primary); color: var(--accent-highlight);">National 36-Hour Hackathon</span>
+                <span class="tech-tag">Memory Continuity</span>
+                <span class="tech-tag">State Serialization</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MILESTONE 2: GENERATIVE AI MSME -->
+          <div class="timeline-item reveal-init reveal-right delay-2">
+            <div class="timeline-node"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-title">Generative AI Specialist Certification</h3>
+                  <div class="timeline-org">Ministry of Micro, Small & Medium Enterprises (MSME), Govt. of India</div>
+                </div>
+                <span class="timeline-period">MAY – JUN 2026</span>
+              </div>
+              <p class="timeline-desc">
+                Comprehensive practical training in Deep Learning architectures, Recurrent Neural Networks (RNN/LSTM), LangChain orchestration frameworks, and Retrieval-Augmented Generation (RAG) vector embeddings for production enterprise workloads.
+              </p>
+              <div class="tech-tags-list" style="margin-bottom: 0;">
+                <span class="tech-tag">Deep Learning</span>
+                <span class="tech-tag">RNN / LSTM</span>
+                <span class="tech-tag">LangChain</span>
+                <span class="tech-tag">RAG Pipelines</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MILESTONE 3: OCAC INTERNSHIP -->
+          <div class="timeline-item reveal-init reveal-left delay-2">
+            <div class="timeline-node"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-title">Software Engineering Intern</h3>
+                  <div class="timeline-org">Odisha Computer Application Centre (OCAC)</div>
+                </div>
+                <span class="timeline-period">JUL – AUG 2025</span>
+              </div>
+              <p class="timeline-desc">
+                Developed responsive web application components and backend modules using HTML, CSS, Modern JavaScript, Python, and MySQL. Collaborated on state-level digital workflow automation initiatives.
+              </p>
+              <div class="tech-tags-list" style="margin-bottom: 0;">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">MySQL</span>
+                <span class="tech-tag">Web Applications</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MILESTONE 4: PYTHON MSME -->
+          <div class="timeline-item reveal-init reveal-right delay-3">
+            <div class="timeline-node"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-title">Python Programming Certification</h3>
+                  <div class="timeline-org">Ministry of Micro, Small & Medium Enterprises (MSME), Govt. of India</div>
+                </div>
+                <span class="timeline-period">MAY 2024</span>
+              </div>
+              <p class="timeline-desc">
+                In-depth mastery of Python fundamentals, advanced data structures, functional and Object-Oriented Programming (OOP), modular architecture, and exception handling protocols.
+              </p>
+              <div class="tech-tags-list" style="margin-bottom: 0;">
+                <span class="tech-tag">Python OOP</span>
+                <span class="tech-tag">Data Structures</span>
+                <span class="tech-tag">Modules & Packages</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         8. SECTION 06: INITIATE CONTACT
+         ================================================================= -->
+    <section id="contact" class="section">
+      <div class="container">
+        
+        <div class="section-eyebrow reveal-init reveal-left">
+          <span class="eyebrow-num">06 / INITIATE CONTACT</span>
+          <div class="eyebrow-line"></div>
+        </div>
+
+        <h2 class="section-title-monumental reveal-init delay-1">
+          <span class="title-line-1">LET'S BUILD</span>
+          <span class="title-line-2">TOGETHER.</span>
+        </h2>
+
+        <p class="section-subtitle-editorial reveal-init delay-2" style="margin-bottom: 3.5rem;">
+          Whether you have an ambitious AI project, an engineering opening, or want to discuss machine learning architectures.
+        </p>
+
+        <div class="contact-grid">
+          
+          <div class="contact-info-cards reveal-init reveal-left delay-1">
+            
+            <!-- Email -->
+            <div class="contact-card contact-info-card reveal-init delay-1">
+              <div class="contact-card-left">
+                <div class="contact-card-icon">✉️</div>
+                <div class="contact-card-text">
+                  <div class="contact-card-label">Direct Email</div>
+                  <div class="contact-card-value">gobindpatel2005@gmail.com</div>
+                </div>
+              </div>
+              <div class="contact-card-actions">
+                <button class="btn btn-secondary contact-action-btn" data-copy="gobindpatel2005@gmail.com" title="Copy Email">
+                  <span class="btn-text">COPY</span>
+                </button>
+                <a href="mailto:gobindpatel2005@gmail.com" class="btn btn-primary contact-action-btn" title="Write Email">
+                  <span class="btn-text">WRITE</span><span class="btn-arrow">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="contact-card contact-info-card reveal-init delay-2">
+              <div class="contact-card-left">
+                <div class="contact-card-icon">📞</div>
+                <div class="contact-card-text">
+                  <div class="contact-card-label">Direct Phone</div>
+                  <div class="contact-card-value">+91 8926062118</div>
+                </div>
+              </div>
+              <div class="contact-card-actions">
+                <button class="btn btn-secondary contact-action-btn" data-copy="+918926062118" title="Copy Phone">
+                  <span class="btn-text">COPY</span>
+                </button>
+                <a href="tel:+918926062118" class="btn btn-primary contact-action-btn" title="Call Phone">
+                  <span class="btn-text">CALL</span><span class="btn-arrow">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="contact-card reveal-init delay-3">
+              <div class="contact-card-left">
+                <div class="contact-card-icon">📍</div>
+                <div>
+                  <div class="contact-card-label">Base Location</div>
+                  <div class="contact-card-value">Bhubaneswar, Odisha, India</div>
+                </div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent-primary);">IST (UTC+5:30)</span>
+            </div>
+
+            <!-- Social Links -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <a href="https://linkedin.com/in/gobind-patel-807347320" target="_blank" rel="noopener noreferrer" class="contact-card reveal-init delay-2" style="justify-content: center; gap: 0.75rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0077b5;"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                <span style="font-family: var(--font-editorial); font-size: 0.8rem; letter-spacing: 0.15em; font-weight: 600;">LINKEDIN ↗</span>
+              </a>
+
+              <a href="https://github.com/GobindPatel2441" target="_blank" rel="noopener noreferrer" class="contact-card reveal-init delay-3" style="justify-content: center; gap: 0.75rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fff;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                <span style="font-family: var(--font-editorial); font-size: 0.8rem; letter-spacing: 0.15em; font-weight: 600;">GITHUB ↗</span>
+              </a>
+            </div>
+
+            <!-- Resume Download CTA -->
+            <div style="margin-top: 0.5rem;" class="reveal-init delay-4">
+              <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-primary" style="width: 100%;">
+                <span>DOWNLOAD RESUME (PDF) ↓</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Contact Dispatch Form -->
+          <form id="contact-form" class="contact-form reveal-init reveal-right delay-2" novalidate>
+            <h3 style="font-family: var(--font-monumental); font-size: 1.85rem; color: #fff; text-transform: uppercase; margin-bottom: 0.35rem;">TRANSMIT DISPATCH</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
+              Reach out directly for engineering collaborations, research dialogues, or full-time opportunities.
+            </p>
+
+            <!-- Live Status Feedback Banner -->
+            <div id="contact-status-banner" class="dispatch-status-banner" role="alert" aria-live="polite"></div>
+
+            <!-- Anti-Spam Honeypot Barrier (hidden from real users) -->
+            <div style="display: none !important;" aria-hidden="true">
+              <label for="contact-bot-check">Do not fill this field</label>
+              <input type="text" id="contact-bot-check" name="bot_field" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="form-group reveal-init delay-1">
+              <label class="form-label" for="contact-name">Your Full Name <span class="required-star">*</span></label>
+              <input type="text" id="contact-name" name="from_name" class="form-input" placeholder="e.g. Elena Rostova" autocomplete="name" required />
+              <span id="name-error" class="field-error-msg" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group reveal-init delay-2">
+              <label class="form-label" for="contact-email">Corporate / Personal Email <span class="required-star">*</span></label>
+              <input type="email" id="contact-email" name="reply_to" class="form-input" placeholder="e.g. elena@enterprise.com" autocomplete="email" required />
+              <span id="email-error" class="field-error-msg" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group reveal-init delay-3">
+              <label class="form-label" for="contact-subject">Objective / Subject <span class="required-star">*</span></label>
+              <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="e.g. AI/ML Engineering Collaboration" required />
+              <span id="subject-error" class="field-error-msg" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group reveal-init delay-4">
+              <label class="form-label" for="contact-message">Dispatch Details <span class="required-star">*</span></label>
+              <textarea id="contact-message" name="message" class="form-textarea" placeholder="Share project scope or opportunity details..." required></textarea>
+              <span id="message-error" class="field-error-msg" aria-live="polite"></span>
+            </div>
+
+            <button type="submit" id="contact-submit-btn" class="btn btn-primary reveal-init delay-4" style="width: 100%;">
+              <span class="btn-spinner" style="display: none;" aria-hidden="true"></span>
+              <span class="btn-text">TRANSMIT DISPATCH ↗</span>
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =================================================================
+       9. FOOTER
+       ================================================================= -->
+  <footer class="footer">
+    <div class="container footer-content reveal-init delay-1">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div class="brand-monogram" style="width: 28px; height: 28px;">
+          <img src="assets/gp-logo-animated.gif" alt="GP. Logo" class="brand-monogram-gif" width="28" height="28" />
+        </div>
+        <span>GOBIND PATEL • ARCHITECTING WHAT'S NEXT</span>
+      </div>
+
+      <div>
+        BHUBANESWAR, ODISHA • B.TECH CSE (AI/ML) 2023–2027
+      </div>
+
+      <div>
+        <a href="#hero" class="nav-link" style="font-size: 0.725rem;">BACK TO TOP ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =================================================================
+       10. DYNAMIC CASE STUDY & RESUME MODAL
+       ================================================================= -->
+  <div id="project-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Project Details" data-lenis-prevent>
+    <div class="modal-dialog" data-lenis-prevent>
+      <button id="modal-close-btn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      <div id="modal-dynamic-content" data-lenis-prevent>
+        <!-- Injected via projects-modal.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================================
+       11. BESPOKE FLOATING CINEMATIC AMBIENT AUDIO CONTROLLER
+       ================================================================= -->
+  <aside id="floating-audio-controller" class="ambient-audio-dock" aria-label="Ambient Soundtrack Controls" data-state="attempting">
+    
+    <!-- Expandable Details & Volume Popover Panel -->
+    <div class="ambient-audio-popover" role="region" aria-label="Soundtrack Controls & Volume">
+      <div class="audio-popover-header">
+        <div>
+          <div class="audio-track-eyebrow">ATMOSPHERIC SOUNDTRACK</div>
+          <div class="audio-track-title">Ambient Cinematic</div>
+          <div class="audio-track-artist">Velario • Production Master</div>
+        </div>
+        <button class="audio-popover-close" aria-label="Close audio panel">&times;</button>
+      </div>
+
+      <!-- Play / Pause & Mute Action Buttons -->
+      <div class="audio-popover-actions">
+        <button id="audio-popover-play" class="audio-popover-btn" aria-label="Toggle Playback">
+          <span id="audio-popover-play-icon">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+          </span>
+          <span id="audio-popover-play-text">Play</span>
+        </button>
+
+        <button id="audio-popover-mute" class="audio-popover-btn" aria-label="Toggle Mute">
+          <span id="audio-popover-mute-icon">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+          </span>
+          <span id="audio-popover-mute-text">Mute</span>
+        </button>
+      </div>
+
+      <!-- Volume Slider Section -->
+      <div class="audio-volume-section">
+        <div class="audio-volume-header">
+          <span>VOLUME</span>
+          <span class="audio-volume-readout">6%</span>
+        </div>
+        <div class="audio-volume-slider-row">
+          <button class="audio-vol-icon-btn" aria-label="Mute or Unmute">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          </button>
+          <input type="range" class="ambient-volume-slider" min="0" max="100" value="6" step="1" aria-label="Ambient volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="6" />
+        </div>
+      </div>
+
+      <!-- Popover Footer -->
+      <div class="audio-popover-footer">
+        <span class="audio-badge-live">
+          <span class="audio-live-dot"></span>
+          <span>48kHz Studio Ambience</span>
+        </span>
+        <span>Looping</span>
+      </div>
+    </div>
+
+    <!-- Main Capsule Pill -->
+    <div class="ambient-audio-pill" role="button" tabindex="0" aria-label="Ambient music controller, tap to toggle panel or play">
+      <button class="audio-btn-action" aria-label="Play or Pause Ambient Music">
+        <span class="audio-action-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+        </span>
+      </button>
+
+      <!-- 4-Bar Waveform Equalizer -->
+      <div class="ambient-eq-visualizer" aria-hidden="true">
+        <span class="ambient-eq-bar"></span>
+        <span class="ambient-eq-bar"></span>
+        <span class="ambient-eq-bar"></span>
+        <span class="ambient-eq-bar"></span>
+      </div>
+
+      <!-- State & Track Title -->
+      <div class="audio-pill-label">
+        <span class="audio-pill-title">Velario • Ambient</span>
+        <span class="audio-pill-subtext">6% Volume</span>
+      </div>
+
+      <!-- Expand Popover Chevron -->
+      <button class="audio-expand-btn" aria-label="Open soundtrack options panel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Progressive Viewport Bottom Edge Blur Dissolve -->
+  <div class="progressive-blur-bottom" aria-hidden="true"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/lenis.min.js"></script>
+  <script src="js/cloud-shader.js"></script>
+  <script src="js/interactive-matrix.js"></script>
+  <script src="js/liquid-glass.js"></script>
+  <script src="js/ai-terminal.js?v=2"></script>
+  <script src="js/projects-modal.js?v=9"></script>
+  <script src="js/scroll-orchestrator.js?v=4"></script>
+  <script src="js/command-menu.js"></script>
+  <script src="js/scramble-text.js"></script>
+  <script src="js/tilt-card.js"></script>
+  <script src="js/magnetic-button.js"></script>
+  <script src="js/custom-cursor.js?v=4"></script>
+  <script src="js/liquid-button.js"></script>
+  <script src="js/ambient-audio.js?v=1"></script>
+  <!-- EmailJS Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/email-config.js"></script>
+  <script src="js/email-dispatch.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

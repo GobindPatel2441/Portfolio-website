@@ -1,0 +1,18 @@
+# Virtual Environments
+medical/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Environment Variables
+.env
+
+# Data and Vector Stores
+vectorstore/
+data/
+
+# Logs
+logs/

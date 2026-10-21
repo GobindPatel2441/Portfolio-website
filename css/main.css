@@ -1,0 +1,482 @@
+/* ===================================================================
+   GOBIND PATEL — BESPOKE CINEMATIC PORTFOLIO SYSTEM
+   Inspired by ex/cinematic-portfolio & ex/threeui
+   Monumental Condensed Typography • Warm Champagne Gold • Multi-Theme
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
+
+/* ===================================================================
+   THEME PALETTES (Interactive Atmosphere Switching)
+   =================================================================== */
+
+/* 1. CINEMATIC WARM GOLD (Default: Editorial, High-End Film Noir) */
+:root, [data-theme="gold"] {
+  --theme-name: 'gold';
+  --bg-dark: #08080a;
+  --bg-secondary: #0e0f13;
+  --bg-card: rgba(16, 17, 22, 0.78);
+  --bg-card-hover: rgba(24, 26, 34, 0.92);
+  --bg-glass: rgba(212, 175, 55, 0.035);
+  --bg-glass-strong: rgba(212, 175, 55, 0.08);
+
+  /* Warm Gold / Champagne / Bronze Accents */
+  --accent-primary: #D4AF37;       /* Iconic Champagne Gold */
+  --accent-secondary: #C99E5D;     /* Warm Amber */
+  --accent-bronze: #8C6D4F;        /* Deep Burnished Bronze */
+  --accent-highlight: #F7E7C4;     /* Pale Silk Gold */
+  --accent-dark: #543B1A;
+
+  /* Text & Inks */
+  --text-main: #F4EBE2;
+  --text-muted: #A8988B;
+  --text-dim: #6B5E53;
+  --text-light: #EAD8C7;
+  --text-highlight: #FFF5EB;
+
+  /* Borders & Hairlines */
+  --border-subtle: rgba(140, 109, 79, 0.24);
+  --border-glass: rgba(212, 175, 55, 0.28);
+  --border-glow: rgba(212, 175, 55, 0.45);
+
+  /* Metallic Typography Gradients */
+  --grad-title-1: linear-gradient(180deg, #FFFFFF 0%, #D5CBC0 55%, #605448 100%);
+  --grad-title-2: linear-gradient(180deg, #F7E7C4 0%, #C99E5D 50%, #543B1A 100%);
+  --grad-title-3: linear-gradient(180deg, #DFBE8A 0%, #9B7640 50%, #342410 100%);
+  --grad-accent-btn: linear-gradient(135deg, #181410 0%, #0d0c0a 100%);
+
+  /* Ambient Lighting */
+  --orb-1-color: rgba(212, 175, 55, 0.16);
+  --orb-2-color: rgba(140, 109, 79, 0.12);
+  --matrix-dot: rgba(212, 175, 55, 0.35);
+  --matrix-line: rgba(212, 175, 55, 0.15);
+  --cursor-ring: rgba(212, 175, 55, 0.5);
+  --cursor-dot: #F3DBB3;
+}
+
+/* 2. OBSIDIAN NOIR (Ultra-Minimalist Titanium Executive Studio) */
+[data-theme="obsidian"] {
+  --theme-name: 'obsidian';
+  --bg-dark: #050607;
+  --bg-secondary: #0a0b0e;
+  --bg-card: rgba(14, 15, 18, 0.85);
+  --bg-card-hover: rgba(22, 24, 28, 0.95);
+  --bg-glass: rgba(255, 255, 255, 0.02);
+  --bg-glass-strong: rgba(255, 255, 255, 0.05);
+
+  --accent-primary: #E2E8F0;
+  --accent-secondary: #CBD5E1;
+  --accent-bronze: #64748B;
+  --accent-highlight: #FFFFFF;
+  --accent-dark: #334155;
+
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-dim: #475569;
+  --text-light: #CBD5E1;
+  --text-highlight: #FFFFFF;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.18);
+  --border-glow: rgba(255, 255, 255, 0.35);
+
+  --grad-title-1: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 55%, #64748B 100%);
+  --grad-title-2: linear-gradient(180deg, #F8FAFC 0%, #94A3B8 50%, #334155 100%);
+  --grad-title-3: linear-gradient(180deg, #E2E8F0 0%, #64748B 50%, #1E293B 100%);
+  --grad-accent-btn: linear-gradient(135deg, #14171d 0%, #0b0d10 100%);
+
+  --orb-1-color: rgba(255, 255, 255, 0.08);
+  --orb-2-color: rgba(148, 163, 184, 0.06);
+  --matrix-dot: rgba(255, 255, 255, 0.3);
+  --matrix-line: rgba(255, 255, 255, 0.12);
+  --cursor-ring: rgba(255, 255, 255, 0.5);
+  --cursor-dot: #FFFFFF;
+}
+
+/* 3. EMERALD HORIZON (Deep Forest Jade & High-Precision Bio-Tech) */
+[data-theme="emerald"] {
+  --theme-name: 'emerald';
+  --bg-dark: #030a07;
+  --bg-secondary: #06140e;
+  --bg-card: rgba(8, 22, 16, 0.82);
+  --bg-card-hover: rgba(14, 34, 25, 0.94);
+  --bg-glass: rgba(16, 185, 129, 0.03);
+  --bg-glass-strong: rgba(16, 185, 129, 0.08);
+
+  --accent-primary: #10B981;
+  --accent-secondary: #059669;
+  --accent-bronze: #047857;
+  --accent-highlight: #6EE7B7;
+  --accent-dark: #064E3B;
+
+  --text-main: #ECFDF5;
+  --text-muted: #A7F3D0;
+  --text-dim: #047857;
+  --text-light: #D1FAE5;
+  --text-highlight: #FFFFFF;
+
+  --border-subtle: rgba(16, 185, 129, 0.18);
+  --border-glass: rgba(16, 185, 129, 0.28);
+  --border-glow: rgba(16, 185, 129, 0.42);
+
+  --grad-title-1: linear-gradient(180deg, #FFFFFF 0%, #A7F3D0 55%, #047857 100%);
+  --grad-title-2: linear-gradient(180deg, #6EE7B7 0%, #10B981 50%, #064E3B 100%);
+  --grad-title-3: linear-gradient(180deg, #A7F3D0 0%, #059669 50%, #022C22 100%);
+  --grad-accent-btn: linear-gradient(135deg, #0a1f16 0%, #04100b 100%);
+
+  --orb-1-color: rgba(16, 185, 129, 0.14);
+  --orb-2-color: rgba(5, 150, 105, 0.09);
+  --matrix-dot: rgba(16, 185, 129, 0.35);
+  --matrix-line: rgba(16, 185, 129, 0.15);
+  --cursor-ring: rgba(16, 185, 129, 0.5);
+  --cursor-dot: #6EE7B7;
+}
+
+/* 4. CELESTIAL SAPPHIRE (Midnight Navy & Electric Cobalt) */
+[data-theme="cyber"] {
+  --theme-name: 'cyber';
+  --bg-dark: #050811;
+  --bg-secondary: #090e1d;
+  --bg-card: rgba(10, 16, 32, 0.82);
+  --bg-card-hover: rgba(16, 26, 52, 0.94);
+  --bg-glass: rgba(56, 189, 248, 0.03);
+  --bg-glass-strong: rgba(56, 189, 248, 0.08);
+
+  --accent-primary: #38BDF8;
+  --accent-secondary: #0284C7;
+  --accent-bronze: #1E40AF;
+  --accent-highlight: #BAE6FD;
+  --accent-dark: #0F172A;
+
+  --text-main: #F0F9FF;
+  --text-muted: #94A3B8;
+  --text-dim: #475569;
+  --text-light: #E0F2FE;
+  --text-highlight: #FFFFFF;
+
+  --border-subtle: rgba(56, 189, 248, 0.18);
+  --border-glass: rgba(56, 189, 248, 0.28);
+  --border-glow: rgba(56, 189, 248, 0.4);
+
+  --grad-title-1: linear-gradient(180deg, #FFFFFF 0%, #BAE6FD 55%, #0284C7 100%);
+  --grad-title-2: linear-gradient(180deg, #BAE6FD 0%, #38BDF8 50%, #1E3A8A 100%);
+  --grad-title-3: linear-gradient(180deg, #7DD3FC 0%, #0284C7 50%, #0F172A 100%);
+  --grad-accent-btn: linear-gradient(135deg, #09152b 0%, #040812 100%);
+
+  --orb-1-color: rgba(56, 189, 248, 0.14);
+  --orb-2-color: rgba(14, 165, 233, 0.08);
+  --matrix-dot: rgba(56, 189, 248, 0.35);
+  --matrix-line: rgba(56, 189, 248, 0.14);
+  --cursor-ring: rgba(56, 189, 248, 0.5);
+  --cursor-dot: #BAE6FD;
+}
+
+/* ===================================================================
+   TYPOGRAPHY SYSTEM (Architectural & Monumental)
+   =================================================================== */
+:root {
+  --font-monumental: 'Bebas Neue', 'Syne', sans-serif;
+  --font-editorial: 'Montserrat', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --container-max: 1320px;
+  --section-spacing: clamp(90px, 12vw, 160px);
+
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Emil Kowalski & Taste-Skill Precision Curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --bg-deep: var(--bg-dark);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.7;
+  overflow-x: clip;
+  position: relative;
+  min-height: 100vh;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+::selection {
+  background: var(--accent-primary);
+  color: #000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-glass);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Background Layers */
+#interactive-matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.ambient-noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.ambient-glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: -2;
+  transition: background 0.8s ease;
+}
+.ambient-glow-1 {
+  top: 5vh;
+  left: -5vw;
+  width: 48vw;
+  height: 48vw;
+  background: var(--orb-1-color);
+}
+.ambient-glow-2 {
+  bottom: 10vh;
+  right: -5vw;
+  width: 45vw;
+  height: 45vw;
+  background: var(--orb-2-color);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+}
+
+/* ===================================================================
+   MONUMENTAL HEADLINES & EDITORIAL EYEBROWS
+   (The Non-AI Signature Look)
+   =================================================================== */
+
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow-num {
+  font-family: var(--font-editorial);
+  font-size: 0.725rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.eyebrow-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+}
+
+.hero-title-monumental {
+  font-family: var(--font-monumental);
+  font-size: clamp(2rem, 6.5vw, 6.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  user-select: none;
+  margin-bottom: 0.9rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.title-line-1 {
+  display: block;
+  background: var(--grad-title-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
+}
+
+.title-line-2 {
+  display: block;
+  background: var(--grad-title-2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 8px 25px rgba(212, 175, 55, 0.25));
+}
+
+.title-line-3 {
+  display: block;
+  background: var(--grad-title-3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 10px 30px rgba(140, 109, 79, 0.35));
+}
+
+.hero-eyebrow-tech {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.68rem, 1vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-highlight);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bullet-dot {
+  color: var(--accent-bronze);
+  margin: 0 0.2rem;
+}
+
+.hero-editorial-desc {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.88rem, 1.1vw, 0.98rem);
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  max-width: 580px;
+  margin-bottom: 1.4rem;
+}
+
+.hero-editorial-desc strong {
+  color: var(--text-highlight);
+  font-weight: 600;
+}
+
+/* Sections */
+.section {
+  padding: var(--section-spacing) 0;
+  position: relative;
+}
+
+.section-title-monumental {
+  font-family: var(--font-monumental);
+  font-size: clamp(1.85rem, 5.2vw, 5.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.section-subtitle-editorial {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  color: var(--text-muted);
+  max-width: 650px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ===================================================================
+   SIGNATURE CONTEXTUAL CURSOR SYSTEM (Desktop Pointer Fine)
+   =================================================================== */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--cursor-dot);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  will-change: transform;
+  box-shadow: 0 0 10px var(--accent-primary);
+  transition: transform 0.05s ease;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--cursor-ring);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  z-index: 999998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, width, height, background;
+  transition: width 0.22s var(--ease-spring),
+              height 0.22s var(--ease-spring),
+              background 0.22s ease,
+              border-color 0.22s ease,
+              border-radius 0.22s ease;
+}
+
+/* Hover State: Subtle expanding accent ring for clickable elements */
+.cursor-ring.active-interactive {
+  width: 48px;
+  height: 48px;
+  background: rgba(212, 175, 55, 0.12);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--border-glow);
+}
+
+.cursor-ring.cursor-down {
+  transform: scale(0.82) !important;
+}
+
+@media (pointer: coarse), (max-width: 1024px) {
+  .cursor-dot, .cursor-ring {
+    display: none !important;
+  }
+}

@@ -1,0 +1,1013 @@
+/* ===================================================================
+   GOBIND PATEL — ANIMATIONS & FLUID SECTION TRANSITIONS
+   Directly ported from ex/cinematic-portfolio (ScrollStack, AboutSection,
+   ExperienceSection) & awwwards motion engine
+   Lenis Momentum Scroll • Chapter Card Pinned Stacking • Mask Reveals
+   =================================================================== */
+
+/* -------------------------------------------------------------
+   0. LENIS SMOOTH MOMENTUM SCROLLING INTEGRATION
+   ------------------------------------------------------------- */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------
+   1. VIEWPORT READING PROGRESS BAR
+   ------------------------------------------------------------- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2.5px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-bronze), var(--accent-primary), var(--accent-highlight));
+  box-shadow: 0 0 10px var(--accent-primary);
+  z-index: 10001;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
+/* -------------------------------------------------------------
+   2. VERTICAL SECTION INDICATOR DOCK (RIGHT EDGE)
+   ------------------------------------------------------------- */
+.section-nav-dock {
+  position: fixed;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 900;
+  pointer-events: auto;
+}
+
+.section-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.section-nav-label {
+  font-family: var(--font-editorial);
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  white-space: nowrap;
+  background: rgba(12, 14, 18, 0.88);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.section-nav-item:hover .section-nav-label {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent-highlight);
+  border-color: var(--accent-primary);
+}
+
+.section-nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-normal);
+}
+
+.section-nav-item:hover .section-nav-dot,
+.section-nav-item.active .section-nav-dot {
+  background: var(--accent-primary);
+  border-color: var(--accent-highlight);
+  box-shadow: 0 0 10px var(--accent-primary);
+  transform: scale(1.6);
+}
+
+@media (max-width: 1024px) {
+  .section-nav-dock {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------
+   3. SCROLL-TRIGGERED BIDIRECTIONAL ENTRANCE & REVERSE TRANSITIONS
+   Smooth, Quick (0.5s), 60 FPS GPU-accelerated
+   ------------------------------------------------------------- */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(4px);
+  transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.reveal-init.reveal-left {
+  transform: translateX(-24px);
+}
+
+.reveal-init.reveal-right {
+  transform: translateX(24px);
+}
+
+.reveal-init.reveal-scale {
+  transform: scale(0.96);
+}
+
+/* Active in Viewport */
+.reveal-active {
+  opacity: 1 !important;
+  transform: translateY(0) translateX(0) scale(1) !important;
+  filter: blur(0px) !important;
+}
+
+/* Reverse Exits (when scrolling up or down out of view) */
+.reveal-exit-down {
+  opacity: 0 !important;
+  transform: translateY(22px) !important;
+  filter: blur(4px) !important;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
+.reveal-exit-up {
+  opacity: 0 !important;
+  transform: translateY(-22px) !important;
+  filter: blur(4px) !important;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
+/* Quick, Snappy Stagger Delays (0.05s increments) */
+.delay-1 { transition-delay: 0.05s; }
+.delay-2 { transition-delay: 0.10s; }
+.delay-3 { transition-delay: 0.15s; }
+.delay-4 { transition-delay: 0.20s; }
+.delay-5 { transition-delay: 0.25s; }
+
+/* Eyebrow Line Extension Transition */
+.eyebrow-line {
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+}
+
+.reveal-init .eyebrow-line {
+  transform: scaleX(0);
+}
+
+.reveal-active .eyebrow-line {
+  transform: scaleX(1);
+}
+
+/* -------------------------------------------------------------
+   3.1 MASKED EDITORIAL TYPOGRAPHY REVEALS
+   Line-by-line staggered entrance via Emil Kowalski smooth curve
+   ------------------------------------------------------------- */
+.section-title-monumental {
+  overflow: hidden;
+}
+
+.section-title-monumental .title-line-1,
+.section-title-monumental .title-line-2 {
+  display: block;
+  will-change: transform, opacity;
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.62s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.62s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reveal-active.section-title-monumental .title-line-1,
+.reveal-active .section-title-monumental .title-line-1 {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.04s;
+}
+
+.reveal-active.section-title-monumental .title-line-2,
+.reveal-active .section-title-monumental .title-line-2 {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.14s;
+}
+
+.reveal-exit-down.section-title-monumental .title-line-1,
+.reveal-exit-down.section-title-monumental .title-line-2,
+.reveal-exit-up.section-title-monumental .title-line-1,
+.reveal-exit-up.section-title-monumental .title-line-2 {
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* -------------------------------------------------------------
+   4. FLUID PROJECT SHOWCASE TRANSITIONS (ScrollStack Engine)
+   Adapted directly from ex/cinematic-portfolio ScrollStack.tsx
+   ------------------------------------------------------------- */
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.scroll-stack-inner {
+  position: relative;
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.25rem, 6.5vh, 5.25rem);
+}
+
+.scroll-stack-card {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  transform-origin: center center;
+  background: rgba(13, 14, 19, 0.96) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-border-color, var(--border-glass));
+  box-shadow: var(--card-box-shadow, 0 20px 60px rgba(0, 0, 0, 0.85));
+  
+  /* Cinematic Hardware-Accelerated Transform Matrix */
+  transform: translate3d(0, var(--card-scroll-y, 0px), 0)
+             scale3d(var(--card-scroll-scale, 1), var(--card-scroll-scale, 1), 1)
+             perspective(1000px)
+             rotateX(var(--card-tilt-x, 0deg))
+             rotateY(var(--card-tilt-y, 0deg));
+  opacity: var(--card-scroll-opacity, 1);
+  will-change: transform, opacity, box-shadow, border-color;
+  
+  filter: brightness(var(--card-brightness, 0.94)) contrast(var(--card-contrast, 0.98));
+  
+  transition: border-color 0.4s ease,
+              box-shadow 0.4s ease,
+              filter 0.4s ease;
+}
+
+.scroll-stack-card.in-focus {
+  --card-brightness: 1;
+  --card-contrast: 1.02;
+  border-color: var(--card-focus-border, var(--accent-primary));
+}
+
+.scroll-stack-card:hover {
+  border-color: var(--card-focus-border, var(--accent-primary));
+  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.95), 0 0 40px var(--card-sweep-color, var(--border-glow));
+}
+
+/* Top Gold Light Flare Line */
+.card-rim-light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--card-rim-accent, var(--accent-primary)), transparent);
+  pointer-events: none;
+  z-index: 10;
+  opacity: var(--card-rim-opacity, 0.4);
+  transition: opacity 0.5s ease;
+}
+
+.scroll-stack-card.in-focus .card-rim-light {
+  opacity: 1;
+}
+
+/* Localized Specular Light Sweep Overlay */
+.card-focal-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(850px circle at var(--mouse-x, 50%) var(--mouse-y, 20%), 
+              var(--card-sweep-color, rgba(212, 175, 55, 0.1)) 0%, 
+              transparent 70%);
+  opacity: var(--card-sweep-opacity, 0);
+  mix-blend-mode: screen;
+  transition: opacity 0.45s ease;
+}
+
+/* Project-Specific Cinematic Nuances */
+/* 01. Sentix: Intelligent Gold Ambient */
+.scroll-stack-card[data-project-id="sentix"] {
+  --card-sweep-color: rgba(212, 175, 55, 0.12);
+  --card-rim-accent: var(--accent-primary);
+  --card-focus-border: var(--accent-primary);
+}
+
+/* 02. Medical AI: Clinical Emerald/Teal Highlight Complementing Dashboard */
+.scroll-stack-card[data-project-id="medical"] {
+  --card-sweep-color: rgba(16, 185, 129, 0.14);
+  --card-rim-accent: #34d399;
+  --card-focus-border: rgba(52, 211, 153, 0.7);
+}
+
+/* 03. Chakravyuh: Regal Hackathon Award Gold & System Architecture Glow */
+.scroll-stack-card[data-project-id="chakravyuh"] {
+  --card-sweep-color: rgba(212, 175, 55, 0.16);
+  --card-rim-accent: #fbbf24;
+  --card-focus-border: #f59e0b;
+}
+
+.scroll-stack-card[data-project-id="chakravyuh"].in-focus .metric-box:first-child {
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: rgba(212, 175, 55, 0.09);
+  border-radius: var(--radius-sm);
+  transition: all 0.5s ease;
+}
+
+/* Independent Image Parallax & Perspective Depth */
+.project-clip-reveal {
+  perspective: 800px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.project-clip-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate3d(var(--img-tilt-x, 0px), var(--img-parallax-y, 0px), 0) scale(var(--img-zoom-scale, 1.03));
+  transition: transform 0.12s ease-out, filter 0.5s ease;
+  will-change: transform;
+}
+
+/* Staggered Content Reveal as Card Reaches Focal Zone */
+.scroll-stack-card .project-category-tag,
+.scroll-stack-card .project-title,
+.scroll-stack-card .project-desc,
+.scroll-stack-card .project-metrics-grid,
+.scroll-stack-card .tech-tags-list,
+.scroll-stack-card .project-actions {
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-stack-card:not(.in-focus) .project-category-tag {
+  transform: translate3d(0, 8px, 0);
+  opacity: 0.85;
+}
+.scroll-stack-card:not(.in-focus) .project-title {
+  transform: translate3d(0, 12px, 0);
+  opacity: 0.85;
+}
+.scroll-stack-card:not(.in-focus) .project-desc {
+  transform: translate3d(0, 16px, 0);
+  opacity: 0.8;
+}
+.scroll-stack-card:not(.in-focus) .project-metrics-grid {
+  transform: translate3d(0, 20px, 0);
+  opacity: 0.75;
+}
+.scroll-stack-card:not(.in-focus) .tech-tags-list {
+  transform: translate3d(0, 24px, 0);
+  opacity: 0.7;
+}
+.scroll-stack-card:not(.in-focus) .project-actions {
+  transform: translate3d(0, 28px, 0);
+  opacity: 0.65;
+}
+
+.scroll-stack-card.in-focus .project-category-tag,
+.scroll-stack-card.in-focus .project-title,
+.scroll-stack-card.in-focus .project-desc,
+.scroll-stack-card.in-focus .project-metrics-grid,
+.scroll-stack-card.in-focus .tech-tags-list,
+.scroll-stack-card.in-focus .project-actions {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
+
+/* Top Gold Light Flare Line (from ProjectsSection.tsx line 186) */
+.card-rim-light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Corner Minimal L-Brackets (from ProjectsSection.tsx lines 188-193) */
+.corner-bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transition: border-color var(--transition-normal);
+  z-index: 10;
+}
+
+.bracket-tl {
+  top: 0; left: 0;
+  border-top: 2px solid rgba(212, 175, 55, 0.6);
+  border-left: 2px solid rgba(212, 175, 55, 0.6);
+  border-top-left-radius: var(--radius-xl);
+}
+.bracket-tr {
+  top: 0; right: 0;
+  border-top: 2px solid rgba(212, 175, 55, 0.6);
+  border-right: 2px solid rgba(212, 175, 55, 0.6);
+  border-top-right-radius: var(--radius-xl);
+}
+.bracket-bl {
+  bottom: 0; left: 0;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.6);
+  border-left: 2px solid rgba(212, 175, 55, 0.6);
+  border-bottom-left-radius: var(--radius-xl);
+}
+.bracket-br {
+  bottom: 0; right: 0;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.6);
+  border-right: 2px solid rgba(212, 175, 55, 0.6);
+  border-bottom-right-radius: var(--radius-xl);
+}
+
+.scroll-stack-card:hover .corner-bracket {
+  border-color: var(--accent-highlight);
+}
+
+/* Watermark Background Number (from ProjectsSection.tsx lines 194-200) */
+.project-watermark-num {
+  position: absolute;
+  bottom: -2.5rem;
+  right: -1rem;
+  font-family: var(--font-monumental);
+  font-size: clamp(6.5rem, 15vw, 13rem);
+  font-weight: 900;
+  color: rgba(234, 216, 199, 0.035);
+  line-height: 0.8;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease;
+}
+
+.scroll-stack-card:hover .project-watermark-num {
+  color: rgba(212, 175, 55, 0.07);
+  transform: translateY(-6px);
+}
+
+/* Clipping Mask Reveal for Project Imagery (Prompt Section 1 & 2) */
+.project-clip-reveal {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  clip-path: inset(0% 0% 0% 0% round var(--radius-lg));
+  background: #08080c;
+}
+
+.project-clip-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  will-change: transform;
+}
+
+.scroll-stack-card:hover .project-clip-img {
+  transform: scale(1.02);
+}
+
+/* Project card active state refinements */
+.scroll-stack-card .project-info-col {
+  transition: opacity 0.35s ease;
+}
+
+/* -------------------------------------------------------------
+   5. TIMELINE SCROLL-LINKED DYNAMIC LINE DRAWING
+   (Adapted directly from ex/cinematic-portfolio ExperienceSection.tsx)
+   ------------------------------------------------------------- */
+.timeline-container {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-progress-track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 29px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-highlight));
+  box-shadow: 0 0 12px var(--accent-primary);
+  pointer-events: none;
+  transition: height 0.08s linear;
+}
+
+.timeline-node {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-node.node-ignited {
+  background: var(--accent-primary) !important;
+  border-color: #fff !important;
+  box-shadow: 0 0 18px var(--accent-primary), 0 0 35px var(--accent-primary) !important;
+  transform: scale(1.4) !important;
+}
+
+/* -------------------------------------------------------------
+   6. 3D SPOTLIGHT CARD PHYSICS (AboutSection.tsx)
+   ------------------------------------------------------------- */
+.spotlight-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: border-color var(--transition-normal);
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 240px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.12), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* -------------------------------------------------------------
+   7. KEYFRAME ANIMATIONS & PULSES
+   ------------------------------------------------------------- */
+@keyframes pulseTag {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(212, 175, 55, 0);
+  }
+}
+
+@keyframes shineReflect {
+  0% {
+    transform: translate(-100%, -100%) rotate(45deg);
+  }
+  20%, 100% {
+    transform: translate(200%, 200%) rotate(45deg);
+  }
+}
+
+@keyframes floatBadge1 {
+  0%, 100% {
+    transform: translateZ(40px) translateY(0);
+  }
+  50% {
+    transform: translateZ(40px) translateY(-6px);
+  }
+}
+
+@keyframes floatBadge2 {
+  0%, 100% {
+    transform: translateZ(40px) translateY(0);
+  }
+  50% {
+    transform: translateZ(40px) translateY(6px);
+  }
+}
+
+.floating-anim-1 {
+  animation: floatBadge1 4s ease-in-out infinite;
+}
+
+.floating-anim-2 {
+  animation: floatBadge2 4.5s ease-in-out infinite 0.5s;
+}
+
+/* ===================================================================
+   5. PURE CSS TYPING ANIMATION ENGINE (steps() Timing & Erase Cycles)
+   Zero JavaScript • 60 FPS Compositor • Zero Layout Shifts
+   =================================================================== */
+:root {
+  --type-speed: 16s;
+  --caret-width: 3px;
+  --caret-color: var(--accent-primary);
+}
+
+.css-typewriter-wrapper {
+  position: relative;
+  display: inline-flex;
+  vertical-align: bottom;
+  max-width: 100%;
+  overflow: visible;
+  line-height: inherit;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  filter: none !important;
+}
+
+/* Invisible Ghost Placeholder: Guarantees zero layout shifts */
+.css-typewriter-ghost {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: none !important;
+  border: none !important;
+  filter: none !important;
+  display: inline-block;
+  line-height: inherit;
+}
+
+.css-typewriter-phrase {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  opacity: 0;
+  visibility: hidden;
+  box-sizing: border-box;
+  color: var(--accent-highlight);
+  background: var(--grad-title-2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  padding-right: 6px;
+  will-change: width, opacity, visibility;
+}
+
+/* Glowing Neon Caret Pseudo-element */
+.css-typewriter-phrase::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 8%;
+  height: 84%;
+  width: 3px;
+  background: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-primary), 0 0 4px #fff;
+  border-radius: 1px;
+  animation: caretBlink 0.75s infinite;
+}
+
+/* 4-Phrase Pure CSS Loop (16s Total Duration) */
+.phrase-1 {
+  animation: typeCycle1 var(--type-speed) infinite;
+}
+
+.phrase-2 {
+  animation: typeCycle2 var(--type-speed) infinite;
+}
+
+.phrase-3 {
+  animation: typeCycle3 var(--type-speed) infinite;
+}
+
+.phrase-4 {
+  animation: typeCycle4 var(--type-speed) infinite;
+}
+
+/* Caret Blinking Keyframe */
+@keyframes caretBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Phrase 1: Active 0% -> 25% (0s to 4s) */
+@keyframes typeCycle1 {
+  0% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  6% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: linear;
+  }
+  19% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  23.5% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  24%, 100% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Phrase 2: Active 25% -> 50% (4s to 8s) */
+@keyframes typeCycle2 {
+  0%, 24% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  25% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  31% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: linear;
+  }
+  44% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  48.5% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  49.5%, 100% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Phrase 3: Active 50% -> 75% (8s to 12s) */
+@keyframes typeCycle3 {
+  0%, 49% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  50% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  56% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: linear;
+  }
+  69% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  73.5% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  74.5%, 100% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Phrase 4: Active 75% -> 100% (12s to 16s) */
+@keyframes typeCycle4 {
+  0%, 74% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  75% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  81% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: linear;
+  }
+  94% {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    animation-timing-function: steps(20, end);
+  }
+  98.5% {
+    width: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  99.5%, 100% {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ===================================================================
+   6. ACETERNITY INFINITE MARQUEE TICKER RIBBON
+   Continuous 60 FPS Hardware-Accelerated Loop with Pause-On-Hover
+   =================================================================== */
+.marquee-ribbon-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 1.15rem 0;
+  background: rgba(10, 11, 15, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-glass);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  margin: 3.5rem 0;
+  z-index: 20;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  animation: marqueeLoop 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-ribbon-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: var(--font-editorial);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.marquee-item:hover {
+  color: var(--accent-highlight);
+  border-color: var(--accent-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.marquee-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+@keyframes marqueeLoop {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Reduced Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .scroll-stack-card {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .project-clip-img {
+    transform: none !important;
+    transition: none !important;
+  }
+  .card-focal-sweep {
+    display: none !important;
+  }
+  .scroll-stack-card .project-category-tag,
+  .scroll-stack-card .project-title,
+  .scroll-stack-card .project-desc,
+  .scroll-stack-card .project-metrics-grid,
+  .scroll-stack-card .tech-tags-list,
+  .scroll-stack-card .project-actions {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  .css-typewriter-phrase {
+    position: static !important;
+    width: auto !important;
+    opacity: 1 !important;
+    border: none !important;
+    animation: none !important;
+  }
+  .phrase-2, .phrase-3, .phrase-4, .css-typewriter-ghost {
+    display: none !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}
