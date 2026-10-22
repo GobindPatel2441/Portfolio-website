@@ -132,12 +132,14 @@ html.lenis, html.lenis body {
   will-change: transform, opacity;
 }
 
-.reveal-init.reveal-left {
-  transform: translateX(-24px);
-}
+@media (min-width: 1024px) {
+  .reveal-init.reveal-left {
+    transform: translateX(-24px);
+  }
 
-.reveal-init.reveal-right {
-  transform: translateX(24px);
+  .reveal-init.reveal-right {
+    transform: translateX(24px);
+  }
 }
 
 .reveal-init.reveal-scale {
@@ -958,8 +960,101 @@ html.lenis, html.lenis body {
   100% { transform: translate3d(-50%, 0, 0); }
 }
 
+/* -------------------------------------------------------------
+   VANTA.JS HERO CANVAS INTEGRATION
+   ------------------------------------------------------------- */
+#hero-vanta-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.28;
+  mix-blend-mode: screen;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------------
+   REACT BITS: SHINY TEXT (GOLD SHIMMER SWEEP)
+   ------------------------------------------------------------- */
+.shiny-text {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.85) 30%,
+    var(--accent-highlight, #f5d77f) 50%,
+    rgba(255, 255, 255, 0.85) 70%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  background-size: 200% auto;
+  color: transparent !important;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shinyTextSweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: inline-block;
+}
+
+@keyframes shinyTextSweep {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* -------------------------------------------------------------
+   REACT BITS: ELECTRIC / STAR BORDER ACCENT
+   ------------------------------------------------------------- */
+.electric-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.electric-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    var(--accent-primary, #d4af37) 60deg,
+    var(--accent-highlight, #f5d77f) 120deg,
+    transparent 180deg,
+    var(--accent-primary, #d4af37) 240deg,
+    var(--accent-highlight, #f5d77f) 300deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  animation: electricBorderRotate 8s linear infinite;
+  opacity: 0.75;
+}
+
+@keyframes electricBorderRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Responsive Card Transforms (< 1024px) */
 @media (max-width: 1023px) {
+  /* On compact viewports, convert horizontal slide-ins to pure vertical to prevent off-screen overflow */
+  .reveal-init.reveal-left,
+  .reveal-init.reveal-right {
+    transform: translateY(20px) !important;
+  }
+
   .scroll-stack-card {
     /* Keep cards planar without 3D perspective distortion or scaling clipping on mobile/tablet */
     transform: translate3d(0, 0, 0) !important;
@@ -1034,5 +1129,18 @@ html.lenis, html.lenis body {
   }
   .marquee-track {
     animation: none !important;
+  }
+  .shiny-text {
+    animation: none !important;
+    background: none !important;
+    color: var(--accent-highlight) !important;
+    -webkit-text-fill-color: var(--accent-highlight) !important;
+  }
+  .electric-border::before {
+    animation: none !important;
+    opacity: 0.4 !important;
+  }
+  #hero-vanta-layer {
+    display: none !important;
   }
 }

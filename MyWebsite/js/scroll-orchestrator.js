@@ -35,11 +35,21 @@
 
     window.lenis = lenis;
 
-    function lenisRaf(time) {
-      lenis.raf(time);
+    // Harmonize Lenis with GSAP ScrollTrigger & Ticker if available
+    if (typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined') {
+      window.gsap.registerPlugin(window.ScrollTrigger);
+      lenis.on('scroll', window.ScrollTrigger.update);
+      window.gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      window.gsap.ticker.lagSmoothing(0);
+    } else {
+      function lenisRaf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(lenisRaf);
+      }
       requestAnimationFrame(lenisRaf);
     }
-    requestAnimationFrame(lenisRaf);
   }
 
   // 4. Bidirectional IntersectionObserver for Smooth Entrance & Reverse Exit
@@ -425,6 +435,28 @@
       );
 
       onScrollUpdate(window.scrollY, 0, 0);
+    }
+
+    // I. GSAP Coordinated Entrance Timeline & ScrollTrigger Refresh
+    if (typeof window.gsap !== 'undefined' && !prefersReducedMotion) {
+      try {
+        const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out' } });
+        heroTl
+          .from('.hero-status-pill', { opacity: 0, y: -16, duration: 0.65, delay: 0.15 })
+          .from('.hero-title-monumental', { opacity: 0, y: 24, duration: 0.8 }, '-=0.45')
+          .from('.hero-eyebrow-tech', { opacity: 0, y: 16, duration: 0.6 }, '-=0.5')
+          .from('.hero-editorial-desc', { opacity: 0, y: 20, duration: 0.65 }, '-=0.5')
+          .from('.hero-ctas', { opacity: 0, y: 18, duration: 0.6 }, '-=0.45')
+          .from('.stat-item', { opacity: 0, y: 16, stagger: 0.08, duration: 0.5 }, '-=0.4');
+
+        if (typeof window.ScrollTrigger !== 'undefined') {
+          window.addEventListener('resize', () => {
+            window.ScrollTrigger.refresh();
+          }, { passive: true });
+        }
+      } catch (err) {
+        console.warn('GSAP timeline init skipped:', err);
+      }
     }
   }
 

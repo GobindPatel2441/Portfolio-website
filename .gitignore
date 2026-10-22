@@ -9,11 +9,14 @@ desktop.ini
 /git/
 /projectreadme/
 /responsive/
+/ani/
 email/
 ex/
 git/
 projectreadme/
 responsive/
+ani/
+*.zip
 
 # Node & Dependencies
 node_modules/
