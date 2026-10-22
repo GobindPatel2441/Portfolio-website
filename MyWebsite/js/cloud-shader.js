@@ -28,10 +28,10 @@
   canvas.style.mixBlendMode = 'screen';
   canvas.style.transition = 'opacity 0.8s ease';
 
-  // Insert before the interactive matrix canvas so dots hover above the clouds
-  const matrixCanvas = document.getElementById('interactive-matrix-canvas');
-  if (matrixCanvas && matrixCanvas.parentNode) {
-    matrixCanvas.parentNode.insertBefore(canvas, matrixCanvas);
+  // Insert before the global particle background so the neural network hovers above the atmospheric clouds
+  const bgTarget = document.getElementById('global-particle-background') || document.getElementById('interactive-matrix-canvas');
+  if (bgTarget && bgTarget.parentNode) {
+    bgTarget.parentNode.insertBefore(canvas, bgTarget);
   } else {
     document.body.prepend(canvas);
   }

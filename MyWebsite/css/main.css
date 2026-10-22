@@ -246,6 +246,7 @@ body {
 }
 
 /* Background Layers */
+#global-particle-background,
 #interactive-matrix-canvas {
   position: fixed;
   top: 0;
@@ -254,6 +255,17 @@ body {
   height: 100vh;
   z-index: -2;
   pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  overflow: hidden;
+}
+
+#global-particle-background canvas,
+#global-particle-background .vanta-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
 }
 
 .ambient-noise-overlay {
