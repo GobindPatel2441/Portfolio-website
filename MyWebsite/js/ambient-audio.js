@@ -17,8 +17,7 @@
   const DEFAULT_VOLUME = 0.06; // Target initial volume ~6%
   const STORAGE_KEYS = {
     VOLUME: 'portfolio_audio_volume',
-    MUTED: 'portfolio_audio_muted',
-    EXPLICIT_DISABLED: 'portfolio_audio_explicit_disabled'
+    MUTED: 'portfolio_audio_muted'
   };
 
   // Safe localStorage helper
@@ -28,17 +27,24 @@
     },
     set: (key, val) => {
       try { localStorage.setItem(key, String(val)); } catch (e) {}
+    },
+    remove: (key) => {
+      try { localStorage.removeItem(key); } catch (e) {}
     }
   };
 
-  // Read saved preferences
-  let savedVolume = storage.get(STORAGE_KEYS.VOLUME);
-  let targetVolume = savedVolume !== null ? Math.max(0, Math.min(1, parseFloat(savedVolume))) : DEFAULT_VOLUME;
-  if (isNaN(targetVolume)) targetVolume = DEFAULT_VOLUME;
+  // Clear any legacy disabled / muted flags so page refresh ALWAYS autoplays music
+  storage.remove('portfolio_audio_explicit_disabled');
+  storage.remove(STORAGE_KEYS.MUTED);
 
-  let isMuted = storage.get(STORAGE_KEYS.MUTED) === 'true';
+  // Read saved volume (ensure audible level >= 0.05)
+  let savedVolume = storage.get(STORAGE_KEYS.VOLUME);
+  let targetVolume = savedVolume !== null ? parseFloat(savedVolume) : DEFAULT_VOLUME;
+  if (isNaN(targetVolume) || targetVolume < 0.05) targetVolume = DEFAULT_VOLUME;
+
+  let isMuted = false;
   let preMuteVolume = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
-  let explicitDisabled = storage.get(STORAGE_KEYS.EXPLICIT_DISABLED) === 'true';
+  let explicitDisabled = false; // In-memory only for current page session, resets on refresh
 
   // Audio state: 'attempting' | 'playing' | 'paused' | 'blocked' | 'muted' | 'error'
   let currentState = 'attempting';
@@ -125,25 +131,22 @@
   function play(userInitiated) {
     if (userInitiated) {
       explicitDisabled = false;
-      storage.set(STORAGE_KEYS.EXPLICIT_DISABLED, 'false');
     }
 
-    // Unmute if muted and user clicked play
-    if (isMuted && userInitiated) {
-      isMuted = false;
-      storage.set(STORAGE_KEYS.MUTED, 'false');
-    }
+    // Always unmute when play is called
+    isMuted = false;
+    audio.muted = false;
+    storage.set(STORAGE_KEYS.MUTED, 'false');
 
-    const goalVol = isMuted ? 0 : targetVolume;
+    const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
 
     // Start playback
     const playPromise = audio.play();
-
     if (playPromise !== undefined) {
-      playPromise
+      return playPromise
         .then(() => {
           isPlaying = true;
-          setState(isMuted ? 'muted' : 'playing');
+          setState('playing');
 
           // Smooth fade-in from current volume to goal volume over 1200ms
           fadeVolume(audio.volume, goalVol, 1200);
@@ -153,23 +156,23 @@
           }
         })
         .catch((err) => {
-          isPlaying = false;
           if (err.name === 'NotAllowedError') {
-            // Browser autoplay policy blocked audible playback
+            // Browser autoplay policy blocked audible playback without user gesture
             setState('blocked');
             setupFirstGestureListener();
           } else {
             console.warn('[AmbientAudio] Playback prevented:', err.message);
             setState('error');
+            setupFirstGestureListener();
           }
         });
     }
+    return Promise.resolve();
   }
 
   function pause(userInitiated) {
     if (userInitiated) {
-      explicitDisabled = true;
-      storage.set(STORAGE_KEYS.EXPLICIT_DISABLED, 'true');
+      explicitDisabled = true; // In-memory only for this session; refreshes will re-autoplay
     }
 
     // Fade out smoothly over 380ms before actual pause
@@ -259,13 +262,15 @@
   // 4. AUTOPLAY ARRIVAL ORCHESTRATION & FIRST-GESTURE LISTENER
   // -------------------------------------------------------------
   let gestureListenerAttached = false;
+  // Valid user activation events according to W3C specification
+  const GESTURE_EVENTS = ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'touchend', 'click'];
 
   function setupFirstGestureListener() {
     if (gestureListenerAttached) return;
     gestureListenerAttached = true;
 
     function handleFirstGesture(e) {
-      // Don't auto-start if the user explicitly paused previously
+      // Don't auto-start if the user explicitly paused during this session
       if (explicitDisabled) {
         removeGestureListener();
         return;
@@ -274,30 +279,68 @@
       // If user clicked directly on audio controls, let button handler manage it
       if (dom.dock && dom.dock.contains(e.target)) return;
 
-      removeGestureListener();
-      play(false);
+      // Ensure audio is unmuted and attempt play
+      audio.muted = false;
+      isMuted = false;
+      storage.set(STORAGE_KEYS.MUTED, 'false');
+
+      const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            removeGestureListener();
+            isPlaying = true;
+            setState('playing');
+            fadeVolume(audio.volume, goalVol, 1000);
+          })
+          .catch((err) => {
+            // Keep listener active if event wasn't recognized as sufficient activation
+          });
+      }
     }
 
     function removeGestureListener() {
-      window.removeEventListener('pointerdown', handleFirstGesture);
-      window.removeEventListener('keydown', handleFirstGesture);
+      GESTURE_EVENTS.forEach((evt) => {
+        window.removeEventListener(evt, handleFirstGesture, { passive: true, capture: true });
+        document.removeEventListener(evt, handleFirstGesture, { passive: true, capture: true });
+      });
       gestureListenerAttached = false;
     }
 
-    window.addEventListener('pointerdown', handleFirstGesture, { passive: true, once: false });
-    window.addEventListener('keydown', handleFirstGesture, { passive: true, once: false });
+    GESTURE_EVENTS.forEach((evt) => {
+      window.addEventListener(evt, handleFirstGesture, { passive: true, capture: true });
+      document.addEventListener(evt, handleFirstGesture, { passive: true, capture: true });
+    });
   }
 
   function attemptInitialAutoplay() {
-    // If the visitor explicitly paused on a previous visit, respect their choice
-    if (explicitDisabled) {
-      setState('paused');
-      return;
-    }
-
-    // Attempt start on arrival
+    // Reset session disabled state on arrival / refresh
+    explicitDisabled = false;
     setState('attempting');
-    play(false);
+
+    // Proactively attach gesture listener so any click immediately starts audio
+    setupFirstGestureListener();
+
+    // Attempt direct audible playback
+    audio.muted = false;
+    isMuted = false;
+    const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          isPlaying = true;
+          setState('playing');
+          fadeVolume(audio.volume, goalVol, 1200);
+        })
+        .catch((err) => {
+          // Autoplay policy prevented immediate playback without user gesture
+          setState('blocked');
+        });
+    }
   }
 
   // -------------------------------------------------------------
@@ -344,7 +387,7 @@
         if (dom.pillSubtext) dom.pillSubtext.textContent = `${Math.round(targetVolume * 100)}% Volume`;
       } else if (isBlock) {
         dom.pillLabel.textContent = '✦ Play Ambience';
-        if (dom.pillSubtext) dom.pillSubtext.textContent = 'Tap to Enable Audio';
+        if (dom.pillSubtext) dom.pillSubtext.textContent = 'Click anywhere to play';
       } else if (isMute) {
         dom.pillLabel.textContent = 'Ambience Muted';
         if (dom.pillSubtext) dom.pillSubtext.textContent = 'Tap to Unmute';
