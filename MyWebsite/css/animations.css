@@ -1153,7 +1153,8 @@ html.lenis, html.lenis body {
     opacity: 0.4 !important;
   }
   #hero-vanta-layer,
-  #global-particle-background {
+  #global-particle-background,
+  #interactive-matrix-canvas {
     display: none !important;
   }
 }

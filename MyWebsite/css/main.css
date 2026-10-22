@@ -246,16 +246,15 @@ body {
 }
 
 /* Background Layers */
-#global-particle-background,
-#interactive-matrix-canvas {
+#global-particle-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -2;
+  z-index: -3;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.32;
   mix-blend-mode: screen;
   overflow: hidden;
 }
@@ -266,6 +265,16 @@ body {
   width: 100% !important;
   height: 100% !important;
   pointer-events: none !important;
+}
+
+#interactive-matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
 }
 
 .ambient-noise-overlay {
