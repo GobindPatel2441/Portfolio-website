@@ -72,28 +72,28 @@
     display: none !important;
   }
 
-  /* Hero Reordering & Stack Layout */
+  /* Hero Reordering & Stack Layout: Photo First Across All Formats */
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 3.5rem;
+    gap: 2.75rem;
     text-align: center;
   }
 
-  .hero-content {
+  .portrait-container,
+  .hero-visual {
     order: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-visual,
-  .portrait-container {
-    order: 2;
     display: flex;
     justify-content: center;
     width: 100%;
     max-width: 340px;
     margin: 0 auto;
+  }
+
+  .hero-content {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .liquid-glass-card {
