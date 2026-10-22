@@ -234,6 +234,63 @@
   gap: 1rem;
 }
 
+/* Individual Social Link Button inside Social Grid */
+.contact-social-btn,
+.contact-social-grid .contact-card {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.65rem !important;
+  padding: 0.95rem 1.25rem !important;
+  min-height: 52px !important;
+  box-sizing: border-box !important;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.contact-social-btn .social-btn-icon,
+.contact-social-grid .contact-card svg {
+  flex-shrink: 0 !important;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+
+.contact-social-btn .social-btn-label,
+.contact-social-grid .contact-card .social-btn-label {
+  font-family: var(--font-editorial);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  white-space: nowrap !important;
+  color: #fff;
+  line-height: 1;
+}
+
+.contact-social-btn .social-btn-arrow,
+.contact-social-grid .contact-card .social-btn-arrow {
+  flex-shrink: 0 !important;
+  font-family: var(--font-editorial);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  margin-left: -0.25rem;
+  transition: transform var(--transition-fast);
+}
+
+.contact-social-btn:hover .social-btn-arrow,
+.contact-social-grid .contact-card:hover .social-btn-arrow {
+  transform: translate(2px, -2px);
+}
+
+.contact-social-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
 /* Audio Sonic Frequency Equalizer Bars */
 .audio-equalizer {
   display: flex;

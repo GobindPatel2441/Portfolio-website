@@ -928,7 +928,7 @@
     max-width: 100%;
   }
 
-  .contact-card {
+  .contact-card:not(.contact-social-btn) {
     flex-direction: column;
     align-items: stretch;
     gap: 0.85rem;
@@ -960,6 +960,35 @@
   .contact-social-grid {
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
+  }
+
+  /* Social Link Buttons — Preserves strictly horizontal single-row alignment */
+  .contact-social-btn,
+  .contact-social-grid .contact-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    padding: 0.9rem 1rem !important;
+    min-height: 50px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .contact-social-btn .social-btn-icon,
+  .contact-social-grid .contact-card svg {
+    flex-shrink: 0 !important;
+  }
+
+  .contact-social-btn .social-btn-label,
+  .contact-social-grid .contact-card .social-btn-label {
+    white-space: nowrap !important;
+  }
+
+  .contact-social-btn .social-btn-arrow,
+  .contact-social-grid .contact-card .social-btn-arrow {
+    flex-shrink: 0 !important;
   }
 
   /* Command Menu Modal */
@@ -1135,10 +1164,16 @@
     padding: 0.75rem 0.5rem;
   }
 
-  /* Social links on compact phones stack */
+  /* Social links on compact phones stack vertically */
   .contact-social-grid {
     grid-template-columns: 1fr;
     gap: 0.65rem;
+  }
+
+  .contact-social-btn,
+  .contact-social-grid .contact-card {
+    min-height: 48px !important;
+    padding: 0.85rem 1rem !important;
   }
 
   .bento-skill-card {
