@@ -958,7 +958,10 @@ const response = await fetch("http://localhost:11434/api/generate", {
     if (!modalOverlay || !modalOverlay.classList.contains('active')) return;
     const modalDialog = modalOverlay.querySelector('.modal-dialog');
 
+    let closed = false;
     const finalizeClose = () => {
+      if (closed) return;
+      closed = true;
       modalOverlay.classList.remove('active');
       document.body.style.overflow = '';
       if (window.lenis && typeof window.lenis.start === 'function') {
@@ -966,25 +969,30 @@ const response = await fetch("http://localhost:11434/api/generate", {
       }
     };
 
-    if (modalDialog) {
-      const anim = modalDialog.animate([
-        { transform: 'translate3d(0, 0, 0) scale(1)', opacity: 1 },
-        { transform: 'translate3d(0, 24px, 0) scale(0.96)', opacity: 0 }
-      ], {
-        duration: 240,
-        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-        fill: 'both'
-      });
+    if (modalDialog && typeof modalDialog.animate === 'function') {
+      try {
+        const anim = modalDialog.animate([
+          { transform: 'translate3d(0, 0, 0) scale(1)', opacity: 1 },
+          { transform: 'translate3d(0, 24px, 0) scale(0.96)', opacity: 0 }
+        ], {
+          duration: 240,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          fill: 'both'
+        });
 
-      modalOverlay.animate([
-        { opacity: 1 },
-        { opacity: 0 }
-      ], {
-        duration: 240,
-        easing: 'ease'
-      });
+        modalOverlay.animate([
+          { opacity: 1 },
+          { opacity: 0 }
+        ], {
+          duration: 240,
+          easing: 'ease'
+        });
 
-      anim.onfinish = finalizeClose;
+        anim.onfinish = finalizeClose;
+        setTimeout(finalizeClose, 260);
+      } catch (e) {
+        finalizeClose();
+      }
     } else {
       finalizeClose();
     }
