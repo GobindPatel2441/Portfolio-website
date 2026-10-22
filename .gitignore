@@ -34,3 +34,6 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
+
+# Performance test scripts
+cdp_*.py

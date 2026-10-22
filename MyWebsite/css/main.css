@@ -4,7 +4,7 @@
    Monumental Condensed Typography • Warm Champagne Gold • Multi-Theme
    =================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
+/* Note: Google Fonts preconnected and linked in index.html <head> for zero-waterfall performance */
 
 /* ===================================================================
    THEME PALETTES (Interactive Atmosphere Switching)
@@ -212,6 +212,7 @@ html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   color-scheme: dark;
+  overflow-x: hidden;
 }
 
 body {
@@ -219,7 +220,7 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   line-height: 1.7;
-  overflow-x: clip;
+  overflow-x: hidden;
   position: relative;
   min-height: 100vh;
   transition: background-color var(--transition-normal), color var(--transition-normal);

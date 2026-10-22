@@ -14,9 +14,17 @@
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
   let width = 0;
   let height = 0;
-  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let dpr = 1;
+
+  function updateDpr() {
+    const isMobile = window.innerWidth < 768 || !window.matchMedia('(pointer: fine)').matches;
+    dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+  }
+  updateDpr();
 
   let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000, radius: 180, isHovered: false };
   let particles = [];
@@ -61,8 +69,9 @@
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    updateDpr();
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -74,8 +83,9 @@
     particles = [];
     sparks = [];
 
-    // Structured Grid Points (Dot Matrix)
-    const spacing = Math.max(55, Math.floor(width / 24));
+    const isMobile = width < 768;
+    // Structured Grid Points (Dot Matrix) with lower density on mobile to preserve battery
+    const spacing = isMobile ? Math.max(68, Math.floor(width / 14)) : Math.max(55, Math.floor(width / 24));
     const cols = Math.ceil(width / spacing) + 1;
     const rows = Math.ceil(height / spacing) + 1;
 
@@ -97,8 +107,8 @@
       }
     }
 
-    // Drifting Spark Embers
-    const sparkCount = Math.min(35, Math.floor(width / 40));
+    // Drifting Spark Embers (scaled by device capability)
+    const sparkCount = isMobile ? Math.min(14, Math.floor(width / 50)) : Math.min(32, Math.floor(width / 40));
     for (let i = 0; i < sparkCount; i++) {
       sparks.push({
         x: Math.random() * width,
@@ -120,6 +130,20 @@
   }, { passive: true });
 
   window.addEventListener('mouseleave', () => {
+    mouse.targetX = -1000;
+    mouse.targetY = -1000;
+    mouse.isHovered = false;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      mouse.targetX = e.touches[0].clientX;
+      mouse.targetY = e.touches[0].clientY;
+      mouse.isHovered = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
     mouse.targetX = -1000;
     mouse.targetY = -1000;
     mouse.isHovered = false;

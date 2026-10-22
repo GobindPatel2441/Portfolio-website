@@ -241,6 +241,60 @@
     const heroTitle = document.querySelector('.hero-title-monumental');
     const heroPortrait = document.querySelector('.portrait-container');
 
+    // Cached Layout Metrics (Updated only on resize or initial load)
+    let cachedViewportHeight = window.innerHeight;
+    let cachedCardMetrics = [];
+    let cachedExpTop = 0;
+    let cachedExpHeight = 0;
+    let cachedTimelineThresholds = [];
+
+    function updateLayoutMetrics() {
+      cachedViewportHeight = window.innerHeight;
+
+      // Cache Project Cards
+      cachedCardMetrics = cards.map((card) => {
+        const rect = card.getBoundingClientRect();
+        return {
+          top: rect.top + window.scrollY,
+          height: rect.height
+        };
+      });
+
+      // Cache Experience Timeline
+      if (expSection && timelineContainer) {
+        const expRect = expSection.getBoundingClientRect();
+        cachedExpTop = expRect.top + window.scrollY;
+        cachedExpHeight = expRect.height || expSection.offsetHeight;
+
+        cachedTimelineThresholds = timelineNodes.map((node) => {
+          const nodeRect = node.getBoundingClientRect();
+          const nodeAbsTop = nodeRect.top + window.scrollY;
+          return (nodeAbsTop - cachedExpTop) / (cachedExpHeight || 1);
+        });
+      }
+    }
+
+    updateLayoutMetrics();
+    window.addEventListener('resize', () => {
+      clearTimeout(window.__metricsTimer);
+      window.__metricsTimer = setTimeout(updateLayoutMetrics, 150);
+    }, { passive: true });
+
+    // High-performance asynchronous section dock indicator via IntersectionObserver
+    const navDockObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          updateNavDock(entry.target.getAttribute('id'));
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '-20% 0px -40% 0px',
+      threshold: 0.05
+    });
+
+    sections.forEach((sec) => navDockObserver.observe(sec));
+
     function onScrollUpdate(scrollTop, scrollVelocity, scrollProgress) {
       // 1. Reading Progress Bar (Shrinks/expands smoothly in reverse)
       if (progressBar) {
@@ -251,8 +305,8 @@
       window.scrollVelocity = scrollVelocity;
 
       // 3. Hero Parallax (Reverses seamlessly when scrolling back to top)
-      if (heroTitle && scrollTop < window.innerHeight) {
-        const heroRatio = Math.max(0, scrollTop / window.innerHeight);
+      if (heroTitle && scrollTop < cachedViewportHeight) {
+        const heroRatio = Math.max(0, scrollTop / cachedViewportHeight);
         heroTitle.style.transform = `translate3d(0, ${heroRatio * -28}px, 0)`;
         if (heroPortrait) {
           heroPortrait.style.transform = `translate3d(0, ${heroRatio * 18}px, 0) scale(${1 - heroRatio * 0.035})`;
@@ -260,19 +314,21 @@
       }
 
       // 4. Cinematic Scroll Zoom-Through Transition for Project Cards
-      if (cards.length > 0) {
-        const viewportHeight = window.innerHeight;
-        const viewportCenter = viewportHeight / 2;
+      if (cards.length > 0 && cachedCardMetrics.length === cards.length) {
+        const viewportCenter = cachedViewportHeight / 2;
         let activeProjectKey = null;
         let closestDist = Infinity;
         const isDesktop = window.innerWidth >= 900 && isFinePointer;
 
-        cards.forEach((card) => {
-          const rect = card.getBoundingClientRect();
+        for (let i = 0; i < cards.length; i++) {
+          const card = cards[i];
+          const metric = cachedCardMetrics[i];
+          const cardTopInView = metric.top - scrollTop;
+          const cardBottomInView = cardTopInView + metric.height;
 
           // Skip off-screen cards for maximum 60/120fps performance
-          if (rect.bottom < -120 || rect.top > viewportHeight + 120) {
-            return;
+          if (cardBottomInView < -120 || cardTopInView > cachedViewportHeight + 120) {
+            continue;
           }
 
           if (prefersReducedMotion) {
@@ -284,13 +340,13 @@
             card.style.setProperty('--img-parallax-y', '0px');
             card.style.setProperty('--img-zoom-scale', '1');
             card.classList.add('in-focus');
-            return;
+            continue;
           }
 
-          const cardCenter = rect.top + rect.height / 2;
+          const cardCenter = cardTopInView + metric.height / 2;
           const dist = cardCenter - viewportCenter;
           const distToCenter = Math.abs(dist);
-          const range = viewportHeight * 0.72;
+          const range = cachedViewportHeight * 0.72;
           const progress = Math.max(-1.5, Math.min(1.5, dist / range));
 
           // Cosine bell curve for smooth camera focal moment (1.0 at center, 0 at bounds)
@@ -301,26 +357,17 @@
 
           if (isDesktop) {
             if (progress > 0) {
-              // Entrance phase (approaching from below center)
               const entranceRatio = Math.max(0, Math.min(1, progress));
-              // Scale increases smoothly from ~0.95 to 1.0, then pushes in to ~1.035 at focal center
               scale = 0.95 + 0.05 * (1 - entranceRatio) + 0.035 * Math.pow(focalFactor, 1.4);
-              // Upward movement ~40px as card enters focal range
               translateY = entranceRatio * 40;
-              // Smooth opacity from ~0.70 to 1.0
               opacity = 0.70 + 0.30 * (1 - entranceRatio);
             } else {
-              // Exit phase (scrolling past center toward top)
               const exitRatio = Math.max(0, Math.min(1, -progress));
-              // Scale gradually recedes from ~1.035 to ~0.975
               scale = 1.035 - (1.035 - 0.975) * exitRatio;
-              // Subtle receding upward glide
               translateY = -exitRatio * 16;
-              // Opacity gently eases to ~0.84, keeping text fully readable
               opacity = 1.0 - 0.16 * exitRatio;
             }
           } else {
-            // Mobile & Tablet: Subtle responsive scale to prevent any horizontal overflow
             if (progress > 0) {
               const entranceRatio = Math.max(0, Math.min(1, progress));
               scale = 0.98 + 0.02 * (1 - entranceRatio) + 0.016 * focalFactor;
@@ -334,15 +381,11 @@
             }
           }
 
-          // Independent image parallax & depth
           const imgParallaxY = isDesktop ? -progress * 22 : -progress * 8;
           const imgZoomScale = isDesktop ? 1.02 + 0.035 * focalFactor : 1.01;
-
-          // Localized lighting sweeps
           const rimOpacity = 0.3 + 0.7 * focalIntensity;
           const sweepOpacity = 0.08 + 0.92 * focalIntensity;
 
-          // Apply hardware-accelerated CSS variables
           card.style.setProperty('--card-scroll-scale', scale.toFixed(4));
           card.style.setProperty('--card-scroll-y', `${translateY.toFixed(2)}px`);
           card.style.setProperty('--card-scroll-opacity', opacity.toFixed(3));
@@ -351,7 +394,6 @@
           card.style.setProperty('--img-parallax-y', `${imgParallaxY.toFixed(2)}px`);
           card.style.setProperty('--img-zoom-scale', imgZoomScale.toFixed(3));
 
-          // Focal state threshold for staggered element ignition and border illumination
           const isInFocus = focalFactor >= 0.42;
           if (isInFocus) {
             card.classList.add('in-focus');
@@ -363,9 +405,8 @@
           } else {
             card.classList.remove('in-focus');
           }
-        });
+        }
 
-        // Dynamic atmosphere lighting shifting based on active project in view
         if (activeProjectKey && projectColorMap[activeProjectKey]) {
           document.documentElement.style.setProperty('--orb-1-color', projectColorMap[activeProjectKey].orb1);
           document.documentElement.style.setProperty('--orb-2-color', projectColorMap[activeProjectKey].orb2);
@@ -373,35 +414,25 @@
       }
 
       // 5. Dynamic Timeline Progress Line (Grows Downwards, Shrinks Back Upwards)
-      if (expSection && timelineContainer && timelineFill) {
-        const expRect = expSection.getBoundingClientRect();
-        const startY = window.innerHeight * 0.75;
-        const totalHeight = expRect.height;
-        const currentProgress = (startY - expRect.top) / totalHeight;
+      if (expSection && timelineContainer && timelineFill && cachedExpHeight > 0) {
+        const expTopInView = cachedExpTop - scrollTop;
+        const startY = cachedViewportHeight * 0.75;
+        const currentProgress = (startY - expTopInView) / cachedExpHeight;
         const clampedProgress = Math.max(0, Math.min(1, currentProgress));
 
         timelineFill.style.height = `${clampedProgress * 100}%`;
 
-        // Ignite/Un-ignite milestone nodes dynamically in both scroll directions
-        timelineNodes.forEach((node) => {
-          const nodeRect = node.getBoundingClientRect();
-          if (nodeRect.top <= window.innerHeight * 0.72) {
+        // Ignite/Un-ignite milestone nodes dynamically in both scroll directions using cached thresholds
+        for (let i = 0; i < timelineNodes.length; i++) {
+          const node = timelineNodes[i];
+          const threshold = cachedTimelineThresholds[i] || 0;
+          if (clampedProgress >= threshold) {
             node.classList.add('node-ignited');
           } else {
             node.classList.remove('node-ignited');
           }
-        });
-      }
-
-      // 6. Update Section Dock Indicator in Both Directions
-      let activeSectionId = 'hero';
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= window.innerHeight * 0.2) {
-          activeSectionId = section.getAttribute('id');
         }
-      });
-      updateNavDock(activeSectionId);
+      }
     }
 
     // H. Connect Listeners (Lenis or Native Fallback)

@@ -26,7 +26,6 @@
       card.style.perspective = PERSPECTIVE + 'px';
       card.style.transformStyle = 'preserve-3d';
       card.style.transition = `transform 0.6s ${SPRING_EASE}`;
-      card.style.willChange = 'transform';
 
       // Create the specular glow overlay
       const glow = document.createElement('div');
@@ -47,12 +46,19 @@
       card.style.overflow = 'hidden';
       card.appendChild(glow);
 
+      let cardRect = null;
+
+      card.addEventListener('mouseenter', () => {
+        card.style.willChange = 'transform';
+        cardRect = card.getBoundingClientRect();
+      });
+
       card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
+        if (!cardRect) cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        const cx = cardRect.width / 2;
+        const cy = cardRect.height / 2;
 
         const rotateY = ((x - cx) / cx) * TILT_MAX;
         const rotateX = -((y - cy) / cy) * TILT_MAX;
@@ -71,7 +77,9 @@
       card.addEventListener('mouseleave', () => {
         card.style.transition = `transform 0.6s ${SPRING_EASE}`;
         card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        card.style.willChange = 'auto';
         glow.style.opacity = '0';
+        cardRect = null;
       });
     });
   }

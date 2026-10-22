@@ -20,9 +20,37 @@
   const MIN_FILL_TIME_MS = 2000; // Minimum time between page load & submit (bot barrier)
   const pageLoadedAt = Date.now();
 
+  let emailJsPromise = null;
+  function loadEmailJsSdk() {
+    if (window.emailjs) return Promise.resolve(window.emailjs);
+    if (emailJsPromise) return emailJsPromise;
+    emailJsPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      s.defer = true;
+      s.onload = () => resolve(window.emailjs);
+      s.onerror = () => reject(new Error('EmailJS SDK failed to load. Please verify your internet connection.'));
+      document.head.appendChild(s);
+    });
+    return emailJsPromise;
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contact-form');
     if (!form) return;
+
+    // Preload SDK as soon as user focuses any contact field or scrolls near #contact
+    form.addEventListener('focusin', loadEmailJsSdk, { once: true, passive: true });
+    const contactSec = document.getElementById('contact');
+    if (contactSec && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadEmailJsSdk();
+          observer.disconnect();
+        }
+      }, { rootMargin: '600px 0px' });
+      observer.observe(contactSec);
+    }
 
     const nameInput = document.getElementById('contact-name');
     const emailInput = document.getElementById('contact-email');
@@ -239,6 +267,7 @@
 
       // Step E: Real EmailJS delivery
       try {
+        await loadEmailJsSdk();
         if (typeof window.emailjs === 'undefined') {
           throw new Error('EmailJS SDK failed to load. Please verify your internet connection.');
         }
