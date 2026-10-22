@@ -358,6 +358,32 @@
     grid-column: span 1;
   }
 
+  /* Experience & Timeline Tablet (< 1024px) */
+  .timeline-container {
+    --timeline-rail-x: 18px;
+    --timeline-card-gap: 28px;
+    padding-left: 46px !important;
+  }
+
+  .timeline-line,
+  .timeline-progress-track {
+    left: 18px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .timeline-item {
+    margin-bottom: 2.75rem;
+  }
+
+  .timeline-node {
+    left: -28px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .timeline-card {
+    padding: 1.4rem 1.25rem;
+  }
+
   /* Contact Section Split */
   .contact-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -821,20 +847,61 @@
     gap: 0.5rem !important;
   }
 
-  /* Timeline & Track Record Mobile */
+  /* Timeline & Track Record Mobile (< 768px) */
   .timeline-container {
-    padding-left: 1.25rem;
+    --timeline-rail-x: 16px;
+    --timeline-card-gap: 24px;
+    padding-left: 40px !important;
+  }
+
+  .timeline-line,
+  .timeline-progress-track {
+    left: 16px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .timeline-item {
+    margin-bottom: 2rem;
   }
 
   .timeline-node {
-    left: -1.25rem;
+    top: 1.25rem;
+    left: -24px !important;
+    transform: translateX(-50%) !important;
+    width: 11px;
+    height: 11px;
   }
 
   .timeline-card {
     width: 100%;
     max-width: 100%;
-    padding: 1.15rem 1rem;
+    padding: 1.2rem 1.05rem;
+    border-radius: var(--radius-md);
     box-sizing: border-box;
+  }
+
+  .timeline-title {
+    font-size: 1.35rem;
+    line-height: 1.1;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .timeline-org {
+    font-size: 0.825rem;
+    line-height: 1.45;
+  }
+
+  .timeline-period {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.55rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .tech-tag {
@@ -1057,6 +1124,44 @@
     text-align: center;
     gap: 1.25rem;
   }
+
+  /* Timeline & Track Record (< 480px) */
+  .timeline-container {
+    --timeline-rail-x: 12px;
+    --timeline-card-gap: 20px;
+    padding-left: 32px !important;
+  }
+
+  .timeline-line,
+  .timeline-progress-track {
+    left: 12px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .timeline-node {
+    top: 1.15rem;
+    left: -20px !important;
+    transform: translateX(-50%) !important;
+    width: 10px;
+    height: 10px;
+  }
+
+  .timeline-card {
+    padding: 1rem 0.85rem;
+  }
+
+  .timeline-title {
+    font-size: 1.2rem;
+  }
+
+  .timeline-period {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.45rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.8rem;
+  }
 }
 
 /* -------------------------------------------------------------
@@ -1160,11 +1265,23 @@
   }
 
   .timeline-container {
-    padding-left: 0.95rem;
+    --timeline-rail-x: 10px;
+    --timeline-card-gap: 16px;
+    padding-left: 26px !important;
+  }
+
+  .timeline-line,
+  .timeline-progress-track {
+    left: 10px !important;
+    transform: translateX(-50%) !important;
   }
 
   .timeline-node {
-    left: -0.95rem;
+    top: 1.05rem;
+    left: -16px !important;
+    transform: translateX(-50%) !important;
+    width: 8px;
+    height: 8px;
   }
 
   .timeline-card {

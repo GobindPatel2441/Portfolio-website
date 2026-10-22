@@ -1209,24 +1209,37 @@
    8. EXPERIENCE & HACKATHON TIMELINE
    ------------------------------------------------------------- */
 .timeline-container {
+  --timeline-rail-x: 18px;
+  --timeline-card-gap: 32px;
   position: relative;
   max-width: 900px;
   margin: 0 auto;
-  padding-left: 2rem;
+  padding-left: calc(var(--timeline-rail-x) + var(--timeline-card-gap));
+  box-sizing: border-box;
 }
 
 .timeline-line {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
-  width: 1px;
-  background: linear-gradient(180deg, var(--accent-primary), var(--accent-bronze), transparent);
+  left: var(--timeline-rail-x);
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.35) 0%, rgba(212, 175, 55, 0.1) 85%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .timeline-item {
   position: relative;
   margin-bottom: 3.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.timeline-item.reveal-init.reveal-left,
+.timeline-item.reveal-init.reveal-right {
+  transform: translateY(20px);
 }
 
 .timeline-item:last-child {
@@ -1235,15 +1248,16 @@
 
 .timeline-node {
   position: absolute;
-  top: 0.35rem;
-  left: -2rem;
-  width: 10px;
-  height: 10px;
+  top: 1.45rem;
+  left: calc(-1 * var(--timeline-card-gap));
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--bg-dark);
   border: 1.5px solid var(--accent-primary);
   box-shadow: 0 0 10px var(--accent-primary);
   transform: translateX(-50%);
+  z-index: 3;
 }
 
 .timeline-card {

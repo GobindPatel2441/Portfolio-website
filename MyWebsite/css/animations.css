@@ -529,19 +529,16 @@ html.lenis, html.lenis body {
    5. TIMELINE SCROLL-LINKED DYNAMIC LINE DRAWING
    (Adapted directly from ex/cinematic-portfolio ExperienceSection.tsx)
    ------------------------------------------------------------- */
-.timeline-container {
-  position: relative;
-  padding-left: 2rem;
-}
-
 .timeline-progress-track {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 29px;
+  left: var(--timeline-rail-x, 18px);
   width: 2px;
-  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.06);
   pointer-events: none;
+  z-index: 2;
 }
 
 .timeline-progress-fill {
@@ -551,20 +548,20 @@ html.lenis, html.lenis body {
   width: 100%;
   height: 0%;
   background: linear-gradient(180deg, var(--accent-primary), var(--accent-highlight));
-  box-shadow: 0 0 12px var(--accent-primary);
+  box-shadow: 0 0 14px var(--accent-primary), 0 0 28px rgba(212, 175, 55, 0.5);
   pointer-events: none;
   transition: height 0.08s linear;
 }
 
 .timeline-node {
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .timeline-node.node-ignited {
   background: var(--accent-primary) !important;
   border-color: #fff !important;
   box-shadow: 0 0 18px var(--accent-primary), 0 0 35px var(--accent-primary) !important;
-  transform: scale(1.4) !important;
+  transform: translateX(-50%) scale(1.35) !important;
 }
 
 /* -------------------------------------------------------------
