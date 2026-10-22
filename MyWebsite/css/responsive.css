@@ -1,10 +1,11 @@
 /* ==========================================================================
-   Gobind Patel Portfolio — Dynamic Responsive Architecture & Breakpoint System
+   GOBIND PATEL PORTFOLIO — BESPOKE RESPONSIVE ARCHITECTURE
    Engineered for seamless scaling from 320px ultra-mobile to 4K Ultrawide
+   Mobile-First • Non-Destructive • Zero-Overflow Layout System
    ========================================================================== */
 
 /* -------------------------------------------------------------
-   1. GLOBAL RESPONSIVE SCALING GUARDS (< 1440px / Standard Desktop)
+   1. GLOBAL RESPONSIVE TOKENS (< 1440px / Standard Desktop)
    ------------------------------------------------------------- */
 @media (max-width: 1440px) {
   :root {
@@ -22,15 +23,14 @@
     --section-spacing: 95px;
   }
 
-  /* Compact Navigation spacing */
-  .nav-center {
-    gap: 0.15rem;
-    padding: 0.35rem 0.6rem;
+  /* Compact Navigation link spacing */
+  .nav-links {
+    gap: 1rem;
   }
 
   .nav-link {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
   }
 
   /* Hero Section proportions */
@@ -46,13 +46,9 @@
     max-width: 380px;
   }
 
-  /* Skills & Experience Grids */
-  .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .metrics-dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* Bento matrix grid scaling */
+  .bento-skills-grid {
+    gap: 1.25rem;
   }
 
   .command-menu-dialog {
@@ -70,7 +66,8 @@
     --header-height: 70px;
   }
 
-  /* Hide right-edge section indicator dock on tablets & iPads to avoid obscuring cards */
+  /* Hide right-edge fixed section indicator dock to avoid obscuring cards */
+  .section-nav-dock,
   .section-indicator-dock {
     display: none !important;
   }
@@ -89,15 +86,23 @@
     align-items: center;
   }
 
-  .hero-visual {
+  .hero-visual,
+  .portrait-container {
     order: 2;
     display: flex;
     justify-content: center;
     width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .liquid-glass-card {
+    max-width: 340px;
   }
 
   .hero-eyebrow-tech {
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .hero-status-pill {
@@ -107,20 +112,13 @@
 
   .hero-ctas {
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .hero-stats {
     justify-content: center;
     max-width: 520px;
     margin: 2.5rem auto 0;
-  }
-
-  .portrait-container {
-    max-width: 340px;
-  }
-
-  .liquid-glass-card {
-    max-width: 340px;
   }
 
   /* Project Showcase Tablet Adjustments */
@@ -138,30 +136,29 @@
     order: 2;
   }
 
+  /* Bento Skills Grid reflow */
+  .bento-skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .bento-card-7,
+  .bento-card-5 {
+    grid-column: span 1;
+  }
+
   /* Contact Section Split */
   .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
   }
 
-  .contact-info-col {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .contact-form-col {
+  .contact-info-cards,
+  .contact-form {
     max-width: 600px;
     margin: 0 auto;
     width: 100%;
-  }
-
-  .contact-reach-items {
-    align-items: center;
-  }
-
-  .contact-reach-item {
-    justify-content: center;
+    min-width: 0;
   }
 }
 
@@ -174,80 +171,108 @@
     --header-height: 64px;
   }
 
+  body.nav-drawer-open {
+    overflow: hidden !important;
+  }
+
   /* Floating Navbar transforms into clean top header bar */
-  .navbar-floating {
+  .navbar-wrapper {
     top: 0;
     left: 0;
     right: 0;
-    padding: 0.65rem 1.15rem;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-bottom: 1px solid var(--border-glass);
-    background: rgba(7, 8, 10, 0.92);
+    width: 100%;
+    padding: 0.45rem 0.85rem;
+  }
+
+  .navbar {
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    gap: 0.45rem;
+  }
+
+  .nav-brand {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.22em;
+  }
+
+  .brand-monogram {
+    width: 30px;
+    height: 30px;
   }
 
   /* Mobile Hamburger Toggle becomes visible */
   .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
   }
 
-  /* Navigation Center Links hide into off-canvas drawer */
-  .nav-center {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(7, 8, 10, 0.97);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    padding: 2.5rem 1.5rem;
-    border: none;
-    border-bottom: 1px solid var(--border-glass);
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform var(--transition-normal), opacity var(--transition-normal);
-    z-index: var(--z-modal);
+  /* Navigation Links transform into full-screen glassmorphic drawer */
+  .nav-links {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: rgba(7, 8, 10, 0.98) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1.15rem !important;
+    padding: 2.5rem 1.5rem !important;
+    z-index: 9999 !important;
+    transform: translateY(-100%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease !important;
   }
 
-  .nav-center.mobile-active {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+  .nav-links.mobile-open {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   .nav-link {
-    font-size: 1.15rem;
-    padding: 0.75rem 2rem;
-    width: 100%;
-    text-align: center;
+    font-size: 1.15rem !important;
+    padding: 0.65rem 1.5rem !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    text-align: center !important;
     border-radius: var(--radius-md);
   }
 
   .nav-link:hover,
   .nav-link.active {
     background: rgba(212, 175, 55, 0.12);
+    color: var(--accent-highlight);
   }
 
-  /* Desktop Resume Action hides from navbar bar */
-  .desktop-resume-btn {
-    display: none !important;
+  /* Mobile Drawer Bottom Actions */
+  .mobile-drawer-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    margin-top: 1rem !important;
   }
 
-  /* Modal drawer version of resume inside nav-center */
-  .mobile-drawer-resume {
-    display: inline-flex !important;
-    margin-top: 1.25rem;
-    width: auto;
+  .mobile-drawer-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
   }
 
   .nav-actions {
@@ -259,10 +284,16 @@
    5. SMARTPHONES & PHABLETS (< 768px CONTENT ADAPTATIONS)
    ------------------------------------------------------------- */
 @media (max-width: 767px) {
+  /* Prevent scroll-triggered reveal animations from overflowing horizontally on mobile screens */
+  .reveal-init.reveal-left,
+  .reveal-init.reveal-right {
+    transform: translateY(16px) !important;
+  }
+
   /* Container margins */
   .container {
-    padding-left: 1.15rem;
-    padding-right: 1.15rem;
+    padding-left: clamp(0.85rem, 3.5vw, 1.25rem);
+    padding-right: clamp(0.85rem, 3.5vw, 1.25rem);
   }
 
   /* Section Headers scaling */
@@ -287,7 +318,7 @@
   }
 
   .hero-title-monumental {
-    font-size: clamp(2.35rem, 7.8vw, 3.75rem);
+    font-size: clamp(2.2rem, 7.8vw, 3.6rem);
     letter-spacing: -0.02em;
   }
 
@@ -295,14 +326,27 @@
     font-size: 1.05rem;
   }
 
-  .hero-lead {
+  .hero-editorial-desc {
     font-size: 0.925rem;
     line-height: 1.65;
+  }
+
+  .hero-ctas {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .hero-ctas .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 46px;
   }
 
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.85rem;
+    width: 100%;
   }
 
   .stat-value {
@@ -314,11 +358,28 @@
   }
 
   .portrait-container {
-    max-width: 300px;
+    max-width: 290px;
+    margin: 0 auto;
+  }
+
+  .portrait-conic-glow {
+    inset: 0 !important;
+    filter: blur(20px) !important;
   }
 
   .liquid-glass-card {
-    max-width: 300px;
+    max-width: 290px;
+  }
+
+  .glass-modes-toggle {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .mode-btn {
+    flex: 1 1 auto;
+    min-width: 50px;
   }
 
   /* Project Showcase Mobile Formatting (< 768px) */
@@ -331,10 +392,12 @@
   .project-visual-wrapper,
   .project-clip-reveal {
     aspect-ratio: 16/10;
+    max-height: 220px;
   }
 
   .project-title {
     font-size: 1.45rem;
+    line-height: 1.1;
   }
 
   .project-desc {
@@ -360,13 +423,20 @@
 
   .project-card-footer {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.85rem;
   }
 
-  .project-links {
+  .project-actions {
+    flex-direction: column;
     width: 100%;
-    justify-content: flex-start;
+    gap: 0.65rem;
+  }
+
+  .project-actions .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
   }
 
   /* Terminal AI Assistant (< 768px) */
@@ -375,7 +445,7 @@
   }
 
   .terminal-output {
-    min-height: 300px;
+    min-height: 280px;
     max-height: 380px;
     padding: 1rem 0.85rem;
     font-size: 0.78rem;
@@ -387,31 +457,104 @@
 
   .chip-btn {
     font-size: 0.65rem;
-    padding: 0.25rem 0.6rem;
+    padding: 0.35rem 0.65rem;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
   }
 
-  /* Skills Grid Mobile */
-  .skills-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .skill-cluster-card {
-    padding: 1.35rem 1.15rem;
-  }
-
-  /* Contact Form Mobile */
-  .contact-form {
-    padding: 1.5rem 1.15rem;
-  }
-
-  .contact-form-grid {
+  /* Bento Skills Grid Mobile */
+  .bento-skills-grid {
     grid-template-columns: 1fr;
     gap: 1.15rem;
   }
 
+  .bento-card-7,
+  .bento-card-5 {
+    grid-column: span 1;
+  }
+
+  .bento-skill-card {
+    padding: 1.35rem 1.15rem;
+  }
+
+  .bento-header {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .bento-stat-strip {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Timeline & Track Record Mobile */
+  .timeline-container {
+    padding-left: 1.25rem;
+  }
+
+  .timeline-node {
+    left: -1.25rem;
+  }
+
+  .timeline-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 1.15rem 1rem;
+    box-sizing: border-box;
+  }
+
+  .tech-tag {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Contact Section Mobile */
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .contact-info-cards,
+  .contact-card,
+  .contact-form {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .contact-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 1.1rem 1rem;
+  }
+
+  .contact-card-left {
+    width: 100%;
+  }
+
   .contact-card-actions {
-    grid-template-columns: 1fr;
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .contact-card-actions .btn {
+    flex: 1;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .contact-card-value {
+    font-size: 0.85rem;
+    word-break: break-all;
+  }
+
+  .contact-social-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 
   /* Command Menu Modal */
@@ -422,7 +565,7 @@
   }
 
   /* Audio Floating Controller */
-  .ambient-audio-fab {
+  .ambient-audio-dock {
     bottom: 1.25rem;
     right: 1.25rem;
   }
@@ -432,47 +575,31 @@
    6. ARCHITECTURE MODAL RESPONSIVE GUARDS (< 768px)
    ------------------------------------------------------------- */
 @media (max-width: 767px) {
-  .arch-modal-dialog {
+  .modal-dialog {
     width: 96vw !important;
     max-width: 96vw !important;
     max-height: 92vh !important;
     margin: 1rem auto !important;
-    border-radius: var(--radius-md) !important;
+    border-radius: var(--radius-lg) !important;
   }
 
-  .arch-modal-header {
-    padding: 0.85rem 1rem !important;
-    flex-wrap: wrap !important;
-    gap: 0.5rem !important;
-  }
-
-  .arch-modal-body {
-    padding: 0.85rem 0.75rem !important;
-    max-height: calc(92vh - 130px) !important;
-    overflow-y: auto !important;
-  }
-
-  .arch-tabs-nav {
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 0.4rem !important;
-    padding-bottom: 0.5rem !important;
-  }
-
-  .arch-tab-btn {
-    font-size: 0.7rem !important;
-    padding: 0.35rem 0.7rem !important;
-    flex-shrink: 0 !important;
-  }
-
-  .arch-diagram-canvas {
-    padding: 1rem 0.75rem !important;
+  .modal-close-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.5rem !important;
+    top: 0.75rem !important;
+    right: 0.75rem !important;
   }
 
   .arch-nodes-flow:not(.mode-pipeline) {
     grid-template-columns: 1fr !important;
     gap: 0.75rem !important;
+  }
+
+  .arch-nodes-flow.mode-pipeline .arch-system-node {
+    flex: 0 0 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
   }
 
   .arch-inspector-meta-grid {
@@ -500,13 +627,13 @@
   }
 
   .container {
-    padding-left: 0.85rem;
-    padding-right: 0.85rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   /* Header Controls Compression */
   .cmd-trigger-btn {
-    display: none !important; /* Cmd+K keyboard button tucked inside mobile menu */
+    display: none !important;
   }
 
   .theme-switcher-dock {
@@ -515,23 +642,22 @@
   }
 
   .theme-btn {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
   }
 
   .brand-monogram {
     width: 28px;
     height: 28px;
-    font-size: 0.75rem;
   }
 
   .nav-brand span {
-    font-size: 0.825rem;
+    font-size: 0.8rem;
   }
 
   /* Hero Monumental Clamping */
   .hero-title-monumental {
-    font-size: clamp(1.85rem, 8.5vw, 2.75rem);
+    font-size: clamp(1.85rem, 8.2vw, 2.75rem);
     line-height: 0.95;
   }
 
@@ -546,29 +672,17 @@
     gap: 0.25rem;
   }
 
-  .hero-ctas {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.75rem;
-  }
-
-  .hero-ctas .btn {
-    width: 100%;
-    min-height: 46px;
-    justify-content: center;
-  }
-
   .portrait-container {
-    max-width: 270px;
+    max-width: 260px;
   }
 
   .liquid-glass-card {
-    max-width: 270px;
+    max-width: 260px;
   }
 
   .mode-btn {
     font-size: 0.6rem;
-    padding: 0.3rem 0.15rem;
+    padding: 0.3rem 0.2rem;
     letter-spacing: 0.05em;
   }
 
@@ -581,17 +695,18 @@
     padding: 0.75rem 0.5rem;
   }
 
-  /* Contact Information Cards (< 480px) */
-  .contact-card-actions {
-    gap: 0.45rem;
+  /* Social links on compact phones stack */
+  .contact-social-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
   }
 
-  .contact-action-btn {
-    height: 42px;
-    min-height: 42px;
-    max-height: 42px;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+  .bento-skill-card {
+    padding: 1.15rem 0.85rem !important;
+  }
+
+  .bento-title {
+    font-size: 1.65rem !important;
   }
 
   .footer-content {
@@ -605,6 +720,38 @@
    8. ULTRA-COMPACT SMARTPHONES (< 360px: iPhone SE 1st, Fold Outer)
    ------------------------------------------------------------- */
 @media (max-width: 359px) {
+  .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .navbar-wrapper {
+    padding: 0.25rem 0.35rem;
+    box-sizing: border-box;
+  }
+
+  .navbar {
+    padding: 0.25rem 0.45rem;
+    max-width: 100%;
+    box-sizing: border-box;
+    gap: 0.25rem;
+  }
+
+  .theme-switcher-dock {
+    padding: 2px 3px;
+    gap: 2px;
+  }
+
+  .theme-btn {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Keep monogram icon visible while hiding text on tiny screens */
+  .nav-brand span {
+    display: none;
+  }
+
   .hero-title-monumental {
     font-size: 1.7rem;
   }
@@ -635,17 +782,47 @@
     letter-spacing: 0.04em;
   }
 
-  .contact-action-btn {
-    height: 40px;
-    min-height: 40px;
-    max-height: 40px;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
+  .timeline-container {
+    padding-left: 0.95rem;
+  }
+
+  .timeline-node {
+    left: -0.95rem;
+  }
+
+  .timeline-card {
+    padding: 0.85rem 0.65rem;
+  }
+
+  .bento-skill-card {
+    padding: 1rem 0.75rem !important;
   }
 }
 
 /* -------------------------------------------------------------
-   9. PREFERS-REDUCED-MOTION (Accessibility Compliance)
+   9. ULTRAWIDE & 4K DISPLAYS (> 1920px)
+   ------------------------------------------------------------- */
+@media (min-width: 1921px) {
+  :root {
+    --container-max-width: 1440px;
+    --section-spacing: 140px;
+  }
+
+  .container {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .project-card {
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* -------------------------------------------------------------
+   10. PREFERS-REDUCED-MOTION (WCAG 2.2 Accessibility Compliance)
    ------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -668,6 +845,7 @@
   .scroll-stack-card {
     transform: none !important;
     filter: none !important;
+    opacity: 1 !important;
   }
 
   .marquee-track {
