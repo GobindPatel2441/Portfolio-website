@@ -210,35 +210,38 @@
             <div class="liquid-glass-card">
               <div class="glass-specular"></div>
 
-              <div class="portrait-img-wrapper">
-                <picture>
-                  <source srcset="assets/gobind-patel.webp" type="image/webp" />
-                  <img src="assets/gobind-patel.png" alt="Gobind Patel" class="portrait-img" width="1024" height="1536" fetchpriority="high" decoding="async" />
-                </picture>
-              </div>
+              <!-- Main Profile Media Stage: Anchors image & floating badges -->
+              <div class="portrait-stage">
+                <div class="portrait-img-wrapper">
+                  <picture>
+                    <source srcset="assets/gobind-patel.webp" type="image/webp" />
+                    <img src="assets/gobind-patel.png" alt="Gobind Patel" class="portrait-img" width="1024" height="1536" fetchpriority="high" decoding="async" />
+                  </picture>
+                </div>
 
-              <!-- Floating Trophy Badge -->
-              <div class="portrait-floating-badge badge-top-right floating-anim-1 reveal-init delay-3">
-                <div class="badge-icon-box">🏆</div>
-                <div>
-                  <div class="badge-text-title">2ND PRIZE WINNER</div>
-                  <div class="badge-text-sub">CHAKRAVYUH 1.0 (36h Hackathon)</div>
+                <!-- Floating Trophy Badge Overlay (Top) -->
+                <div class="portrait-floating-badge badge-top-right floating-anim-1 reveal-init delay-3">
+                  <div class="badge-icon-box" aria-hidden="true">🏆</div>
+                  <div class="badge-text-group">
+                    <div class="badge-text-title">2ND PRIZE WINNER</div>
+                    <div class="badge-text-sub">CHAKRAVYUH 1.0 (36h Hackathon)</div>
+                  </div>
+                </div>
+
+                <!-- Floating Tech Badge Overlay (Bottom) -->
+                <div class="portrait-floating-badge badge-bottom-left floating-anim-2 reveal-init delay-4">
+                  <div class="badge-icon-box" aria-hidden="true">⚡</div>
+                  <div class="badge-text-group">
+                    <div class="badge-text-title">AI/ML &amp; CORE JAVA</div>
+                    <div class="badge-text-sub">LangChain • FAISS • PyTorch</div>
+                  </div>
                 </div>
               </div>
 
-              <!-- Floating Tech Badge -->
-              <div class="portrait-floating-badge badge-bottom-left floating-anim-2 reveal-init delay-4">
-                <div class="badge-icon-box">⚡</div>
-                <div>
-                  <div class="badge-text-title">AI/ML & CORE JAVA</div>
-                  <div class="badge-text-sub">LangChain • FAISS • PyTorch</div>
-                </div>
-              </div>
-
-              <!-- Glass Mode Controls -->
+              <!-- Glass Mode Controls: Dedicated, Unobstructed Bottom Region -->
               <div class="portrait-card-footer">
                 <span class="glass-shading-label">Glass Shading</span>
-                <div class="glass-modes-toggle">
+                <div class="glass-modes-toggle" role="group" aria-label="Card Glass Shading Mode">
                   <button class="mode-btn active" data-mode="crystal">Crystal</button>
                   <button class="mode-btn" data-mode="frosted">Frosted</button>
                   <button class="mode-btn" data-mode="holo">Holo</button>
