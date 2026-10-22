@@ -3,10 +3,17 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# Reference & inspiration downloads (local reference archives)
+# Reference & inspiration downloads (local reference archives - never tracked)
 /email/
 /ex/
 /git/
+/projectreadme/
+/responsive/
+email/
+ex/
+git/
+projectreadme/
+responsive/
 
 # Node & Dependencies
 node_modules/
@@ -17,6 +24,7 @@ yarn-error.log*
 # Environment & Private configurations
 .env
 .env.local
+*.env
 
 # IDE & Editor
 .vscode/
