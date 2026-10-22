@@ -691,7 +691,7 @@
 
 .project-card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(1.25rem, 2.5vw, 2.5rem);
   align-items: center;
   background: var(--bg-card);
@@ -704,6 +704,9 @@
   position: relative;
   overflow: hidden;
   transition: all var(--transition-normal);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .project-card:not(.scroll-stack-card):hover {
@@ -713,13 +716,21 @@
 }
 
 .project-card.reversed {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 .project-card.reversed .project-visual-col {
   order: 2;
 }
 .project-card.reversed .project-info-col {
   order: 1;
+}
+
+.project-visual-col,
+.project-info-col {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .project-index-num {
@@ -808,10 +819,12 @@
   font-family: var(--font-monumental);
   font-size: clamp(1.6rem, 2.3vw, 2.25rem);
   letter-spacing: -0.01em;
-  line-height: 1;
+  line-height: 1.05;
   text-transform: uppercase;
   color: #fff;
   margin-bottom: 0.5rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .project-desc {
@@ -819,6 +832,7 @@
   color: var(--text-muted);
   line-height: 1.55;
   margin-bottom: 0.75rem;
+  overflow-wrap: anywhere;
 }
 
 /* 3-Item Structured Metrics Grid (Compact Editorial) */
@@ -1070,8 +1084,19 @@
 
 .sim-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.sim-panel,
+.sim-stream-output {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sim-panel {
@@ -2637,6 +2662,10 @@
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: rgba(212, 175, 55, 0.45) rgba(255, 255, 255, 0.04);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .card-micro-pipeline::-webkit-scrollbar {
   height: 4px;

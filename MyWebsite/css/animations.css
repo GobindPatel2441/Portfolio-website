@@ -478,8 +478,8 @@ html.lenis, html.lenis body {
 /* Watermark Background Number (from ProjectsSection.tsx lines 194-200) */
 .project-watermark-num {
   position: absolute;
-  bottom: -2.5rem;
-  right: -1rem;
+  bottom: -1rem;
+  right: 0.5rem;
   font-family: var(--font-monumental);
   font-size: clamp(6.5rem, 15vw, 13rem);
   font-weight: 900;
@@ -959,6 +959,34 @@ html.lenis, html.lenis body {
 @keyframes marqueeLoop {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Responsive Card Transforms (< 1024px) */
+@media (max-width: 1023px) {
+  .scroll-stack-card {
+    /* Keep cards planar without 3D perspective distortion or scaling clipping on mobile/tablet */
+    transform: translate3d(0, 0, 0) !important;
+    perspective: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  
+  .scroll-stack-card .project-category-tag,
+  .scroll-stack-card .project-title,
+  .scroll-stack-card .project-desc,
+  .scroll-stack-card .project-metrics-grid,
+  .scroll-stack-card .tech-tags-list,
+  .scroll-stack-card .project-actions {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .project-watermark-num {
+    right: 0.5rem !important;
+    bottom: 0.5rem !important;
+    font-size: clamp(3rem, 10vw, 4.5rem) !important;
+    line-height: 1 !important;
+  }
 }
 
 /* Reduced Motion preferences */

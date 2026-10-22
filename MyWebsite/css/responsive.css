@@ -196,19 +196,155 @@
     margin: 2.5rem auto 0;
   }
 
-  /* Project Showcase Tablet Adjustments */
+  /* Project Showcase Tablet & Mobile Formatting (< 1024px) */
   .project-card,
   .project-card.reversed {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1.35rem;
+    padding: clamp(1.15rem, 3vw, 1.65rem);
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  .project-card.reversed .project-visual-col {
-    order: 1;
+  .project-visual-col {
+    order: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  .project-card.reversed .project-info-col {
-    order: 2;
+  .project-info-col {
+    order: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .project-visual-wrapper,
+  .project-clip-reveal {
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 16 / 10;
+    max-height: 260px;
+    box-sizing: border-box !important;
+  }
+
+  .project-title {
+    font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+    line-height: 1.12;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .card-micro-pipeline {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0.75rem 0 0.95rem 0;
+  }
+
+  .project-metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .tech-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    margin-bottom: 0.85rem;
+  }
+
+  .tech-tag {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.45rem;
+    white-space: normal;
+  }
+
+  /* SENTIX Interactive AI Dashboard (< 1024px) */
+  .sim-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1.35rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .sim-panel,
+  .sim-stream-output {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .sim-button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .sim-choice-btn {
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+    width: 100%;
+  }
+
+  .terminal-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    gap: 0.65rem;
+  }
+
+  .terminal-tabs {
+    display: flex;
+    gap: 0.35rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .terminal-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .term-tab {
+    flex: 1 0 auto;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.68rem;
+    padding: 0.4rem 0.65rem;
   }
 
   /* Bento Skills Grid reflow */
@@ -463,30 +599,57 @@
   /* Project Showcase Mobile Formatting (< 768px) */
   .project-card,
   .project-card.reversed {
+    grid-template-columns: minmax(0, 1fr) !important;
     padding: 1.15rem;
     gap: 1.25rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .project-visual-col,
+  .project-info-col {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .project-visual-wrapper,
   .project-clip-reveal {
     aspect-ratio: 16/10;
     max-height: 220px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .project-title {
     font-size: 1.45rem;
     line-height: 1.1;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+    max-width: 100%;
   }
 
   .project-desc {
     font-size: 0.825rem;
     line-height: 1.55;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+    max-width: 100%;
   }
 
   .project-metrics-grid {
     grid-template-columns: 1fr;
     gap: 0.4rem;
     padding: 0.65rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
   .metric-box {
@@ -515,6 +678,14 @@
     width: 100%;
     justify-content: center;
     min-height: 44px;
+    box-sizing: border-box;
+  }
+
+  .project-watermark-num {
+    right: 0.5rem !important;
+    bottom: 0.5rem !important;
+    font-size: clamp(2.8rem, 8vw, 4rem) !important;
+    line-height: 1 !important;
   }
 
   /* Terminal AI Assistant (< 768px) */
@@ -539,6 +710,90 @@
     min-height: 36px;
     display: inline-flex;
     align-items: center;
+  }
+
+  /* SENTIX Interactive AI Dashboard (< 768px) */
+  .sim-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1.25rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .sim-panel,
+  .sim-stream-output {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.15rem 1rem;
+  }
+
+  .sim-button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.45rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sim-choice-btn {
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+    font-size: 0.72rem;
+    padding: 0.5rem 0.65rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .terminal-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.65rem 0.85rem;
+    gap: 0.6rem;
+  }
+
+  .terminal-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .terminal-badge {
+    align-self: flex-start;
+    font-size: 0.65rem;
+  }
+
+  .terminal-tabs {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    gap: 0.35rem;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .term-tab {
+    flex: 1 0 auto;
+    font-size: 0.68rem;
+    padding: 0.45rem 0.75rem;
+    min-height: 38px;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  #sentix-stream-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   /* Bento Skills Grid Mobile */
@@ -918,6 +1173,51 @@
 
   .bento-skill-card {
     padding: 1rem 0.75rem !important;
+  }
+
+  /* Compact Phone (< 480px) Project Cards & SENTIX Dashboard */
+  .project-card,
+  .project-card.reversed {
+    padding: 0.95rem;
+    gap: 1rem;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+  }
+
+  .project-desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .project-actions .btn {
+    font-size: 0.725rem;
+    padding: 0.6rem 0.75rem;
+    letter-spacing: 0.04em;
+    min-height: 42px;
+  }
+
+  .sim-panel,
+  .sim-stream-output {
+    padding: 0.95rem 0.75rem;
+  }
+
+  .sim-button-group {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .sim-choice-btn {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.55rem;
+    min-height: 38px;
+  }
+
+  .project-watermark-num {
+    right: 0.35rem !important;
+    bottom: 0.35rem !important;
+    font-size: 2.8rem !important;
   }
 }
 
