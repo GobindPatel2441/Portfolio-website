@@ -1,18 +1,8 @@
 # Gobind Patel — AI & Full-Stack Systems Architect Portfolio
 
-[![Deploy to GitHub Pages](https://github.com/GobindPatel2441/Portfolio-website/actions/workflows/deploy.yml/badge.svg)](https://github.com/GobindPatel2441/Portfolio-website/actions/workflows/deploy.yml)
-[![Live Portfolio](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-gold?style=for-the-badge&logo=githubpages&logoColor=black)](https://gobindpatel2441.github.io/Portfolio-website/)
-
 An **Awwwards-caliber personal portfolio website** designed and engineered for **Gobind Patel** (B.Tech Computer Science & Engineering [AI/ML] at Sri Sri University, Cuttack).
 
 ![Gobind Patel Portfolio Preview](MyWebsite/assets/gobind-patel.png)
-
----
-
-## 🌟 Live Deployment
-
-- **GitHub Pages URL**: [https://gobindpatel2441.github.io/Portfolio-website/](https://gobindpatel2441.github.io/Portfolio-website/)
-- **Automatic CI/CD**: Powered by GitHub Actions (`.github/workflows/deploy.yml`) on every push to `main`.
 
 ---
 
@@ -37,7 +27,7 @@ An **Awwwards-caliber personal portfolio website** designed and engineered for *
 
 ## 🚀 Local Development
 
-To run locally without CORS restrictions:
+To run locally:
 
 ```bash
 # Clone the repository
@@ -48,19 +38,6 @@ cd Portfolio-website/MyWebsite
 python -m http.server 5173
 ```
 Then navigate to: `http://localhost:5173`
-
----
-
-## ⚙️ GitHub Pages Setup
-
-This repository is pre-configured with automated GitHub Actions deployment.
-
-To ensure your GitHub Pages is active:
-1. Navigate to **Settings** > **Pages** in this GitHub repository.
-2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
-3. Any push to `main` will automatically build and publish your site!
-
-*(Alternatively, if choosing "Deploy from a branch", selecting `main` and `/ (root)` will seamlessly redirect via root `index.html`)*.
 
 ---
 
