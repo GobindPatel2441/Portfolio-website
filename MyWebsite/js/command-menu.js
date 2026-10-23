@@ -40,7 +40,8 @@
     // Actions
     { label: '📄 Download Resume (PDF)', action: () => { const a = document.querySelector('a[download="Gobind_Patel_Resume.pdf"]'); if (a) a.click(); }, group: 'Actions', keywords: ['resume', 'cv', 'download', 'pdf'] },
     { label: '📧 Copy Email Address', action: () => { navigator.clipboard.writeText('gobindpatel2005@gmail.com'); showToast('Email copied to clipboard'); }, group: 'Actions', keywords: ['email', 'copy', 'clipboard'] },
-    { label: '🔊 Toggle Audio Ambience', action: () => { if (window.AmbientAudio) window.AmbientAudio.togglePlay(); }, group: 'Actions', keywords: ['audio', 'sound', 'music', 'mute'] },
+    { label: '🔔 Toggle Sound Effects (SFX)', action: () => { if (window.SoundEffects) window.SoundEffects.toggleEnabled(); }, group: 'Actions', keywords: ['sfx', 'sound', 'effects', 'audio', 'earshot', 'mute', 'click', 'haptic'] },
+    { label: '🔊 Toggle Audio Ambience', action: () => { if (window.AmbientAudio) window.AmbientAudio.togglePlay(); }, group: 'Actions', keywords: ['audio', 'sound', 'music', 'mute', 'ambient'] },
   ];
 
   function applyThemeCmd(theme) {
@@ -130,7 +131,11 @@
     els.input.value = '';
     renderResults('');
     requestAnimationFrame(() => els.input.focus());
-    if (window.PortfolioAudio) window.PortfolioAudio.playBlip();
+    if (window.PortfolioAudio && typeof window.PortfolioAudio.playPop === 'function') {
+      window.PortfolioAudio.playPop();
+    } else if (window.PortfolioAudio) {
+      window.PortfolioAudio.playClick();
+    }
   }
 
   function close() {
@@ -138,6 +143,9 @@
     isOpen = false;
     els.overlay.classList.remove('active');
     els.input.blur();
+    if (window.SoundEffects && typeof window.SoundEffects.playPopOut === 'function') {
+      window.SoundEffects.playPopOut();
+    }
   }
 
   function renderResults(query) {

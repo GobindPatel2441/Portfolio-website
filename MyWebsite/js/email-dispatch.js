@@ -315,8 +315,12 @@
             window.showToast('Dispatch delivered to Gobind Patel!');
           }
 
-          if (window.PortfolioAudio && typeof window.PortfolioAudio.playBlip === 'function') {
-            window.PortfolioAudio.playBlip();
+          if (window.PortfolioAudio) {
+            if (typeof window.PortfolioAudio.playSuccess === 'function') {
+              window.PortfolioAudio.playSuccess();
+            } else if (typeof window.PortfolioAudio.playBlip === 'function') {
+              window.PortfolioAudio.playBlip();
+            }
           }
 
           setButtonSuccess();
@@ -325,6 +329,10 @@
         }
       } catch (error) {
         console.error('[Dispatch Error]', error);
+
+        if (window.PortfolioAudio && typeof window.PortfolioAudio.playError === 'function') {
+          window.PortfolioAudio.playError();
+        }
 
         // Form fields are preserved so the user doesn't lose their message
         showStatusBanner('error', `

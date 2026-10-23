@@ -247,7 +247,9 @@
   position: absolute;
   bottom: calc(100% + 0.65rem);
   left: 50%;
-  width: clamp(260px, 85vw, 300px);
+  width: clamp(280px, 90vw, 340px);
+  max-height: 85vh;
+  overflow-y: auto;
   background: rgba(14, 15, 20, 0.92);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -326,12 +328,82 @@
   outline: 2px solid var(--accent-primary, #D4AF37);
 }
 
+/* Audio Panel Sub-Cards */
+.audio-panel-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-subtle, rgba(140, 109, 79, 0.2));
+  border-radius: var(--radius-sm, 10px);
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0.75rem;
+  transition: border-color var(--transition-fast, 0.2s ease);
+}
+
+.audio-panel-card:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+.audio-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+
+.audio-section-tag {
+  font-family: var(--font-editorial, 'Montserrat', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-primary, #D4AF37);
+}
+
+.audio-section-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted, #A8988B);
+}
+
+.sfx-toggles-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sfx-main-toggle {
+  flex: 1.4;
+  justify-content: space-between;
+}
+
+.sfx-sub-toggle {
+  flex: 1;
+  justify-content: space-between;
+}
+
+.sfx-badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #A8988B);
+  transition: all 0.2s ease;
+}
+
+.audio-popover-btn.active .sfx-badge,
+.audio-popover-btn[aria-pressed="true"] .sfx-badge {
+  background: var(--accent-primary, #D4AF37);
+  color: #0c0d12;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
 /* Playback Actions Row */
 .audio-popover-actions {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.95rem;
+  margin-bottom: 0.75rem;
 }
 
 .audio-popover-btn {
@@ -356,6 +428,13 @@
   background: var(--bg-glass-strong, rgba(212, 175, 55, 0.08));
   border-color: var(--border-glow, rgba(212, 175, 55, 0.45));
   color: #fff;
+}
+
+.audio-popover-btn.active,
+.audio-popover-btn[aria-pressed="true"] {
+  border-color: var(--accent-primary, #D4AF37);
+  background: rgba(212, 175, 55, 0.14);
+  color: var(--accent-highlight, #F7E7C4);
 }
 
 .audio-popover-btn:focus-visible {

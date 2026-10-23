@@ -3,66 +3,34 @@
  * Atmosphere Theme Switcher, Audio Synthesizer, Custom Cursor, Stats Counter
  */
 
-// 1. Web Audio API Micro-Synthesizer (Integrated with Ambient Audio Engine)
-window.PortfolioAudio = (function () {
-  let audioCtx = null;
-  let localMuted = false;
-
-  function initCtx() {
-    if (!audioCtx && typeof window.AudioContext !== 'undefined') {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-  }
-
-  function playTone(freq, type, duration, gainLevel) {
-    if (window.PortfolioAudio.isMuted()) return;
-    try {
-      initCtx();
-      if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-      gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
-    } catch (e) {
-      // Audio context error or blocked
-    }
-  }
-
-  return {
-    toggleMute: function () {
-      if (window.AmbientAudio) {
-        window.AmbientAudio.toggleMute();
-        return window.AmbientAudio.isMuted();
-      }
-      localMuted = !localMuted;
-      return localMuted;
-    },
-    isMuted: function () {
-      if (window.AmbientAudio) {
-        return window.AmbientAudio.isMuted() || !window.AmbientAudio.isPlaying();
-      }
-      return localMuted;
-    },
+// 1. Audio Interface Bridge (Backed by Earshot SoundEffects Engine)
+if (!window.PortfolioAudio) {
+  window.PortfolioAudio = {
     playClick: function () {
-      playTone(1100, 'sine', 0.035, 0.02);
+      if (window.SoundEffects) window.SoundEffects.playClick();
     },
     playBlip: function () {
-      playTone(600, 'triangle', 0.07, 0.02);
+      if (window.SoundEffects) window.SoundEffects.playNav();
+    },
+    playPop: function () {
+      if (window.SoundEffects) window.SoundEffects.playPopIn();
+    },
+    playSuccess: function () {
+      if (window.SoundEffects) window.SoundEffects.playSuccess();
+    },
+    playError: function () {
+      if (window.SoundEffects) window.SoundEffects.playError();
+    },
+    toggleMute: function () {
+      if (window.SoundEffects) return window.SoundEffects.toggleEnabled();
+      return false;
+    },
+    isMuted: function () {
+      if (window.SoundEffects) return !window.SoundEffects.isEnabled();
+      return true;
     }
   };
-})();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // -------------------------------------------------------------

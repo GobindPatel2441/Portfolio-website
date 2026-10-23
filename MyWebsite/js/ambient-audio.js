@@ -360,8 +360,8 @@
     dom.popoverMuteBtn = dom.dock.querySelector('#audio-popover-mute');
     dom.popoverMuteIcon = dom.dock.querySelector('#audio-popover-mute-icon');
     dom.popoverMuteText = dom.dock.querySelector('#audio-popover-mute-text');
-    dom.slider = dom.dock.querySelector('.ambient-volume-slider');
-    dom.volumeReadout = dom.dock.querySelector('.audio-volume-readout');
+    dom.slider = dom.dock.querySelector('#music-volume-slider') || dom.dock.querySelector('.music-control-card .ambient-volume-slider') || dom.dock.querySelector('.ambient-volume-slider');
+    dom.volumeReadout = dom.dock.querySelector('#music-volume-readout') || dom.dock.querySelector('.music-control-card .audio-volume-readout') || dom.dock.querySelector('.audio-volume-readout');
 
     // 1. Action Button: Play / Pause toggle
     if (dom.actionBtn) {
@@ -481,7 +481,7 @@
   }
 
   // -------------------------------------------------------------
-  // 8. PUBLIC API (Exported as window.AmbientAudio)
+  // 8. PUBLIC API (Exported as window.AmbientAudio and window.PortfolioAmbientAudio)
   // -------------------------------------------------------------
   window.AmbientAudio = {
     play: () => play(true),
@@ -492,7 +492,9 @@
     isPlaying: () => isPlaying,
     isMuted: () => isMuted,
     getVolume: () => targetVolume,
-    getState: () => currentState
+    getState: () => currentState,
+    getAudioElement: () => audio
   };
+  window.PortfolioAmbientAudio = window.AmbientAudio;
 
 })();

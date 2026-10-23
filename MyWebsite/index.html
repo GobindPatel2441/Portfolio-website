@@ -1502,45 +1502,85 @@ CLINICAL EVIDENCE SYNTHESIS:
        ================================================================= -->
   <aside id="floating-audio-controller" class="ambient-audio-dock" aria-label="Ambient Soundtrack Controls" data-state="paused">
     
-    <!-- Expandable Details & Volume Popover Panel -->
-    <div class="ambient-audio-popover" role="region" aria-label="Soundtrack Controls & Volume">
+    <!-- Expandable Details & Audio Settings Popover Panel -->
+    <div class="ambient-audio-popover" role="region" aria-label="Audio System & Soundtrack Controls">
       <div class="audio-popover-header">
         <div>
-          <div class="audio-track-eyebrow">ATMOSPHERIC SOUNDTRACK</div>
-          <div class="audio-track-title">Ambient Cinematic</div>
-          <div class="audio-track-artist">Velario • Production Master</div>
+          <div class="audio-track-eyebrow">AUDIO EXPERIENCE</div>
+          <div class="audio-track-title">Sound System Controls</div>
+          <div class="audio-track-artist">Earshot Motion SFX & Velario Ambient</div>
         </div>
         <button class="audio-popover-close" aria-label="Close audio panel">&times;</button>
       </div>
 
-      <!-- Play / Pause & Mute Action Buttons -->
-      <div class="audio-popover-actions">
-        <button id="audio-popover-play" class="audio-popover-btn" aria-label="Toggle Playback">
-          <span id="audio-popover-play-icon">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-          </span>
-          <span id="audio-popover-play-text">Play</span>
-        </button>
+      <!-- SECTION 1: INTERFACE SOUND EFFECTS (EARSHOT SFX) -->
+      <div class="audio-panel-card sfx-control-card">
+        <div class="audio-section-header">
+          <span class="audio-section-tag">MOTION SFX</span>
+          <span class="audio-section-title">Interface Sound Effects</span>
+        </div>
 
-        <button id="audio-popover-mute" class="audio-popover-btn" aria-label="Toggle Mute">
-          <span id="audio-popover-mute-icon">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-          </span>
-          <span id="audio-popover-mute-text">Mute</span>
-        </button>
+        <div class="sfx-toggles-row">
+          <button id="sfx-toggle-btn" class="audio-popover-btn sfx-main-toggle" aria-label="Toggle Interface Sound Effects" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <span id="sfx-toggle-text">Sound Effects: OFF</span>
+            <span id="sfx-toggle-state" class="sfx-badge">OFF</span>
+          </button>
+
+          <button id="sfx-hover-toggle-btn" class="audio-popover-btn sfx-sub-toggle" aria-label="Toggle Desktop Hover Sounds" aria-pressed="false" title="Hover tick sounds on buttons and links (desktop only)">
+            <span>Hover Ticks</span>
+            <span id="sfx-hover-toggle-state" class="sfx-badge">OFF</span>
+          </button>
+        </div>
+
+        <!-- SFX Volume Slider Section -->
+        <div class="audio-volume-section" style="margin-top: 0.65rem; margin-bottom: 0.35rem;">
+          <div class="audio-volume-header">
+            <span>SFX VOLUME</span>
+            <span id="sfx-volume-readout" class="audio-volume-readout">35%</span>
+          </div>
+          <div class="audio-volume-slider-row">
+            <input type="range" id="sfx-volume-slider" class="ambient-volume-slider" min="0" max="100" value="35" step="1" aria-label="Sound effects volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35" />
+          </div>
+        </div>
       </div>
 
-      <!-- Volume Slider Section -->
-      <div class="audio-volume-section">
-        <div class="audio-volume-header">
-          <span>VOLUME</span>
-          <span class="audio-volume-readout">6%</span>
+      <!-- SECTION 2: ATMOSPHERIC SOUNDTRACK (VELARIO AMBIENT) -->
+      <div class="audio-panel-card music-control-card">
+        <div class="audio-section-header">
+          <span class="audio-section-tag">CINEMATIC SOUNDTRACK</span>
+          <span class="audio-section-title">Velario • Ambient Master</span>
         </div>
-        <div class="audio-volume-slider-row">
-          <button class="audio-vol-icon-btn" aria-label="Mute or Unmute">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+
+        <!-- Play / Pause & Mute Action Buttons -->
+        <div class="audio-popover-actions">
+          <button id="audio-popover-play" class="audio-popover-btn" aria-label="Toggle Ambient Music Playback">
+            <span id="audio-popover-play-icon">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+            </span>
+            <span id="audio-popover-play-text">Play</span>
           </button>
-          <input type="range" class="ambient-volume-slider" min="0" max="100" value="6" step="1" aria-label="Ambient volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="6" />
+
+          <button id="audio-popover-mute" class="audio-popover-btn" aria-label="Toggle Ambient Music Mute">
+            <span id="audio-popover-mute-icon">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+            </span>
+            <span id="audio-popover-mute-text">Mute</span>
+          </button>
+        </div>
+
+        <!-- Music Volume Slider Section -->
+        <div class="audio-volume-section" style="margin-bottom: 0.35rem;">
+          <div class="audio-volume-header">
+            <span>MUSIC VOLUME</span>
+            <span id="music-volume-readout" class="audio-volume-readout">6%</span>
+          </div>
+          <div class="audio-volume-slider-row">
+            <button class="audio-vol-icon-btn" aria-label="Mute or Unmute Music">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </button>
+            <input type="range" id="music-volume-slider" class="ambient-volume-slider" min="0" max="100" value="6" step="1" aria-label="Ambient music volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="6" />
+          </div>
         </div>
       </div>
 
@@ -1548,9 +1588,9 @@ CLINICAL EVIDENCE SYNTHESIS:
       <div class="audio-popover-footer">
         <span class="audio-badge-live">
           <span class="audio-live-dot"></span>
-          <span>48kHz Studio Ambience</span>
+          <span>Dual Audio Engine</span>
         </span>
-        <span>Looping</span>
+        <span>Independent Controls</span>
       </div>
     </div>
 
@@ -1608,6 +1648,7 @@ CLINICAL EVIDENCE SYNTHESIS:
   <script src="js/magnetic-button.js" defer></script>
   <script src="js/custom-cursor.js?v=4" defer></script>
   <script src="js/liquid-button.js" defer></script>
+  <script src="js/sound-effects.js?v=1" defer></script>
   <script src="js/ambient-audio.js?v=3" defer></script>
   <script src="js/certificates.js?v=1" defer></script>
   <!-- EmailJS Integration (Lazy-loaded on demand via email-dispatch.js) -->
