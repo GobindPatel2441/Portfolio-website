@@ -14,7 +14,15 @@
     { label: 'Go to AI Lab (Interactive)', section: '#ai-terminal', group: 'Navigation', keywords: ['ai', 'lab', 'terminal', 'chat', 'interactive'] },
     { label: 'Go to Skills Matrix', section: '#skills', group: 'Navigation', keywords: ['skills', 'tech', 'matrix', 'bento', 'languages'] },
     { label: 'Go to Timeline & Honors', section: '#experience', group: 'Navigation', keywords: ['timeline', 'experience', 'honors', 'milestones', 'hackathon', 'chakravyuh'] },
+    { label: 'Go to Verified Credentials & Certifications', section: '#certifications', group: 'Navigation', keywords: ['certifications', 'credentials', 'certificates', 'marksheet', 'transcript', 'diploma', 'accreditations', 'msme', 'ibm'] },
     { label: 'Go to Contact', section: '#contact', group: 'Navigation', keywords: ['contact', 'email', 'phone', 'hire', 'message'] },
+
+    // Credentials & Certifications (Direct View)
+    { label: '📜 View Chakravyuh Hackathon 2nd Prize Certificate', action: () => { if (window.CertificatesEngine) window.CertificatesEngine.open('cert-chakravyuh-2026'); }, group: 'Credentials', keywords: ['chakravyuh', 'hackathon', 'prize', 'certificate'] },
+    { label: '📜 View Generative AI Specialist (MSME) Certificate', action: () => { if (window.CertificatesEngine) window.CertificatesEngine.open('cert-msme-genai-2026'); }, group: 'Credentials', keywords: ['genai', 'msme', 'generative', 'rag', 'langchain', 'cttc'] },
+    { label: '📜 View IBM Agentic AI Architect Certificate', action: () => { if (window.CertificatesEngine) window.CertificatesEngine.open('cert-ibm-agentic-ai-2025'); }, group: 'Credentials', keywords: ['ibm', 'agentic', 'architect', 'skillsbuild'] },
+    { label: '📜 View OCAC Full Stack Engineering Certificate', action: () => { if (window.CertificatesEngine) window.CertificatesEngine.open('cert-ocac-fullstack-2025'); }, group: 'Credentials', keywords: ['ocac', 'fullstack', 'odisha', 'software', 'internship'] },
+    { label: '📜 View Official B.Tech Academic Transcript (CGPA 8.89)', action: () => { if (window.CertificatesEngine) window.CertificatesEngine.open('cert-ssu-btech-transcript'); }, group: 'Credentials', keywords: ['transcript', 'marksheet', 'grades', 'cgpa', 'university', 'sri sri'] },
 
     // Projects (direct scroll)
     { label: 'Sentix — Emotion AI System', section: '#projects', group: 'Projects', keywords: ['sentix', 'emotion', 'deepface', 'multimodal', 'nllb', 'ollama'] },
