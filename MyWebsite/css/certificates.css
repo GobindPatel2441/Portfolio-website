@@ -98,61 +98,67 @@
 .cert-filters-scroll {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.65rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.cert-filters-scroll::-webkit-scrollbar {
-  display: none;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cert-filter-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
   padding: 0.55rem 1.15rem;
-  background: rgba(14, 16, 24, 0.6);
-  border: 1px solid var(--border-glass, rgba(212, 175, 55, 0.14));
+  background: rgba(14, 16, 24, 0.65);
+  border: 1px solid var(--border-glass, rgba(212, 175, 55, 0.16));
   border-radius: var(--radius-full, 9999px);
   color: var(--text-muted, #8a8d9b);
   font-family: var(--font-editorial, 'Montserrat', sans-serif);
   font-size: 0.725rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   backdrop-filter: blur(8px);
-  transition: all var(--transition-normal, 0.3s ease);
+  touch-action: manipulation;
+  transition: all var(--transition-normal, 0.25s ease);
 }
 
 .cert-filter-btn:hover {
   color: #fff;
-  border-color: rgba(212, 175, 55, 0.4);
-  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.cert-filter-btn:focus-visible {
+  outline: 2px solid var(--accent-primary, #D4AF37);
+  outline-offset: 3px;
 }
 
 .cert-filter-btn.active {
   color: var(--accent-highlight, #F7E7C4);
   border-color: var(--accent-primary, #D4AF37);
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.05) 100%);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.08) 100%);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.25), inset 0 0 10px rgba(212, 175, 55, 0.08);
 }
 
 .cert-filter-count {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.68rem;
-  padding: 0.12rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.12rem 0.5rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-muted, #8a8d9b);
+  transition: all 0.2s ease;
 }
 
 .cert-filter-btn.active .cert-filter-count {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(212, 175, 55, 0.3);
   color: #fff;
 }
 
@@ -573,6 +579,18 @@
   }
 }
 
+@media (max-width: 834px) {
+  .cert-filters-scroll {
+    gap: 0.55rem;
+  }
+  .cert-filter-btn {
+    min-height: 38px;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+}
+
 @media (max-width: 768px) {
   .cert-grid {
     grid-template-columns: 1fr;
@@ -589,5 +607,21 @@
   
   .cert-title {
     font-size: 1.18rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cert-filters-scroll {
+    gap: 0.45rem;
+  }
+  .cert-filter-btn {
+    min-height: 36px;
+    padding: 0.45rem 0.82rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+  }
+  .cert-filter-count {
+    padding: 0.1rem 0.42rem;
+    font-size: 0.65rem;
   }
 }

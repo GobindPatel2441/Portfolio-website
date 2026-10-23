@@ -12,7 +12,7 @@
     {
       id: "cert-chakravyuh-2026",
       title: "2nd Prize Winner — CHAKRAVYUH 1.0 National Hackathon",
-      category: "Hackathons & Honors",
+      category: "Achievements",
       issuer: "GITA Autonomous College & Sri Sri University",
       issueDate: "January 31, 2026",
       credentialId: null,
@@ -30,7 +30,7 @@
     {
       id: "cert-msme-genai-2026",
       title: "Generative AI Specialist Certification",
-      category: "AI/ML & Deep Tech",
+      category: "Internships",
       issuer: "Central Tool Room & Training Centre (CTTC), Ministry of MSME, Govt. of India",
       issueDate: "June 13, 2026",
       credentialId: "BBST462605000086",
@@ -48,7 +48,7 @@
     {
       id: "cert-ibm-agentic-ai-2025",
       title: "Agentic AI Architect — Project Based Learning",
-      category: "AI/ML & Deep Tech",
+      category: "Additional Courses",
       issuer: "IBM SkillsBuild & CSRBOX Foundation",
       issueDate: "August 7, 2025",
       credentialId: "AAI2025CSRBOX4413",
@@ -66,7 +66,7 @@
     {
       id: "cert-ibm-ai-internship-2024",
       title: "Artificial Intelligence Summer Internship",
-      category: "AI/ML & Deep Tech",
+      category: "Internships",
       issuer: "IBM SkillsBuild & CSRBOX Foundation",
       issueDate: "August 5, 2024",
       credentialId: "1nfX8ThIXQe58uhoSNy9qghg0MD9s4fmF",
@@ -84,7 +84,7 @@
     {
       id: "cert-ocac-fullstack-2025",
       title: "Software Engineering — Full Stack Development Internship",
-      category: "Professional Engineering",
+      category: "Internships",
       issuer: "Odisha Computer Application Centre (OCAC), Govt. of Odisha",
       issueDate: "August 2, 2025",
       credentialId: "SENG-01256200225",
@@ -102,7 +102,7 @@
     {
       id: "cert-msme-python-2024",
       title: "Python Programming & Django Certification",
-      category: "Professional Engineering",
+      category: "Internships",
       issuer: "Central Tool Room & Training Centre (CTTC), Ministry of MSME, Govt. of India",
       issueDate: "May 31, 2024",
       credentialId: "BBST202405000849",
@@ -120,7 +120,7 @@
     {
       id: "cert-msme-c-2025",
       title: "C Systems Programming Certification",
-      category: "Professional Engineering",
+      category: "Internships",
       issuer: "Central Tool Room & Training Centre (CTTC), Ministry of MSME, Govt. of India",
       issueDate: "July 15, 2025",
       credentialId: "BBST622506001137",
@@ -138,7 +138,7 @@
     {
       id: "cert-scaler-masterclass-2026",
       title: "Future of Software Engineering in AI Era",
-      category: "AI/ML & Deep Tech",
+      category: "Additional Courses",
       issuer: "Scaler Masterclass",
       issueDate: "May 24, 2026",
       credentialId: null,
@@ -156,7 +156,7 @@
     {
       id: "cert-be10x-ai-tools-2026",
       title: "AI Tools & Prompt Engineering Workshop",
-      category: "AI/ML & Deep Tech",
+      category: "Additional Courses",
       issuer: "be10x",
       issueDate: "February 22, 2026",
       credentialId: null,
@@ -174,7 +174,7 @@
     {
       id: "cert-ideathon-ssu-2026",
       title: "IDEATHON 2026 — AI & Data Science Innovation",
-      category: "Hackathons & Honors",
+      category: "Extracurricular",
       issuer: "School of AI & Data Science, Sri Sri University & IBM ICE",
       issueDate: "February 24, 2026",
       credentialId: null,
@@ -192,7 +192,7 @@
     {
       id: "cert-ssuimun-g20-2023",
       title: "SSUIMUN G20 Summit — Model United Nations Delegate",
-      category: "Extracurricular & Leadership",
+      category: "Extracurricular",
       issuer: "Sri Sri University International Model United Nations (SSUIMUN)",
       issueDate: "September 12, 2023",
       credentialId: "SSU/DSW/IMUN/23-24/174",
@@ -210,7 +210,7 @@
     {
       id: "cert-ssu-btech-transcript",
       title: "Official B.Tech Academic Transcript (Semesters I – VI)",
-      category: "Academic Transcripts",
+      category: "Achievements",
       issuer: "Faculty of Engineering & Technology, Sri Sri University",
       issueDate: "July 20, 2026",
       credentialId: "FET-BAML-2023-27-022",
@@ -228,7 +228,7 @@
     {
       id: "cert-cbse-class-xii-2023",
       title: "Class XII Senior School Certificate (CBSE)",
-      category: "Academic Transcripts",
+      category: "Achievements",
       issuer: "Central Board of Secondary Education (CBSE) & SAI International School",
       issueDate: "May 12, 2023",
       credentialId: "Roll No. 12652417",
@@ -246,7 +246,7 @@
     {
       id: "cert-cbse-class-x-2021",
       title: "Class X Secondary School Certificate (CBSE)",
-      category: "Academic Transcripts",
+      category: "Achievements",
       issuer: "Central Board of Secondary Education (CBSE) & SAI International School",
       issueDate: "August 3, 2021",
       credentialId: "Roll No. 12127554",
