@@ -1,0 +1,6 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Enforce LF for GitHub workflows
+.github/**/*.yml text eol=lf
+*.sh text eol=lf
