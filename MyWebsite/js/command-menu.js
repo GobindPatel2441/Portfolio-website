@@ -282,5 +282,5 @@
   });
 
   // Expose for navbar trigger
-  window.CommandMenu = { open, close, toggle: () => isOpen ? close() : open() };
+  window.CommandMenu = { open, close, toggle: () => isOpen ? close() : open(), isOpen: () => isOpen };
 })();
