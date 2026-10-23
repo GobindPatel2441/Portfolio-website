@@ -1,0 +1,30 @@
+# ===================================================================
+# GOBIND PATEL PORTFOLIO — NETLIFY PRODUCTION DEPLOYMENT & SECURITY
+# ===================================================================
+
+[build]
+  publish = "MyWebsite"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking / frame embedding
+    X-Frame-Options = "SAMEORIGIN"
+
+    # Enforce strict MIME-type sniffing prevention
+    X-Content-Type-Options = "nosniff"
+
+    # Protect referrer information on cross-origin requests
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Restrict sensitive browser APIs / hardware capabilities
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=()"
+
+    # Legacy XSS filter protection
+    X-XSS-Protection = "1; mode=block"
+
+    # HTTP Strict Transport Security (HSTS)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Robust Content Security Policy (CSP) tailored for Three.js, Vanta, EmailJS, and Google Fonts
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://api.emailjs.com https://cdn.jsdelivr.net; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"

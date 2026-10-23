@@ -19,6 +19,11 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2308080a'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='44' fill='%23D4AF37'>GP</text></svg>" />
 
+  <!-- Security Hardening & Transport Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://api.emailjs.com https://cdn.jsdelivr.net; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
   <!-- High-Performance Font Preconnect & Stylesheet Link -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1306,25 +1311,25 @@ CLINICAL EVIDENCE SYNTHESIS:
 
             <div class="form-group reveal-init delay-1">
               <label class="form-label" for="contact-name">Your Full Name <span class="required-star">*</span></label>
-              <input type="text" id="contact-name" name="from_name" class="form-input" placeholder="e.g. Elena Rostova" autocomplete="name" required />
+              <input type="text" id="contact-name" name="from_name" class="form-input" placeholder="e.g. Elena Rostova" autocomplete="name" maxlength="100" required />
               <span id="name-error" class="field-error-msg" aria-live="polite"></span>
             </div>
 
             <div class="form-group reveal-init delay-2">
               <label class="form-label" for="contact-email">Corporate / Personal Email <span class="required-star">*</span></label>
-              <input type="email" id="contact-email" name="reply_to" class="form-input" placeholder="e.g. elena@enterprise.com" autocomplete="email" required />
+              <input type="email" id="contact-email" name="reply_to" class="form-input" placeholder="e.g. elena@enterprise.com" autocomplete="email" maxlength="254" spellcheck="false" required />
               <span id="email-error" class="field-error-msg" aria-live="polite"></span>
             </div>
 
             <div class="form-group reveal-init delay-3">
               <label class="form-label" for="contact-subject">Objective / Subject <span class="required-star">*</span></label>
-              <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="e.g. AI/ML Engineering Collaboration" required />
+              <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="e.g. AI/ML Engineering Collaboration" maxlength="150" autocomplete="off" required />
               <span id="subject-error" class="field-error-msg" aria-live="polite"></span>
             </div>
 
             <div class="form-group reveal-init delay-4">
               <label class="form-label" for="contact-message">Dispatch Details <span class="required-star">*</span></label>
-              <textarea id="contact-message" name="message" class="form-textarea" placeholder="Share project scope or opportunity details..." required></textarea>
+              <textarea id="contact-message" name="message" class="form-textarea" placeholder="Share project scope or opportunity details..." maxlength="3000" required></textarea>
               <span id="message-error" class="field-error-msg" aria-live="polite"></span>
             </div>
 

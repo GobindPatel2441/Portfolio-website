@@ -252,7 +252,12 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.className = 'toast-notice';
       document.body.appendChild(toast);
     }
-    toast.innerHTML = `<span style="color: var(--accent-primary);">✦</span> ${msg}`;
+    toast.textContent = '';
+    const iconSpan = document.createElement('span');
+    iconSpan.style.color = 'var(--accent-primary)';
+    iconSpan.textContent = '✦ ';
+    toast.appendChild(iconSpan);
+    toast.appendChild(document.createTextNode(String(msg || '')));
     toast.classList.add('show');
 
     clearTimeout(toast._timeout);

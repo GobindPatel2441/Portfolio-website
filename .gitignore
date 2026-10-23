@@ -37,3 +37,11 @@ yarn-error.log*
 
 # Performance test scripts
 cdp_*.py
+
+# Security testing tools & assessment runs (Strix / PentAGI)
+/security/
+security/
+strix_runs/
+pentagi_runs/
+*.sarif
+

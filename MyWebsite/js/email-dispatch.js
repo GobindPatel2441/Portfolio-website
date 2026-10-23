@@ -67,13 +67,23 @@
     let isSubmitting = false;
 
     // -------------------------------------------------------------
-    // 1. REAL-TIME INPUT VALIDATION HANDLERS
+    // 1. SECURITY: HTML SANITIZATION & INPUT VALIDATION
     // -------------------------------------------------------------
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     const fields = [
-      { el: nameInput, errorId: 'name-error', validate: v => v.trim().length >= 2, msg: 'Please provide your full name (at least 2 characters).' },
-      { el: emailInput, errorId: 'email-error', validate: v => isValidEmail(v), msg: 'Please provide a valid email address (e.g. name@domain.com).' },
-      { el: subjectInput, errorId: 'subject-error', validate: v => v.trim().length >= 3, msg: 'Please enter an objective or subject (at least 3 characters).' },
-      { el: messageInput, errorId: 'message-error', validate: v => v.trim().length >= 10, msg: 'Please detail your dispatch scope (at least 10 characters).' }
+      { el: nameInput, errorId: 'name-error', validate: v => v.trim().length >= 2 && v.trim().length <= 100, msg: 'Please provide your full name (2–100 characters).' },
+      { el: emailInput, errorId: 'email-error', validate: v => isValidEmail(v) && v.trim().length <= 254, msg: 'Please provide a valid email address (up to 254 characters).' },
+      { el: subjectInput, errorId: 'subject-error', validate: v => v.trim().length >= 3 && v.trim().length <= 150, msg: 'Please enter an objective or subject (3–150 characters).' },
+      { el: messageInput, errorId: 'message-error', validate: v => v.trim().length >= 10 && v.trim().length <= 3000, msg: 'Please detail your dispatch scope (10–3000 characters).' }
     ];
 
     function isValidEmail(email) {
@@ -222,14 +232,20 @@
       isSubmitting = true;
       setButtonLoading(true);
 
+      // Sanitize inputs and strip control characters / newlines from header fields
+      const sanitizedName = nameInput.value.trim().slice(0, 100);
+      const sanitizedEmail = emailInput.value.trim().slice(0, 254);
+      const sanitizedSubject = subjectInput.value.trim().replace(/[\r\n]+/g, ' ').slice(0, 150);
+      const sanitizedMessage = messageInput.value.trim().slice(0, 3000);
+
       const formData = {
-        from_name: nameInput.value.trim(),
-        name: nameInput.value.trim(),
-        reply_to: emailInput.value.trim(),
-        email: emailInput.value.trim(),
-        subject: subjectInput.value.trim(),
-        title: subjectInput.value.trim(),
-        message: messageInput.value.trim(),
+        from_name: sanitizedName,
+        name: sanitizedName,
+        reply_to: sanitizedEmail,
+        email: sanitizedEmail,
+        subject: sanitizedSubject,
+        title: sanitizedSubject,
+        message: sanitizedMessage,
         to_email: (window.EMAILJS_CONFIG && window.EMAILJS_CONFIG.RECIPIENT_EMAIL) || 'gobindpatel2005@gmail.com'
       };
 
@@ -249,9 +265,9 @@
           showStatusBanner('info', `
             <div class="banner-icon">⚙️</div>
             <div class="banner-text">
-              <strong>EmailJS Setup Pending:</strong> Validation passed! To receive live messages in your inbox (<code>${formData.to_email}</code>), add your EmailJS keys in <code>js/email-config.js</code> or <code>.env</code>.
+              <strong>EmailJS Setup Pending:</strong> Validation passed! To receive live messages in your inbox (<code>${escapeHTML(formData.to_email)}</code>), add your EmailJS keys in <code>js/email-config.js</code> or <code>.env</code>.
               <div style="margin-top: 0.4rem; font-size: 0.78rem; opacity: 0.85;">
-                Sender: <strong>${formData.from_name}</strong> (${formData.reply_to}) • Subject: <strong>${formData.subject}</strong>
+                Sender: <strong>${escapeHTML(formData.from_name)}</strong> (${escapeHTML(formData.reply_to)}) • Subject: <strong>${escapeHTML(formData.subject)}</strong>
               </div>
             </div>
           `);
@@ -314,9 +330,9 @@
         showStatusBanner('error', `
           <div class="banner-icon">⚠</div>
           <div class="banner-text">
-            <strong>TRANSMISSION FAILED:</strong> ${error.text || error.message || 'Unable to route dispatch.'}
+            <strong>TRANSMISSION FAILED:</strong> ${escapeHTML(error.text || error.message || 'Unable to route dispatch.')}
             <div style="margin-top: 0.4rem; font-size: 0.78rem;">
-              You can also reach out directly via <a href="mailto:${formData.to_email}" style="color: var(--accent-primary); text-decoration: underline;">${formData.to_email}</a>.
+              You can also reach out directly via <a href="mailto:${escapeHTML(formData.to_email)}" style="color: var(--accent-primary); text-decoration: underline;">${escapeHTML(formData.to_email)}</a>.
             </div>
           </div>
         `);
