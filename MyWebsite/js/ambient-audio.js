@@ -3,7 +3,8 @@
  * GOBIND PATEL — BESPOKE CINEMATIC AMBIENT AUDIO CONTROLLER
  * Track: Velario — Ambient Cinematic (Production Master)
  * Luxury Glassmorphic Ambient Controller • Web Audio & HTML5 Audio
- * Zero Dependencies • Accessible • Mobile Responsive • Auto-Fade
+ * Zero Dependencies • Accessible • Mobile Responsive • User-Controlled
+ * Default: ALWAYS PAUSED. Plays only upon explicit user action.
  * ===================================================================
  */
 
@@ -16,8 +17,7 @@
   const AUDIO_SRC = 'assets/audio/velariomusic-ambient-cinematic-598430.mp3';
   const DEFAULT_VOLUME = 0.06; // Target initial volume ~6%
   const STORAGE_KEYS = {
-    VOLUME: 'portfolio_audio_volume',
-    MUTED: 'portfolio_audio_muted'
+    VOLUME: 'portfolio_audio_volume'
   };
 
   // Safe localStorage helper
@@ -33,21 +33,16 @@
     }
   };
 
-  // Clear any legacy disabled / muted flags so page refresh ALWAYS autoplays music
-  storage.remove('portfolio_audio_explicit_disabled');
-  storage.remove(STORAGE_KEYS.MUTED);
-
-  // Read saved volume (ensure audible level >= 0.05)
+  // Read saved volume preference (default to 6%)
   let savedVolume = storage.get(STORAGE_KEYS.VOLUME);
   let targetVolume = savedVolume !== null ? parseFloat(savedVolume) : DEFAULT_VOLUME;
-  if (isNaN(targetVolume) || targetVolume < 0.05) targetVolume = DEFAULT_VOLUME;
+  if (isNaN(targetVolume) || targetVolume < 0.01 || targetVolume > 1) targetVolume = DEFAULT_VOLUME;
 
   let isMuted = false;
   let preMuteVolume = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
-  let explicitDisabled = false; // In-memory only for current page session, resets on refresh
 
-  // Audio state: 'attempting' | 'playing' | 'paused' | 'blocked' | 'muted' | 'error'
-  let currentState = 'attempting';
+  // Audio state: STRICTLY defaults to paused on every load/refresh
+  let currentState = 'paused';
   let isPlaying = false;
   let activeFadeRaf = null;
 
@@ -56,7 +51,8 @@
   audio.src = AUDIO_SRC;
   audio.loop = true;
   audio.preload = 'metadata';
-  audio.volume = 0; // Starts at 0 for smooth volume fade-in
+  audio.autoplay = false;
+  audio.volume = targetVolume;
 
   // DOM Elements (cached after DOM ready)
   let dom = {
@@ -94,7 +90,6 @@
     fromVol = Math.max(0, Math.min(1, fromVol));
     toVol = Math.max(0, Math.min(1, toVol));
 
-    // Instant if duration 0 or already matched
     if (durationMs <= 0 || Math.abs(fromVol - toVol) < 0.001) {
       audio.volume = toVol;
       if (typeof onComplete === 'function') onComplete();
@@ -126,61 +121,42 @@
   }
 
   // -------------------------------------------------------------
-  // 3. PLAYBACK ENGINE
+  // 3. PLAYBACK ENGINE — USER-CONTROLLED ONLY
   // -------------------------------------------------------------
   function play(userInitiated) {
-    if (userInitiated) {
-      explicitDisabled = false;
-    }
-
-    // Always unmute when play is called
     isMuted = false;
     audio.muted = false;
-    storage.set(STORAGE_KEYS.MUTED, 'false');
 
     const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
 
-    // Start playback
+    // Start with volume 0 and fade smoothly into the goal volume
+    audio.volume = 0;
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       return playPromise
         .then(() => {
           isPlaying = true;
           setState('playing');
-
-          // Smooth fade-in from current volume to goal volume over 1200ms
-          fadeVolume(audio.volume, goalVol, 1200);
+          fadeVolume(0, goalVol, 1000);
 
           if (userInitiated && typeof window.showToast === 'function') {
             window.showToast('Ambient Soundtrack Playing');
           }
         })
         .catch((err) => {
-          if (err.name === 'NotAllowedError') {
-            // Browser autoplay policy blocked audible playback without user gesture
-            setState('blocked');
-            setupFirstGestureListener();
-          } else {
-            console.warn('[AmbientAudio] Playback prevented:', err.message);
-            setState('error');
-            setupFirstGestureListener();
-          }
+          console.warn('[AmbientAudio] Playback prevented:', err.message);
+          isPlaying = false;
+          setState('paused');
         });
     }
     return Promise.resolve();
   }
 
   function pause(userInitiated) {
-    if (userInitiated) {
-      explicitDisabled = true; // In-memory only for this session; refreshes will re-autoplay
-    }
-
-    // Fade out smoothly over 380ms before actual pause
-    fadeVolume(audio.volume, 0, 380, () => {
-      audio.pause();
-      isPlaying = false;
-      setState('paused');
-    });
+    cancelActiveFade();
+    audio.pause();
+    isPlaying = false;
+    setState('paused');
 
     if (userInitiated && typeof window.showToast === 'function') {
       window.showToast('Ambient Soundtrack Paused');
@@ -188,7 +164,7 @@
   }
 
   function togglePlay() {
-    if (isPlaying) {
+    if (isPlaying && !audio.paused) {
       pause(true);
     } else {
       play(true);
@@ -205,17 +181,18 @@
 
     if (newVol === 0) {
       isMuted = true;
-      storage.set(STORAGE_KEYS.MUTED, 'true');
     } else if (isMuted) {
       isMuted = false;
-      storage.set(STORAGE_KEYS.MUTED, 'false');
     }
 
     cancelActiveFade();
+    // Only adjust actual audio element volume if currently playing
     audio.volume = newVol;
 
     if (isPlaying) {
       setState(isMuted ? 'muted' : 'playing');
+    } else {
+      setState('paused');
     }
 
     updateVolumeUI();
@@ -226,12 +203,13 @@
       // Mute
       preMuteVolume = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
       isMuted = true;
-      storage.set(STORAGE_KEYS.MUTED, 'true');
-
-      fadeVolume(audio.volume, 0, 250, () => {
+      cancelActiveFade();
+      audio.muted = true;
+      if (isPlaying) {
+        audio.volume = 0;
         setState('muted');
-        updateVolumeUI();
-      });
+      }
+      updateVolumeUI();
 
       if (typeof window.showToast === 'function') {
         window.showToast('Ambient Soundtrack Muted');
@@ -239,18 +217,17 @@
     } else {
       // Unmute
       isMuted = false;
-      storage.set(STORAGE_KEYS.MUTED, 'false');
+      audio.muted = false;
       const restoreVol = preMuteVolume > 0 ? preMuteVolume : DEFAULT_VOLUME;
       targetVolume = restoreVol;
+      audio.volume = restoreVol;
 
-      if (!isPlaying) {
-        play(true);
+      if (isPlaying) {
+        setState('playing');
       } else {
-        fadeVolume(audio.volume, restoreVol, 350, () => {
-          setState('playing');
-          updateVolumeUI();
-        });
+        setState('paused');
       }
+      updateVolumeUI();
 
       if (typeof window.showToast === 'function') {
         window.showToast('Ambient Soundtrack Unmuted');
@@ -259,89 +236,30 @@
   }
 
   // -------------------------------------------------------------
-  // 4. AUTOPLAY ARRIVAL ORCHESTRATION & FIRST-GESTURE LISTENER
+  // 4. HTML5 AUDIO EVENT SYNCHRONIZATION
   // -------------------------------------------------------------
-  let gestureListenerAttached = false;
-  // Valid user activation events according to W3C specification
-  const GESTURE_EVENTS = ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'touchend', 'click'];
+  audio.addEventListener('play', () => {
+    isPlaying = true;
+    setState('playing');
+  });
 
-  function setupFirstGestureListener() {
-    if (gestureListenerAttached) return;
-    gestureListenerAttached = true;
+  audio.addEventListener('pause', () => {
+    isPlaying = false;
+    setState('paused');
+  });
 
-    function handleFirstGesture(e) {
-      // Don't auto-start if the user explicitly paused during this session
-      if (explicitDisabled) {
-        removeGestureListener();
-        return;
-      }
-
-      // If user clicked directly on audio controls, let button handler manage it
-      if (dom.dock && dom.dock.contains(e.target)) return;
-
-      // Ensure audio is unmuted and attempt play
-      audio.muted = false;
-      isMuted = false;
-      storage.set(STORAGE_KEYS.MUTED, 'false');
-
-      const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
-
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            removeGestureListener();
-            isPlaying = true;
-            setState('playing');
-            fadeVolume(audio.volume, goalVol, 1000);
-          })
-          .catch((err) => {
-            // Keep listener active if event wasn't recognized as sufficient activation
-          });
-      }
+  audio.addEventListener('ended', () => {
+    if (!audio.loop) {
+      isPlaying = false;
+      setState('paused');
     }
+  });
 
-    function removeGestureListener() {
-      GESTURE_EVENTS.forEach((evt) => {
-        window.removeEventListener(evt, handleFirstGesture, { passive: true, capture: true });
-        document.removeEventListener(evt, handleFirstGesture, { passive: true, capture: true });
-      });
-      gestureListenerAttached = false;
-    }
-
-    GESTURE_EVENTS.forEach((evt) => {
-      window.addEventListener(evt, handleFirstGesture, { passive: true, capture: true });
-      document.addEventListener(evt, handleFirstGesture, { passive: true, capture: true });
-    });
-  }
-
-  function attemptInitialAutoplay() {
-    // Reset session disabled state on arrival / refresh
-    explicitDisabled = false;
-    setState('attempting');
-
-    // Proactively attach gesture listener so any click immediately starts audio
-    setupFirstGestureListener();
-
-    // Attempt direct audible playback
-    audio.muted = false;
-    isMuted = false;
-    const goalVol = targetVolume > 0 ? targetVolume : DEFAULT_VOLUME;
-
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          isPlaying = true;
-          setState('playing');
-          fadeVolume(audio.volume, goalVol, 1200);
-        })
-        .catch((err) => {
-          // Autoplay policy prevented immediate playback without user gesture
-          setState('blocked');
-        });
-    }
-  }
+  audio.addEventListener('error', (err) => {
+    console.warn('[AmbientAudio] HTML5 Audio error:', err);
+    isPlaying = false;
+    setState('paused');
+  });
 
   // -------------------------------------------------------------
   // 5. SVG ICONS & UI RENDERING
@@ -350,8 +268,7 @@
     play: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>`,
     pause: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>`,
     volumeHigh: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`,
-    volumeMute: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
-    blockedSparkle: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
+    volumeMute: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`
   };
 
   function setState(state) {
@@ -361,7 +278,6 @@
     dom.dock.setAttribute('data-state', state);
 
     const isPlay = state === 'playing';
-    const isBlock = state === 'blocked';
     const isMute = state === 'muted';
 
     // Update Pill Action Button Icon & Label
@@ -369,31 +285,26 @@
       if (isPlay) {
         dom.actionIcon.innerHTML = ICONS.pause;
         dom.actionBtn.setAttribute('aria-label', 'Pause Ambient Music');
-      } else if (isBlock) {
-        dom.actionIcon.innerHTML = ICONS.play;
-        dom.actionBtn.setAttribute('aria-label', 'Enable Ambient Music');
       } else if (isMute) {
         dom.actionIcon.innerHTML = ICONS.volumeMute;
         dom.actionBtn.setAttribute('aria-label', 'Unmute Ambient Music');
       } else {
+        // Paused state: ALWAYS show PLAY icon
         dom.actionIcon.innerHTML = ICONS.play;
         dom.actionBtn.setAttribute('aria-label', 'Play Ambient Music');
       }
     }
 
     if (dom.pillLabel) {
-      if (isPlay) {
-        dom.pillLabel.textContent = 'Velario • Ambient';
-        if (dom.pillSubtext) dom.pillSubtext.textContent = `${Math.round(targetVolume * 100)}% Volume`;
-      } else if (isBlock) {
-        dom.pillLabel.textContent = '✦ Play Ambience';
-        if (dom.pillSubtext) dom.pillSubtext.textContent = 'Click anywhere to play';
-      } else if (isMute) {
-        dom.pillLabel.textContent = 'Ambience Muted';
-        if (dom.pillSubtext) dom.pillSubtext.textContent = 'Tap to Unmute';
+      dom.pillLabel.textContent = 'Velario • Ambient';
+    }
+
+    if (dom.pillSubtext) {
+      const pct = Math.round(targetVolume * 100);
+      if (isMute) {
+        dom.pillSubtext.textContent = 'Muted';
       } else {
-        dom.pillLabel.textContent = 'Ambience Paused';
-        if (dom.pillSubtext) dom.pillSubtext.textContent = 'Tap to Resume';
+        dom.pillSubtext.textContent = `${pct}% Volume`;
       }
     }
 
@@ -410,8 +321,8 @@
       dom.popoverMuteBtn.setAttribute('aria-pressed', isMute ? 'true' : 'false');
     }
 
-    // Synchronize Top Header Audio Button
-    syncHeaderButton(state);
+    // Synchronize body active sound state class
+    document.body.classList.toggle('sound-active', isPlay);
   }
 
   function updateVolumeUI() {
@@ -423,14 +334,9 @@
     if (dom.volumeReadout) {
       dom.volumeReadout.textContent = `${pct}%`;
     }
-    if (dom.pillSubtext && isPlaying && !isMuted) {
+    if (dom.pillSubtext && !isMuted) {
       dom.pillSubtext.textContent = `${pct}% Volume`;
     }
-  }
-
-  function syncHeaderButton(state) {
-    // Body sound state class for any ambient styling
-    document.body.classList.toggle('sound-active', state === 'playing');
   }
 
   // -------------------------------------------------------------
@@ -457,7 +363,7 @@
     dom.slider = dom.dock.querySelector('.ambient-volume-slider');
     dom.volumeReadout = dom.dock.querySelector('.audio-volume-readout');
 
-    // 1. Pill Click: Toggle Playback or Open popover on click
+    // 1. Action Button: Play / Pause toggle
     if (dom.actionBtn) {
       dom.actionBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -465,20 +371,18 @@
       });
     }
 
+    // 2. Pill Click: Toggle popover panel (or play if clicking play button)
     if (dom.pill) {
       dom.pill.addEventListener('click', (e) => {
-        // If clicking on expand chevron, toggle popover
         if (dom.expandBtn && (e.target === dom.expandBtn || dom.expandBtn.contains(e.target))) {
           e.stopPropagation();
           togglePopover();
           return;
         }
-        // If autoplay blocked, clicking the pill triggers play!
-        if (currentState === 'blocked' || currentState === 'paused') {
-          play(true);
-        } else {
-          togglePopover();
+        if (dom.actionBtn && (e.target === dom.actionBtn || dom.actionBtn.contains(e.target))) {
+          return;
         }
+        togglePopover();
       });
     }
 
@@ -496,7 +400,7 @@
       });
     }
 
-    // 2. Popover Action Buttons
+    // 3. Popover Action Buttons
     if (dom.popoverPlayBtn) {
       dom.popoverPlayBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -511,7 +415,7 @@
       });
     }
 
-    // 3. Volume Slider live adjustment
+    // 4. Volume Slider live adjustment
     if (dom.slider) {
       dom.slider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value) / 100;
@@ -528,7 +432,7 @@
       });
     }
 
-    // 4. Close Popover on Outside Click or Escape key
+    // 5. Close Popover on Outside Click or Escape key
     document.addEventListener('click', (e) => {
       if (dom.dock && !dom.dock.contains(e.target)) {
         closePopover();
@@ -541,11 +445,9 @@
       }
     });
 
-
-
-    // Initial UI state setup
+    // Initial UI state setup: strictly paused
     updateVolumeUI();
-    setState('attempting');
+    setState('paused');
   }
 
   function togglePopover() {
@@ -565,12 +467,11 @@
   }
 
   // -------------------------------------------------------------
-  // 7. INITIALIZATION
+  // 7. INITIALIZATION — ALWAYS STARTS PAUSED
   // -------------------------------------------------------------
   function init() {
     setupDOM();
-    // Attempt playback on arrival
-    attemptInitialAutoplay();
+    setState('paused');
   }
 
   if (document.readyState === 'loading') {

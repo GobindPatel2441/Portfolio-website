@@ -138,12 +138,14 @@
   width: 2.5px;
   background: linear-gradient(180deg, var(--accent-highlight, #F7E7C4) 0%, var(--accent-primary, #D4AF37) 100%);
   border-radius: 2px;
-  height: 3px;
-  transition: height 0.3s ease;
+  height: 2px;
+  opacity: 0.45;
+  transition: height 0.3s ease, opacity 0.3s ease;
 }
 
 /* Animated heights when playing */
 .ambient-audio-dock[data-state="playing"] .ambient-eq-bar {
+  opacity: 1;
   animation: ambientEqBounce 1.2s infinite ease-in-out alternate;
 }
 
@@ -176,10 +178,11 @@
   }
 }
 
-/* Paused / Muted / Blocked flattened state */
+/* Paused / Muted / Idle flattened state */
 .ambient-audio-dock[data-state="paused"] .ambient-eq-bar,
 .ambient-audio-dock[data-state="blocked"] .ambient-eq-bar,
-.ambient-audio-dock[data-state="muted"] .ambient-eq-bar {
+.ambient-audio-dock[data-state="muted"] .ambient-eq-bar,
+.ambient-audio-dock:not([data-state="playing"]) .ambient-eq-bar {
   height: 2px;
   opacity: 0.45;
   animation: none !important;
