@@ -233,4 +233,135 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.classList.remove('show');
     }, 3200);
   };
+
+  // -------------------------------------------------------------
+  // 9. STALE SERVICE WORKER & CACHE PURGE
+  // -------------------------------------------------------------
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const reg of registrations) {
+        reg.unregister().then((unregistered) => {
+          if (unregistered) console.log('[Portfolio] Unregistered stale service worker successfully.');
+        });
+      }
+    }).catch(() => {});
+  }
+  if ('caches' in window) {
+    caches.keys().then((names) => {
+      for (const name of names) {
+        caches.delete(name);
+      }
+    }).catch(() => {});
+  }
+
+  // -------------------------------------------------------------
+  // 10. RESILIENT PORTFOLIO FILE DOWNLOAD CONTROLLER
+  // -------------------------------------------------------------
+  /**
+   * Universal Resilient File Downloader
+   * Creates a verified Blob from actual file bytes, assigns the intended filename
+   * with correct extension, triggers download after user action, and revokes
+   * object URL safely after a delay. Ensures downloads never inherit UUIDs from
+   * service workers or direct navigation.
+   *
+   * @param {string} url - Target asset path or URL
+   * @param {string} [preferredFilename] - Explicit filename with extension
+   * @param {Event} [event] - Optional click event to prevent default navigation
+   */
+  window.downloadPortfolioFile = async function (url, preferredFilename, event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    // Determine target filename
+    let filename = preferredFilename;
+    if (!filename && url) {
+      const cleanUrl = url.split('#')[0].split('?')[0];
+      filename = cleanUrl.split('/').pop();
+    }
+    if (!filename) {
+      filename = 'Gobind_Patel_Document.pdf';
+    }
+
+    try {
+      // Fetch fresh bytes
+      const response = await fetch(url, { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+      }
+
+      // Create blob from actual file data
+      const blob = await response.blob();
+
+      // Create object URL correctly
+      const objectUrl = URL.createObjectURL(blob);
+
+      // Create anchor and assign intended filename
+      const tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = objectUrl;
+      tempLink.setAttribute('download', filename);
+
+      document.body.appendChild(tempLink);
+
+      // Trigger download only after user action
+      tempLink.click();
+
+      // Remove anchor immediately
+      document.body.removeChild(tempLink);
+
+      // Revoke temporary object URL at an appropriate time without interrupting download
+      setTimeout(() => {
+        try {
+          URL.revokeObjectURL(objectUrl);
+        } catch (e) {
+          // Cleanup ignore
+        }
+      }, 60000);
+
+      // Visual feedback
+      if (typeof window.showToast === 'function') {
+        window.showToast(`Downloading: ${filename}`);
+      }
+      if (window.PortfolioAudio && typeof window.PortfolioAudio.playSuccess === 'function') {
+        window.PortfolioAudio.playSuccess();
+      }
+      return true;
+    } catch (err) {
+      console.warn('[Portfolio Download] Blob fetch failed, falling back to direct anchor:', err);
+      // Fallback: direct anchor with download attribute
+      const fallbackLink = document.createElement('a');
+      fallbackLink.style.display = 'none';
+      fallbackLink.href = url;
+      fallbackLink.setAttribute('download', filename);
+      fallbackLink.target = '_blank';
+      document.body.appendChild(fallbackLink);
+      fallbackLink.click();
+      document.body.removeChild(fallbackLink);
+
+      if (typeof window.showToast === 'function') {
+        window.showToast(`Starting download: ${filename}`);
+      }
+      return false;
+    }
+  };
+
+  // Delegated event listener for all download links/buttons across the portfolio
+  document.addEventListener('click', (e) => {
+    const downloadLink = e.target.closest('a[download], [data-download-file]');
+    if (!downloadLink) return;
+
+    // Allow user to use modifier keys (e.g. Ctrl/Cmd+click to open in new tab)
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+
+    const url = downloadLink.getAttribute('data-download-file') || downloadLink.getAttribute('href');
+    if (!url || url.startsWith('#') || url.startsWith('mailto:') || url.startsWith('tel:')) return;
+
+    const filename = downloadLink.getAttribute('data-filename') || downloadLink.getAttribute('download') || url.split('#')[0].split('?')[0].split('/').pop();
+    if (filename) {
+      window.downloadPortfolioFile(url, filename, e);
+    }
+  });
 });
+

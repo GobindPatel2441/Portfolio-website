@@ -20,6 +20,8 @@ certification/
 buttonsound/
 /buttonsound/
 *.zip
+offlinegame/
+/offlinegame/
 
 # Node & Dependencies
 node_modules/

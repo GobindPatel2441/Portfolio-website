@@ -38,7 +38,7 @@
     { label: '⚡ Switch to Celestial Cobalt', action: () => applyThemeCmd('cyber'), group: 'Themes', keywords: ['cobalt', 'blue', 'cyber', 'celestial'] },
 
     // Actions
-    { label: '📄 Download Resume (PDF)', action: () => { const a = document.querySelector('a[download="Gobind_Patel_Resume.pdf"]'); if (a) a.click(); }, group: 'Actions', keywords: ['resume', 'cv', 'download', 'pdf'] },
+    { label: '📄 Download Resume (PDF)', action: () => { if (typeof window.downloadPortfolioFile === 'function') { window.downloadPortfolioFile('assets/Gobind_Patel_Resume.pdf', 'Gobind_Patel_Resume.pdf'); } else { const a = document.querySelector('a[download="Gobind_Patel_Resume.pdf"]'); if (a) a.click(); } }, group: 'Actions', keywords: ['resume', 'cv', 'download', 'pdf'] },
     { label: '📧 Copy Email Address', action: () => { navigator.clipboard.writeText('gobindpatel2005@gmail.com'); showToast('Email copied to clipboard'); }, group: 'Actions', keywords: ['email', 'copy', 'clipboard'] },
     { label: '🔔 Toggle Sound Effects (SFX)', action: () => { if (window.SoundEffects) window.SoundEffects.toggleEnabled(); }, group: 'Actions', keywords: ['sfx', 'sound', 'effects', 'audio', 'earshot', 'mute', 'click', 'haptic'] },
     { label: '🔊 Toggle Audio Ambience', action: () => { if (window.AmbientAudio) window.AmbientAudio.togglePlay(); }, group: 'Actions', keywords: ['audio', 'sound', 'music', 'mute', 'ambient'] },
