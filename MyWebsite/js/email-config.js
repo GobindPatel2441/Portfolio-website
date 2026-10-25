@@ -27,8 +27,11 @@ window.EMAILJS_CONFIG = {
   // EmailJS Service ID
   SERVICE_ID: window.ENV_EMAILJS_SERVICE_ID || 'service_tthx1qm',
 
-  // EmailJS Template ID
+  // EmailJS Inbound Template ID (Delivers to Gobind Patel)
   TEMPLATE_ID: window.ENV_EMAILJS_TEMPLATE_ID || 'template_p8fkvfa',
+
+  // EmailJS Auto-Reply Template ID (Confirmation directly to recruiter/sender)
+  AUTO_REPLY_TEMPLATE_ID: window.ENV_EMAILJS_AUTO_REPLY_TEMPLATE_ID || 'template_8ymvh89',
 
   // EmailJS Public Key
   PUBLIC_KEY: window.ENV_EMAILJS_PUBLIC_KEY || 'pEO_NQZ45XnwaHxM8',

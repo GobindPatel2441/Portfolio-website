@@ -297,6 +297,19 @@
           formData
         );
 
+        // Dispatch Auto-Reply confirmation to sender if configured
+        if (config.AUTO_REPLY_TEMPLATE_ID && config.AUTO_REPLY_TEMPLATE_ID !== config.TEMPLATE_ID) {
+          window.emailjs.send(
+            config.SERVICE_ID,
+            config.AUTO_REPLY_TEMPLATE_ID,
+            formData
+          ).then(() => {
+            console.info('[EmailJS] Auto-reply confirmation dispatched to sender successfully.');
+          }).catch((autoReplyErr) => {
+            console.warn('[EmailJS] Auto-reply dispatch notice:', autoReplyErr);
+          });
+        }
+
         if (response.status === 200 || response.text === 'OK') {
           // Success confirmed!
           sessionStorage.setItem('last_dispatch_timestamp', Date.now().toString());
