@@ -1521,15 +1521,15 @@ CLINICAL EVIDENCE SYNTHESIS:
         </div>
 
         <div class="sfx-toggles-row">
-          <button id="sfx-toggle-btn" class="audio-popover-btn sfx-main-toggle" aria-label="Toggle Interface Sound Effects" aria-pressed="false">
+          <button id="sfx-toggle-btn" class="audio-popover-btn sfx-main-toggle active" aria-label="Toggle Interface Sound Effects" aria-pressed="true">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-            <span id="sfx-toggle-text">Sound Effects: OFF</span>
-            <span id="sfx-toggle-state" class="sfx-badge">OFF</span>
+            <span id="sfx-toggle-text">Sound Effects: ON</span>
+            <span id="sfx-toggle-state" class="sfx-badge">ON</span>
           </button>
 
-          <button id="sfx-hover-toggle-btn" class="audio-popover-btn sfx-sub-toggle" aria-label="Toggle Desktop Hover Sounds" aria-pressed="false" title="Hover tick sounds on buttons and links (desktop only)">
+          <button id="sfx-hover-toggle-btn" class="audio-popover-btn sfx-sub-toggle active" aria-label="Toggle Desktop Hover Sounds" aria-pressed="true" title="Hover tick sounds on buttons and links (desktop only)">
             <span>Hover Ticks</span>
-            <span id="sfx-hover-toggle-state" class="sfx-badge">OFF</span>
+            <span id="sfx-hover-toggle-state" class="sfx-badge">ON</span>
           </button>
         </div>
 
@@ -1537,10 +1537,10 @@ CLINICAL EVIDENCE SYNTHESIS:
         <div class="audio-volume-section" style="margin-top: 0.65rem; margin-bottom: 0.35rem;">
           <div class="audio-volume-header">
             <span>SFX VOLUME</span>
-            <span id="sfx-volume-readout" class="audio-volume-readout">35%</span>
+            <span id="sfx-volume-readout" class="audio-volume-readout">65%</span>
           </div>
           <div class="audio-volume-slider-row">
-            <input type="range" id="sfx-volume-slider" class="ambient-volume-slider" min="0" max="100" value="35" step="1" aria-label="Sound effects volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35" />
+            <input type="range" id="sfx-volume-slider" class="ambient-volume-slider" min="0" max="100" value="65" step="1" aria-label="Sound effects volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65" />
           </div>
         </div>
       </div>
@@ -1648,7 +1648,7 @@ CLINICAL EVIDENCE SYNTHESIS:
   <script src="js/magnetic-button.js" defer></script>
   <script src="js/custom-cursor.js?v=4" defer></script>
   <script src="js/liquid-button.js" defer></script>
-  <script src="js/sound-effects.js?v=1" defer></script>
+  <script src="js/sound-effects.js?v=2" defer></script>
   <script src="js/ambient-audio.js?v=3" defer></script>
   <script src="js/certificates.js?v=1" defer></script>
   <!-- EmailJS Integration (Lazy-loaded on demand via email-dispatch.js) -->

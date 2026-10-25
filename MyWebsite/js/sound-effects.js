@@ -3,7 +3,8 @@
  * GOBIND PATEL — EARSHOT-INSPIRED INTERACTIVE SOUND SYSTEM
  * Procedural & Audited Motion SFX Engine for Luxury Cinematic UI
  * Web Audio API • Zero Dependencies • Accessible • 100% Unobtrusive
- * Default: STRICTLY OFF on fresh visit. User must explicitly enable.
+ * Defaults for New Visitors: Sound Effects ON, Hover Ticks ON, SFX Volume 65%
+ * Persistent via versioned localStorage: 'portfolio-motion-sfx-v1'
  * Ambient music separation: 100% independent volume and controls.
  * ===================================================================
  */
@@ -12,15 +13,90 @@
   'use strict';
 
   // -------------------------------------------------------------
-  // 1. CONFIGURATION & STATE
+  // 1. CONFIGURATION & VERSIONED PERSISTENCE
   // -------------------------------------------------------------
-  const STORAGE_KEYS = {
-    ENABLED: 'portfolio_sfx_enabled',
-    VOLUME: 'portfolio_sfx_volume',
-    HOVER: 'portfolio_sfx_hover'
+  const STORAGE_KEY = 'portfolio-motion-sfx-v1';
+
+  const DEFAULT_PREFERENCES = {
+    soundEffectsEnabled: true,
+    hoverTicksEnabled: true,
+    sfxVolume: 0.65
   };
 
-  const DEFAULT_VOLUME = 0.35; // 35% comfortable default level
+  /**
+   * Centralized Preference Loader
+   * Distinguishes explicitly between:
+   * 1. A new visitor who has never configured settings (returns defaults)
+   * 2. A visitor who explicitly switched a setting OFF (restores false, never overrides)
+   * 3. A visitor whose localStorage is blocked/corrupted (safe in-memory fallback)
+   */
+  function loadPreferences() {
+    try {
+      // Support test reset via URL query/hash without requiring DevTools access
+      if (window.location.search.includes('reset-sfx=1') || window.location.hash === '#reset-sfx') {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('portfolio_sfx_enabled');
+        localStorage.removeItem('portfolio_sfx_hover');
+        localStorage.removeItem('portfolio_sfx_volume');
+      }
+
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw === null) {
+        // First-time visitor: clean up any legacy keys and return fresh defaults
+        try {
+          localStorage.removeItem('portfolio_sfx_enabled');
+          localStorage.removeItem('portfolio_sfx_hover');
+          localStorage.removeItem('portfolio_sfx_volume');
+        } catch (e) {}
+        return { ...DEFAULT_PREFERENCES };
+      }
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') {
+        return { ...DEFAULT_PREFERENCES };
+      }
+
+      const soundEffectsEnabled = typeof parsed.soundEffectsEnabled === 'boolean'
+        ? parsed.soundEffectsEnabled
+        : DEFAULT_PREFERENCES.soundEffectsEnabled;
+
+      const hoverTicksEnabled = typeof parsed.hoverTicksEnabled === 'boolean'
+        ? parsed.hoverTicksEnabled
+        : DEFAULT_PREFERENCES.hoverTicksEnabled;
+
+      let sfxVolume = typeof parsed.sfxVolume === 'number' && !isNaN(parsed.sfxVolume)
+        ? parsed.sfxVolume
+        : DEFAULT_PREFERENCES.sfxVolume;
+      sfxVolume = Math.max(0, Math.min(1, sfxVolume));
+
+      return {
+        soundEffectsEnabled,
+        hoverTicksEnabled,
+        sfxVolume
+      };
+    } catch (e) {
+      return { ...DEFAULT_PREFERENCES };
+    }
+  }
+
+  function savePreferences(prefs) {
+    try {
+      const payload = {
+        soundEffectsEnabled: Boolean(prefs.soundEffectsEnabled),
+        hoverTicksEnabled: Boolean(prefs.hoverTicksEnabled),
+        sfxVolume: Math.max(0, Math.min(1, parseFloat(prefs.sfxVolume)))
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch (e) {
+      // Graceful fallback if storage quota exceeded or disabled
+    }
+  }
+
+  // Initialize from storage or default
+  const initialPrefs = loadPreferences();
+  let isEnabled = initialPrefs.soundEffectsEnabled;
+  let isHoverEnabled = initialPrefs.hoverTicksEnabled;
+  let currentVolume = initialPrefs.sfxVolume;
+
   const SOUND_URLS = {
     click: 'assets/audio/sfx/sfx-click.wav',
     nav: 'assets/audio/sfx/sfx-nav.wav',
@@ -43,23 +119,6 @@
     error: 250,
     transition: 1600
   };
-
-  // Safe localStorage helper
-  const storage = {
-    get: (key) => {
-      try { return localStorage.getItem(key); } catch (e) { return null; }
-    },
-    set: (key, val) => {
-      try { localStorage.setItem(key, String(val)); } catch (e) {}
-    }
-  };
-
-  // Read saved preferences. Default is STRICTLY FALSE (disabled) for first-time visitors
-  let isEnabled = storage.get(STORAGE_KEYS.ENABLED) === 'true';
-  let isHoverEnabled = storage.get(STORAGE_KEYS.HOVER) === 'true';
-  let savedVol = storage.get(STORAGE_KEYS.VOLUME);
-  let currentVolume = savedVol !== null ? parseFloat(savedVol) : DEFAULT_VOLUME;
-  if (isNaN(currentVolume) || currentVolume < 0 || currentVolume > 1) currentVolume = DEFAULT_VOLUME;
 
   // Web Audio Context & Buffers
   let audioCtx = null;
@@ -125,7 +184,7 @@
         return decodedBuffer;
       })
       .catch(err => {
-        console.warn(`[SoundEffects] Audio asset "${key}" fallback to synth:`, err.message);
+        // Fallback to synth if file fails to fetch or decode
         loadingPromises.delete(key);
         return null;
       });
@@ -136,7 +195,7 @@
 
   // Preload core sound assets lazily when SFX is enabled or initialized
   function preloadCoreSounds() {
-    ['click', 'nav', 'popIn', 'popOut', 'success', 'error'].forEach(loadSound);
+    ['click', 'nav', 'popIn', 'popOut', 'success', 'error', 'hover'].forEach(loadSound);
   }
 
   // -------------------------------------------------------------
@@ -171,7 +230,6 @@
         osc.start(now);
         osc.stop(now + dur);
       } else if (key === 'success') {
-        // Two-stage bell chime (1930 Hz + 2800 Hz)
         osc.type = 'sine';
         osc.frequency.setValueAtTime(1930, now);
         gain.gain.setValueAtTime(vol * 0.4, now);
@@ -204,10 +262,13 @@
   // 4. PLAYBACK ENGINE & RATE LIMITING
   // -------------------------------------------------------------
   function play(key, customVolume) {
-    // 1. Silent if disabled
+    // 1. Silent if Sound Effects is globally disabled
     if (!isEnabled) return;
 
-    // 2. Cooldown check
+    // 2. Suppress hover sounds if Hover Ticks is disabled
+    if (key === 'hover' && !isHoverEnabled) return;
+
+    // 3. Cooldown check
     const now = performance.now();
     const cooldown = COOLDOWNS[key] || 50;
     if (lastPlayed[key] && (now - lastPlayed[key] < cooldown)) {
@@ -215,7 +276,7 @@
     }
     lastPlayed[key] = now;
 
-    // 3. Audio Context check
+    // 4. Audio Context check
     const ctx = getAudioContext();
     if (!ctx) return;
     if (ctx.state === 'suspended') {
@@ -224,7 +285,7 @@
 
     const vol = typeof customVolume === 'number' ? customVolume : 1.0;
 
-    // 4. Play decoded AudioBuffer if loaded
+    // 5. Play decoded AudioBuffer if loaded
     const buffer = audioBuffers.get(key);
     if (buffer) {
       try {
@@ -256,7 +317,11 @@
   // -------------------------------------------------------------
   function setEnabled(val, notifyUser) {
     isEnabled = Boolean(val);
-    storage.set(STORAGE_KEYS.ENABLED, isEnabled ? 'true' : 'false');
+    savePreferences({
+      soundEffectsEnabled: isEnabled,
+      hoverTicksEnabled: isHoverEnabled,
+      sfxVolume: currentVolume
+    });
 
     if (masterGain && audioCtx) {
       masterGain.gain.setValueAtTime(isEnabled ? currentVolume : 0, audioCtx.currentTime);
@@ -265,7 +330,6 @@
     if (isEnabled) {
       unlockAudio();
       preloadCoreSounds();
-      // Play subtle confirmation click on explicit user activation
       if (notifyUser) {
         setTimeout(() => play('nav'), 30);
       }
@@ -288,7 +352,11 @@
     currentVolume = val;
 
     if (save !== false) {
-      storage.set(STORAGE_KEYS.VOLUME, val.toFixed(2));
+      savePreferences({
+        soundEffectsEnabled: isEnabled,
+        hoverTicksEnabled: isHoverEnabled,
+        sfxVolume: currentVolume
+      });
     }
 
     if (masterGain && audioCtx && isEnabled) {
@@ -300,7 +368,12 @@
 
   function setHoverEnabled(val, notifyUser) {
     isHoverEnabled = Boolean(val);
-    storage.set(STORAGE_KEYS.HOVER, isHoverEnabled ? 'true' : 'false');
+    savePreferences({
+      soundEffectsEnabled: isEnabled,
+      hoverTicksEnabled: isHoverEnabled,
+      sfxVolume: currentVolume
+    });
+
     if (isHoverEnabled) loadSound('hover');
     updateUI();
 
@@ -351,8 +424,7 @@
     if (sfxHoverToggleBtn) {
       sfxHoverToggleBtn.setAttribute('aria-pressed', isHoverEnabled ? 'true' : 'false');
       sfxHoverToggleBtn.classList.toggle('active', isHoverEnabled);
-      sfxHoverToggleBtn.disabled = !isEnabled;
-      sfxHoverToggleBtn.style.opacity = isEnabled ? '1' : '0.45';
+      sfxHoverToggleBtn.style.opacity = isEnabled ? '1' : '0.55';
     }
     if (sfxHoverToggleState) {
       sfxHoverToggleState.textContent = isHoverEnabled ? 'ON' : 'OFF';
@@ -459,10 +531,11 @@
       }
     }, true);
 
-    // 3. Desktop Hover Interaction (Strictly Opt-In & Non-Touch)
+    // 3. Desktop Hover Interaction (Strictly Non-Touch & Fine-Pointer)
     const isPointerFine = window.matchMedia('(hover: hover) and (pointer: fine)');
     document.addEventListener('pointerover', (e) => {
       if (!isEnabled || !isHoverEnabled || !isPointerFine.matches) return;
+      if (e.pointerType === 'touch') return;
       
       const target = e.target;
       if (!target || !(target instanceof Element)) return;
@@ -470,7 +543,13 @@
       const interactive = target.closest('button, .btn, .cert-filter-btn, .nav-link, .theme-btn');
       if (interactive && interactive !== lastHoverTarget) {
         lastHoverTarget = interactive;
-        play('hover', 0.4); // Calibrated -14dB down per Earshot study
+        play('hover', 0.4); // Calibrated subtle volume for hover ticks
+      }
+    }, { passive: true });
+
+    document.addEventListener('pointerout', (e) => {
+      if (lastHoverTarget && (!e.relatedTarget || !lastHoverTarget.contains(e.relatedTarget))) {
+        lastHoverTarget = null;
       }
     }, { passive: true });
 
@@ -497,7 +576,6 @@
           const id = entry.target.id;
           if (id && id !== currentSectionId) {
             currentSectionId = id;
-            // Play sparse transition cue
             play('transition', 0.28);
           }
         }
@@ -542,10 +620,9 @@
     updateUI: updateUI
   };
 
-  // Expose as window.SoundEffects
   window.SoundEffects = SoundEffectsAPI;
 
-  // Bridge to existing window.PortfolioAudio callers
+  // Bridge to existing window.PortfolioAudio callers across all components
   window.PortfolioAudio = {
     playClick: () => SoundEffectsAPI.playClick(),
     playBlip: () => SoundEffectsAPI.playNav(),
@@ -554,8 +631,7 @@
     playError: () => SoundEffectsAPI.playError(),
     toggleMute: () => SoundEffectsAPI.toggleEnabled(),
     isMuted: () => !SoundEffectsAPI.isEnabled(),
-    playTone: (freq, type, dur, gain) => {
-      // Graceful fallback for custom tone calls
+    playTone: () => {
       SoundEffectsAPI.playClick();
     }
   };
@@ -563,14 +639,15 @@
   // -------------------------------------------------------------
   // 10. DOM INITIALIZATION
   // -------------------------------------------------------------
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setupInteractionListeners();
-      updateUI();
-    });
-  } else {
+  function initSoundSystem() {
     setupInteractionListeners();
     updateUI();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSoundSystem);
+  } else {
+    initSoundSystem();
   }
 
 })();
