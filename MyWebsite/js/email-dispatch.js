@@ -294,37 +294,43 @@
         // Initialize with public key
         window.emailjs.init({ publicKey: config.PUBLIC_KEY });
 
-        const response = await window.emailjs.send(
+        // Prepare auto-reply payload
+        const autoReplyData = {
+          ...formData,
+          // Recipient fields mapped to the user who filled the form
+          to_name: sanitizedName,
+          to_email: sanitizedEmail,
+          recipient_email: sanitizedEmail,
+          user_name: sanitizedName,
+          user_email: sanitizedEmail,
+          // Owner/sender fields
+          sender_name: 'Gobind Patel',
+          owner_email: (window.EMAILJS_CONFIG && window.EMAILJS_CONFIG.RECIPIENT_EMAIL) || 'gobindpatel2005@gmail.com'
+        };
+
+        // 1. Primary dispatch (Inbound message to Gobind)
+        const inboundPromise = window.emailjs.send(
           config.SERVICE_ID,
           config.TEMPLATE_ID,
           formData
         );
 
-        // Dispatch Auto-Reply confirmation directly to sender/recruiter if configured
-        if (config.AUTO_REPLY_TEMPLATE_ID && config.AUTO_REPLY_TEMPLATE_ID !== config.TEMPLATE_ID) {
-          const autoReplyData = {
-            ...formData,
-            // Recipient fields mapped to the user who filled the form
-            to_name: sanitizedName,
-            to_email: sanitizedEmail,
-            recipient_email: sanitizedEmail,
-            user_name: sanitizedName,
-            user_email: sanitizedEmail,
-            // Owner/sender fields
-            sender_name: 'Gobind Patel',
-            owner_email: (window.EMAILJS_CONFIG && window.EMAILJS_CONFIG.RECIPIENT_EMAIL) || 'gobindpatel2005@gmail.com'
-          };
+        // 2. Secondary dispatch (Auto-reply confirmation to the recruiter/sender)
+        const hasAutoReply = Boolean(config.AUTO_REPLY_TEMPLATE_ID && config.AUTO_REPLY_TEMPLATE_ID !== config.TEMPLATE_ID);
+        const autoReplyPromise = hasAutoReply
+          ? window.emailjs.send(config.SERVICE_ID, config.AUTO_REPLY_TEMPLATE_ID, autoReplyData)
+              .then((res) => {
+                console.info('[EmailJS] Auto-reply confirmation dispatched successfully:', res);
+                return res;
+              })
+              .catch((autoReplyErr) => {
+                console.warn('[EmailJS] Auto-reply dispatch notice:', autoReplyErr);
+                return null; // Don't fail the primary transmission if auto-reply hits rate limits
+              })
+          : Promise.resolve(null);
 
-          window.emailjs.send(
-            config.SERVICE_ID,
-            config.AUTO_REPLY_TEMPLATE_ID,
-            autoReplyData
-          ).then(() => {
-            console.info('[EmailJS] Auto-reply confirmation dispatched to sender successfully.');
-          }).catch((autoReplyErr) => {
-            console.warn('[EmailJS] Auto-reply dispatch notice:', autoReplyErr);
-          });
-        }
+        // Await both dispatches before resolving
+        const [response] = await Promise.all([inboundPromise, autoReplyPromise]);
 
         if (response.status === 200 || response.text === 'OK') {
           // Success confirmed!
