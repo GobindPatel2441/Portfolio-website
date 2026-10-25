@@ -241,8 +241,11 @@
       const formData = {
         from_name: sanitizedName,
         name: sanitizedName,
+        user_name: sanitizedName,
+        to_name: 'Gobind Patel',
         reply_to: sanitizedEmail,
         email: sanitizedEmail,
+        user_email: sanitizedEmail,
         subject: sanitizedSubject,
         title: sanitizedSubject,
         message: sanitizedMessage,
@@ -297,12 +300,25 @@
           formData
         );
 
-        // Dispatch Auto-Reply confirmation to sender if configured
+        // Dispatch Auto-Reply confirmation directly to sender/recruiter if configured
         if (config.AUTO_REPLY_TEMPLATE_ID && config.AUTO_REPLY_TEMPLATE_ID !== config.TEMPLATE_ID) {
+          const autoReplyData = {
+            ...formData,
+            // Recipient fields mapped to the user who filled the form
+            to_name: sanitizedName,
+            to_email: sanitizedEmail,
+            recipient_email: sanitizedEmail,
+            user_name: sanitizedName,
+            user_email: sanitizedEmail,
+            // Owner/sender fields
+            sender_name: 'Gobind Patel',
+            owner_email: (window.EMAILJS_CONFIG && window.EMAILJS_CONFIG.RECIPIENT_EMAIL) || 'gobindpatel2005@gmail.com'
+          };
+
           window.emailjs.send(
             config.SERVICE_ID,
             config.AUTO_REPLY_TEMPLATE_ID,
-            formData
+            autoReplyData
           ).then(() => {
             console.info('[EmailJS] Auto-reply confirmation dispatched to sender successfully.');
           }).catch((autoReplyErr) => {
