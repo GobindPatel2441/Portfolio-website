@@ -268,6 +268,15 @@
     // 2. Suppress hover sounds if Hover Ticks is disabled
     if (key === 'hover' && !isHoverEnabled) return;
 
+    // 2b. Subtle tactile haptic pulse on devices supporting the Vibration API
+    if (key === 'click' || key === 'nav' || key === 'popIn' || key === 'success') {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate(key === 'success' ? [12, 40, 15] : 10);
+        } catch (e) {}
+      }
+    }
+
     // 3. Cooldown check
     const now = performance.now();
     const cooldown = COOLDOWNS[key] || 50;
