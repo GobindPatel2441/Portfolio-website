@@ -35,7 +35,7 @@
     return emailJsPromise;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initEmailDispatch() {
     const form = document.getElementById('contact-form');
     if (!form) return;
 
@@ -420,5 +420,11 @@
         btnText.innerHTML = defaultBtnHTML;
       }, 4000);
     }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEmailDispatch);
+  } else {
+    initEmailDispatch();
+  }
 })();

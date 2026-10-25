@@ -5,7 +5,7 @@
  * and dynamic adaptation to the selected background theme.
  */
 
-(function () {
+function initInteractiveMatrix() {
   'use strict';
 
   const canvas = document.getElementById('interactive-matrix-canvas');
@@ -122,7 +122,12 @@
     }
   }
 
-  window.addEventListener('resize', resize, { passive: true });
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150);
+  }, { passive: true });
+
   window.addEventListener('mousemove', (e) => {
     mouse.targetX = e.clientX;
     mouse.targetY = e.clientY;
@@ -151,10 +156,17 @@
 
   let time = 0;
   let isRunning = true;
+  let rafId = null;
 
   document.addEventListener('visibilitychange', () => {
     isRunning = !document.hidden;
-    if (isRunning) requestAnimationFrame(render);
+    if (isRunning) {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(render);
+    } else if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
   });
 
   function render() {
@@ -287,9 +299,15 @@
       ctx.globalAlpha = 1.0;
     }
 
-    requestAnimationFrame(render);
+    rafId = requestAnimationFrame(render);
   }
 
   resize();
-  requestAnimationFrame(render);
-})();
+  rafId = requestAnimationFrame(render);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initInteractiveMatrix);
+} else {
+  initInteractiveMatrix();
+}

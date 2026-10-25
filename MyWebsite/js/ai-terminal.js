@@ -6,7 +6,7 @@
  * 3. Human-AI Memory Continuity (Hackathon Winner)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initAiTerminal() {
   // Tab Switching
   const tabs = document.querySelectorAll('.term-tab');
   const panels = document.querySelectorAll('.terminal-tab-panel');
@@ -659,4 +659,10 @@ CLINICAL EVIDENCE SYNTHESIS:
       if (window.PortfolioAudio) window.PortfolioAudio.playClick();
     });
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAiTerminal);
+} else {
+  initAiTerminal();
+}

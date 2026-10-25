@@ -46,11 +46,10 @@
   let isPlaying = false;
   let activeFadeRaf = null;
 
-  // Single shared HTML5 Audio instance
+  // Single shared HTML5 Audio instance — strictly deferred to avoid downloading 6.5MB MP3 on page load
   const audio = new Audio();
-  audio.src = AUDIO_SRC;
   audio.loop = true;
-  audio.preload = 'metadata';
+  audio.preload = 'none';
   audio.autoplay = false;
   audio.volume = targetVolume;
 
@@ -124,6 +123,9 @@
   // 3. PLAYBACK ENGINE — USER-CONTROLLED ONLY
   // -------------------------------------------------------------
   function play(userInitiated) {
+    if (!audio.src || !audio.src.includes('velariomusic')) {
+      audio.src = AUDIO_SRC;
+    }
     isMuted = false;
     audio.muted = false;
 

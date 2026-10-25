@@ -13,23 +13,20 @@
   // 1. Reduced Motion Preference Check
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 2. Reading Progress Bar Element
-  let progressBar = document.querySelector('.scroll-progress-bar');
-  if (!progressBar) {
-    progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress-bar';
-    document.body.appendChild(progressBar);
-  }
+  // 2. Reading Progress Bar Element Reference
+  let progressBar = null;
 
   // 3. Initialize Lenis Smooth Momentum Scroll Engine (Quick & Smooth)
   let lenis = null;
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth < 768);
   if (!prefersReducedMotion && typeof window.Lenis !== 'undefined') {
     lenis = new window.Lenis({
-      duration: 0.85, // Snappy & responsive momentum (fast feel)
+      duration: isTouchDevice ? 1.0 : 0.85, // Snappy & responsive momentum
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1.15,
-      touchMultiplier: 2.0,
+      touchMultiplier: 1.0, // Natural 1:1 touch response on touchscreens
+      syncTouch: false, // Preserve native 120Hz touch scrolling on mobile
       infinite: false,
     });
 
@@ -83,6 +80,14 @@
   );
 
   function initScrollOrchestrator() {
+    // 0. Ensure Reading Progress Bar is mounted in body
+    progressBar = document.querySelector('.scroll-progress-bar');
+    if (!progressBar && document.body) {
+      progressBar = document.createElement('div');
+      progressBar.className = 'scroll-progress-bar';
+      document.body.appendChild(progressBar);
+    }
+
     // A. Register all reveal elements and immediately activate those in current viewport
     const revealElements = document.querySelectorAll('.reveal-init');
     revealElements.forEach((el) => {
@@ -481,8 +486,17 @@
           .from('.stat-item', { opacity: 0, y: 16, stagger: 0.08, duration: 0.5 }, '-=0.4');
 
         if (typeof window.ScrollTrigger !== 'undefined') {
+          let resizeTimer = null;
+          let lastW = window.innerWidth;
           window.addEventListener('resize', () => {
-            window.ScrollTrigger.refresh();
+            // Only refresh if horizontal viewport changed to avoid mobile address-bar resize churn
+            if (window.innerWidth !== lastW) {
+              lastW = window.innerWidth;
+              clearTimeout(resizeTimer);
+              resizeTimer = setTimeout(() => {
+                window.ScrollTrigger.refresh();
+              }, 250);
+            }
           }, { passive: true });
         }
       } catch (err) {

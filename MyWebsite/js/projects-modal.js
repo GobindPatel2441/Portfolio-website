@@ -3,7 +3,7 @@
  * Detailed case studies with architectural diagrams, metrics, and direct links.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initProjectsModal() {
   const modalOverlay = document.getElementById('project-modal');
   const modalContent = document.getElementById('modal-dynamic-content');
   const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -1095,5 +1095,11 @@ const response = await fetch("http://localhost:11434/api/generate", {
 
     if (window.PortfolioAudio) window.PortfolioAudio.playClick();
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initProjectsModal);
+} else {
+  initProjectsModal();
+}
 

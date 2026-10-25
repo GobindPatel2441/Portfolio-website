@@ -32,7 +32,7 @@ if (!window.PortfolioAudio) {
   };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initMainApp() {
   // -------------------------------------------------------------
   // 1. ATMOSPHERE THEME SWITCHER
   // -------------------------------------------------------------
@@ -235,21 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // -------------------------------------------------------------
-  // 9. STALE SERVICE WORKER & CACHE PURGE
+  // 9. STALE SERVICE WORKER CLEANUP (SAFE PASSIVE CHECK)
   // -------------------------------------------------------------
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
       for (const reg of registrations) {
-        reg.unregister().then((unregistered) => {
-          if (unregistered) console.log('[Portfolio] Unregistered stale service worker successfully.');
-        });
-      }
-    }).catch(() => {});
-  }
-  if ('caches' in window) {
-    caches.keys().then((names) => {
-      for (const name of names) {
-        caches.delete(name);
+        reg.unregister().catch(() => {});
       }
     }).catch(() => {});
   }
@@ -385,5 +376,12 @@ document.addEventListener('DOMContentLoaded', () => {
       window.downloadPortfolioFile(url, filename);
     }
   });
-});
+}
+
+// Resilient readyState check ensures execution on both cold first-load and warm cache
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMainApp);
+} else {
+  initMainApp();
+}
 

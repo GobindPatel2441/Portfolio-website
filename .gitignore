@@ -42,6 +42,9 @@ yarn-error.log*
 
 # Performance test scripts
 cdp_*.py
+scratch/
+quickload/
+
 
 # Security testing tools & assessment runs (Strix / PentAGI)
 /security/

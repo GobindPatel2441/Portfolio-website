@@ -4,52 +4,56 @@
  * Real-time tilt physics, specular glare reflection, and refraction mode presets.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLiquidGlass() {
   const glassCard = document.querySelector('.liquid-glass-card');
   const specular = document.querySelector('.glass-specular');
+  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
   if (glassCard) {
-    let bounds;
+    let bounds = null;
 
     function updateBounds() {
       bounds = glassCard.getBoundingClientRect();
     }
-    updateBounds();
-    window.addEventListener('resize', updateBounds);
-    window.addEventListener('scroll', updateBounds, { passive: true });
 
-    glassCard.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-      const leftX = mouseX - bounds.x;
-      const topY = mouseY - bounds.y;
-      const center = {
-        x: leftX - bounds.width / 2,
-        y: topY - bounds.height / 2
-      };
+    if (isFinePointer) {
+      glassCard.addEventListener('mouseenter', updateBounds, { passive: true });
+      window.addEventListener('resize', () => { bounds = null; }, { passive: true });
 
-      // Subtle 3D tilt max 12 deg
-      const rotateX = (-center.y / (bounds.height / 2)) * 10;
-      const rotateY = (center.x / (bounds.width / 2)) * 10;
+      glassCard.addEventListener('mousemove', (e) => {
+        if (!bounds) updateBounds();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const leftX = mouseX - bounds.left;
+        const topY = mouseY - bounds.top;
+        const center = {
+          x: leftX - bounds.width / 2,
+          y: topY - bounds.height / 2
+        };
 
-      glassCard.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        // Subtle 3D tilt max 10 deg
+        const rotateX = (-center.y / (bounds.height / 2)) * 10;
+        const rotateY = (center.x / (bounds.width / 2)) * 10;
 
-      // Specular glare positioning
-      if (specular) {
-        const specX = (leftX / bounds.width) * 100;
-        const specY = (topY / bounds.height) * 100;
-        specular.style.background = `radial-gradient(circle at ${specX}% ${specY}%, rgba(255, 255, 255, 0.45) 0%, rgba(0, 242, 254, 0.15) 35%, transparent 65%)`;
-        specular.style.opacity = '0.9';
-      }
-    });
+        glassCard.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
 
-    glassCard.addEventListener('mouseleave', () => {
-      glassCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-      if (specular) {
-        specular.style.background = 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.35), transparent 60%)';
-        specular.style.opacity = '0.6';
-      }
-    });
+        // Specular glare positioning
+        if (specular) {
+          const specX = (leftX / bounds.width) * 100;
+          const specY = (topY / bounds.height) * 100;
+          specular.style.background = `radial-gradient(circle at ${specX}% ${specY}%, rgba(255, 255, 255, 0.45) 0%, rgba(0, 242, 254, 0.15) 35%, transparent 65%)`;
+          specular.style.opacity = '0.9';
+        }
+      }, { passive: true });
+
+      glassCard.addEventListener('mouseleave', () => {
+        glassCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        if (specular) {
+          specular.style.background = 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.35), transparent 60%)';
+          specular.style.opacity = '0.6';
+        }
+      });
+    }
 
     // Glass Mode Buttons
     const modeBtns = document.querySelectorAll('.mode-btn');
@@ -79,19 +83,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Tilt on Project Visual Wrappers
-  const projectCards = document.querySelectorAll('.project-card');
-  projectCards.forEach((card) => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const rotX = (-y / (rect.height / 2)) * 3;
-      const rotY = (x / (rect.width / 2)) * 3;
-      card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
+  // Tilt on Project Visual Wrappers (Desktop only)
+  if (isFinePointer) {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const rotX = (-y / (rect.height / 2)) * 3;
+        const rotY = (x / (rect.width / 2)) * 3;
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
+      }, { passive: true });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      });
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
-    });
-  });
-});
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLiquidGlass);
+} else {
+  initLiquidGlass();
+}
