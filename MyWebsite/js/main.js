@@ -255,112 +255,134 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // -------------------------------------------------------------
-  // 10. RESILIENT PORTFOLIO FILE DOWNLOAD CONTROLLER
+  // 10. RESILIENT DIRECT BROWSER DOWNLOAD CONTROLLER
   // -------------------------------------------------------------
   /**
-   * Universal Resilient File Downloader
-   * Creates a verified Blob from actual file bytes, assigns the intended filename
-   * with correct extension, triggers download after user action, and revokes
-   * object URL safely after a delay. Ensures downloads never inherit UUIDs from
-   * service workers or direct navigation.
+   * Universal Portfolio File Downloader
+   * Prefers direct browser streaming downloads for static assets (zero memory overhead,
+   * no main-thread freezing, no Blob allocation loops). Supports programmatic invocation,
+   * throttles rapid repeat clicks, prevents recursive event storms, and provides
+   * elegant toast and audio feedback.
    *
    * @param {string} url - Target asset path or URL
    * @param {string} [preferredFilename] - Explicit filename with extension
-   * @param {Event} [event] - Optional click event to prevent default navigation
+   * @param {Event} [event] - Optional event object
    */
-  window.downloadPortfolioFile = async function (url, preferredFilename, event) {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  const downloadThrottleMap = new Map();
+  const THROTTLE_WINDOW_MS = 1500;
 
-    // Determine target filename
-    let filename = preferredFilename;
-    if (!filename && url) {
-      const cleanUrl = url.split('#')[0].split('?')[0];
-      filename = cleanUrl.split('/').pop();
-    }
-    if (!filename) {
-      filename = 'Gobind_Patel_Document.pdf';
-    }
-
-    try {
-      // Fetch fresh bytes
-      const response = await fetch(url, { cache: 'no-cache' });
-      if (!response.ok) {
-        throw new Error(`Server returned HTTP ${response.status}`);
-      }
-
-      // Create blob from actual file data
-      const blob = await response.blob();
-
-      // Create object URL correctly
-      const objectUrl = URL.createObjectURL(blob);
-
-      // Create anchor and assign intended filename
-      const tempLink = document.createElement('a');
-      tempLink.style.display = 'none';
-      tempLink.href = objectUrl;
-      tempLink.setAttribute('download', filename);
-
-      document.body.appendChild(tempLink);
-
-      // Trigger download only after user action
-      tempLink.click();
-
-      // Remove anchor immediately
-      document.body.removeChild(tempLink);
-
-      // Revoke temporary object URL at an appropriate time without interrupting download
-      setTimeout(() => {
-        try {
-          URL.revokeObjectURL(objectUrl);
-        } catch (e) {
-          // Cleanup ignore
-        }
-      }, 60000);
-
-      // Visual feedback
-      if (typeof window.showToast === 'function') {
-        window.showToast(`Downloading: ${filename}`);
-      }
-      if (window.PortfolioAudio && typeof window.PortfolioAudio.playSuccess === 'function') {
-        window.PortfolioAudio.playSuccess();
-      }
+  function isThrottled(key) {
+    const now = Date.now();
+    const last = downloadThrottleMap.get(key) || 0;
+    if (now - last < THROTTLE_WINDOW_MS) {
       return true;
-    } catch (err) {
-      console.warn('[Portfolio Download] Blob fetch failed, falling back to direct anchor:', err);
-      // Fallback: direct anchor with download attribute
-      const fallbackLink = document.createElement('a');
-      fallbackLink.style.display = 'none';
-      fallbackLink.href = url;
-      fallbackLink.setAttribute('download', filename);
-      fallbackLink.target = '_blank';
-      document.body.appendChild(fallbackLink);
-      fallbackLink.click();
-      document.body.removeChild(fallbackLink);
+    }
+    downloadThrottleMap.set(key, now);
+    return false;
+  }
 
-      if (typeof window.showToast === 'function') {
-        window.showToast(`Starting download: ${filename}`);
+  function resolveDownloadFilename(url, preferredFilename) {
+    if (preferredFilename && preferredFilename.trim()) {
+      return preferredFilename.trim();
+    }
+    if (url) {
+      const cleanUrl = url.split('#')[0].split('?')[0];
+      const base = cleanUrl.split('/').pop();
+      if (base) return base;
+    }
+    return 'Gobind_Patel_Document.pdf';
+  }
+
+  window.downloadPortfolioFile = function (url, preferredFilename, event) {
+    if (!url) return false;
+
+    const filename = resolveDownloadFilename(url, preferredFilename);
+
+    // Throttle multi-clicks on the same target
+    if (isThrottled(url)) {
+      if (event && typeof event.preventDefault === 'function') {
+        event.preventDefault();
       }
       return false;
     }
+
+    // Audio & UI Toast feedback
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Downloading: ${filename}`);
+    }
+    if (window.PortfolioAudio && typeof window.PortfolioAudio.playSuccess === 'function') {
+      try {
+        window.PortfolioAudio.playSuccess();
+      } catch (_) {}
+    }
+
+    // Direct browser download via lightweight, dedicated anchor
+    // Marked with 'data-direct-download' to ensure event listeners never recursively intercept it
+    const tempLink = document.createElement('a');
+    tempLink.href = url;
+    tempLink.setAttribute('download', filename);
+    tempLink.setAttribute('data-direct-download', 'true');
+    tempLink.rel = 'noopener';
+    tempLink.style.display = 'none';
+
+    document.body.appendChild(tempLink);
+    try {
+      tempLink.click();
+    } catch (err) {
+      console.warn('[Portfolio Download] Native anchor click error:', err);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } finally {
+      document.body.removeChild(tempLink);
+    }
+
+    return true;
   };
 
   // Delegated event listener for all download links/buttons across the portfolio
   document.addEventListener('click', (e) => {
+    // 1. Never intercept internal programmatic download anchors (prevents recursive loops)
+    if (e.target.closest('[data-direct-download]')) {
+      return;
+    }
+
+    // 2. Identify target download element
     const downloadLink = e.target.closest('a[download], [data-download-file]');
     if (!downloadLink) return;
 
-    // Allow user to use modifier keys (e.g. Ctrl/Cmd+click to open in new tab)
+    // 3. Honor user modifier keys (e.g. Ctrl/Cmd+click to open in new tab)
     if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
 
     const url = downloadLink.getAttribute('data-download-file') || downloadLink.getAttribute('href');
     if (!url || url.startsWith('#') || url.startsWith('mailto:') || url.startsWith('tel:')) return;
 
-    const filename = downloadLink.getAttribute('data-filename') || downloadLink.getAttribute('download') || url.split('#')[0].split('?')[0].split('/').pop();
-    if (filename) {
-      window.downloadPortfolioFile(url, filename, e);
+    const filename = resolveDownloadFilename(
+      url,
+      downloadLink.getAttribute('data-filename') || downloadLink.getAttribute('download')
+    );
+
+    // 4. Throttle rapid spam-clicks on the element
+    if (isThrottled(url)) {
+      e.preventDefault();
+      return;
+    }
+
+    // 5. Audio and Toast feedback
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Downloading: ${filename}`);
+    }
+    if (window.PortfolioAudio && typeof window.PortfolioAudio.playSuccess === 'function') {
+      try {
+        window.PortfolioAudio.playSuccess();
+      } catch (_) {}
+    }
+
+    // 6. Execution:
+    // If it's a native anchor element with href, do NOT preventDefault!
+    // The browser natively streams the file with zero memory allocation and zero main-thread block.
+    // If it's a custom button without href (using data-download-file), invoke downloadPortfolioFile.
+    if (!downloadLink.hasAttribute('href') || downloadLink.tagName !== 'A') {
+      e.preventDefault();
+      window.downloadPortfolioFile(url, filename);
     }
   });
 });

@@ -37,6 +37,12 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/assets/certificates/*.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
   for = "/assets/certificates/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
