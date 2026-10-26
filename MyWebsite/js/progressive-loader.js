@@ -31,12 +31,12 @@
   }
 
   function loadProjectsModal(cb) {
-    loadScript('js/projects-modal.js?v=10', cb);
+    loadScript('js/projects-modal.js?v=11', cb);
   }
 
   function loadCertificates(cb) {
-    loadCss('css/certificates.css?v=2');
-    loadScript('js/certificates.js?v=1', cb);
+    loadCss('css/certificates.css?v=3');
+    loadScript('js/certificates.js?v=2', cb);
   }
 
 

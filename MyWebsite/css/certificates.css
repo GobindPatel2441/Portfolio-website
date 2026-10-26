@@ -625,3 +625,26 @@
     font-size: 0.65rem;
   }
 }
+
+/* ==========================================================================
+   6. DOCUMENT VIEWER & MOBILE PREVIEW ENHANCEMENTS
+   ========================================================================== */
+.cert-desktop-viewer,
+.cert-mobile-preview-stage {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.cert-load-inline-btn {
+  transition: all 0.2s ease;
+}
+.cert-load-inline-btn:hover {
+  background: rgba(212, 175, 55, 0.15) !important;
+  color: var(--accent-highlight, #F7E7C4) !important;
+  border-color: var(--accent-primary, #D4AF37) !important;
+}
+

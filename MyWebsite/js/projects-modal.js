@@ -965,6 +965,16 @@ const response = await fetch("http://localhost:11434/api/generate", {
       modalOverlay.classList.remove('active');
       document.body.style.overflow = '';
       if (modalContent) {
+        // Explicitly tear down all iframes and background renderers
+        const iframes = modalContent.querySelectorAll('iframe');
+        iframes.forEach((f) => {
+          try {
+            f.onload = null;
+            f.onerror = null;
+            f.src = 'about:blank';
+            f.remove();
+          } catch (e) {}
+        });
         modalContent.innerHTML = '';
       }
       if (window.lenis && typeof window.lenis.start === 'function') {
@@ -1029,16 +1039,57 @@ const response = await fetch("http://localhost:11434/api/generate", {
 
   function openResumeModal(triggerEl) {
     if (!modalContent || !modalOverlay) return;
+
+    const isMobile = window.innerWidth < 768 || (('ontouchstart' in window) && window.innerWidth < 900);
+
+    const resumeViewerHtml = isMobile ? `
+      <div class="modal-stagger-2" style="width: 100%; padding: 2rem 1.25rem; border-radius: 12px; border: 1px solid var(--border-glass); background: #0c0d14; text-align: center;">
+        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">📄</div>
+        <h3 style="font-family: var(--font-monumental); font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem;">Official Resume & Curriculum Vitae</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 420px; margin: 0 auto 1.5rem auto; line-height: 1.5;">
+          Optimized for high-speed mobile reading. View the complete document in full resolution or save a copy.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 340px; margin: 0 auto;">
+          <a href="assets/Gobind_Patel_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" type="button" style="width: 100%; justify-content: center;">
+            <span>Open Resume (New Tab) ↗</span>
+          </a>
+          <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-secondary" type="button" style="width: 100%; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download PDF (137 KB)</span>
+          </a>
+          <button type="button" class="btn btn-secondary btn-sm" id="resume-inline-load-btn" style="width: 100%; justify-content: center; font-size: 0.75rem; opacity: 0.8;">
+            <span>Load Inline Viewer</span>
+          </button>
+        </div>
+      </div>
+    ` : `
+      <div class="modal-stagger-2" style="width: 100%; height: min(75vh, 800px); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass); background: #0c0d14; position: relative;">
+        <div id="resume-spinner" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0c0d14; z-index: 2; transition: opacity 0.3s ease;">
+          <div style="width: 36px; height: 36px; border: 3px solid rgba(212, 175, 55, 0.2); border-top-color: var(--accent-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-highlight); margin-top: 1rem; letter-spacing: 0.05em;">Loading Resume Document...</span>
+        </div>
+        <iframe 
+          id="resume-iframe-el"
+          src="assets/Gobind_Patel_Resume.pdf#toolbar=1" 
+          width="100%" 
+          height="100%" 
+          title="Gobind Patel Resume"
+          style="border: none; display: block;"
+          loading="lazy"
+        ></iframe>
+      </div>
+    `;
+
     modalContent.innerHTML = `
       <div style="padding: clamp(1.25rem, 3vw, 2.5rem);">
         <div class="modal-stagger-1" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <h2 style="font-size: 1.6rem; color: #fff;">Gobind Patel — Resume</h2>
+            <h2 style="font-family: var(--font-monumental); font-size: 1.6rem; color: #fff; margin-bottom: 0.25rem;">Gobind Patel — Resume</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem;">B.Tech CSE (AI/ML) • Sri Sri University • CGPA: 8.89/10</p>
           </div>
-          <div style="display: flex; gap: 0.75rem;">
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
             <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-primary btn-sm">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span>Download PDF</span>
             </a>
             <a href="assets/Gobind_Patel_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
@@ -1046,11 +1097,41 @@ const response = await fetch("http://localhost:11434/api/generate", {
             </a>
           </div>
         </div>
-        <div class="modal-stagger-2" style="width: 100%; height: 75vh; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass);">
-          <iframe src="assets/Gobind_Patel_Resume.pdf#toolbar=1" width="100%" height="100%" style="border: none;"></iframe>
-        </div>
+        ${resumeViewerHtml}
       </div>
     `;
+
+    // Wire desktop spinner fade
+    const resumeIframe = document.getElementById('resume-iframe-el');
+    const resumeSpinner = document.getElementById('resume-spinner');
+    if (resumeIframe && resumeSpinner) {
+      resumeIframe.onload = () => {
+        resumeSpinner.style.opacity = '0';
+        setTimeout(() => { if (resumeSpinner) resumeSpinner.style.display = 'none'; }, 300);
+      };
+      // 3.5s timeout fallback
+      setTimeout(() => {
+        if (resumeSpinner) {
+          resumeSpinner.style.opacity = '0';
+          setTimeout(() => { if (resumeSpinner) resumeSpinner.style.display = 'none'; }, 300);
+        }
+      }, 3500);
+    }
+
+    // Wire mobile on-demand inline loader
+    const inlineBtn = document.getElementById('resume-inline-load-btn');
+    if (inlineBtn) {
+      inlineBtn.addEventListener('click', () => {
+        const parent = inlineBtn.closest('.modal-stagger-2');
+        if (parent) {
+          parent.innerHTML = `
+            <div style="width: 100%; height: min(70vh, 600px); border-radius: 8px; overflow: hidden; background: #000;">
+              <iframe src="assets/Gobind_Patel_Resume.pdf#toolbar=1" width="100%" height="100%" style="border: none;" title="Gobind Patel Resume"></iframe>
+            </div>
+          `;
+        }
+      });
+    }
     modalOverlay.classList.add('active');
     modalOverlay.setAttribute('data-lenis-prevent', 'true');
     document.body.style.overflow = 'hidden';

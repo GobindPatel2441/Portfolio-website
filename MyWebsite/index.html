@@ -1145,7 +1145,7 @@ CLINICAL EVIDENCE SYNTHESIS:
                 <span class="tech-tag">State Serialization</span>
               </div>
               <div class="timeline-cert-actions">
-                <button class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-chakravyuh-2026">
+                <button type="button" class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-chakravyuh-2026">
                   <span>View Certificate ↗</span>
                 </button>
                 <a href="assets/certificates/chakravyuh-hackathon-2nd-prize.pdf" download="chakravyuh-hackathon-2nd-prize.pdf" class="timeline-cert-btn timeline-cert-btn-ghost">
@@ -1177,7 +1177,7 @@ CLINICAL EVIDENCE SYNTHESIS:
                 <span class="tech-tag">RAG Pipelines</span>
               </div>
               <div class="timeline-cert-actions">
-                <button class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-msme-genai-2026">
+                <button type="button" class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-msme-genai-2026">
                   <span>View Certificate ↗</span>
                 </button>
                 <a href="assets/certificates/cttc-msme-generative-ai.pdf" download="cttc-msme-generative-ai.pdf" class="timeline-cert-btn timeline-cert-btn-ghost">
@@ -1209,7 +1209,7 @@ CLINICAL EVIDENCE SYNTHESIS:
                 <span class="tech-tag">Web Applications</span>
               </div>
               <div class="timeline-cert-actions">
-                <button class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-ocac-fullstack-2025">
+                <button type="button" class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-ocac-fullstack-2025">
                   <span>View Certificate ↗</span>
                 </button>
                 <a href="assets/certificates/ocac-fullstack-software-engineering.pdf" download="ocac-fullstack-software-engineering.pdf" class="timeline-cert-btn timeline-cert-btn-ghost">
@@ -1240,7 +1240,7 @@ CLINICAL EVIDENCE SYNTHESIS:
                 <span class="tech-tag">Modules & Packages</span>
               </div>
               <div class="timeline-cert-actions">
-                <button class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-msme-python-2024">
+                <button type="button" class="timeline-cert-btn timeline-cert-btn-gold" data-open-cert="cert-msme-python-2024">
                   <span>View Certificate ↗</span>
                 </button>
                 <a href="assets/certificates/cttc-msme-python-programming.pdf" download="cttc-msme-python-programming.pdf" class="timeline-cert-btn timeline-cert-btn-ghost">
@@ -1291,30 +1291,30 @@ CLINICAL EVIDENCE SYNTHESIS:
               spellcheck="false" 
               aria-label="Search certificates and credentials"
             />
-            <button id="cert-search-clear" class="cert-search-clear" aria-label="Clear search input">
+            <button type="button" id="cert-search-clear" class="cert-search-clear" aria-label="Clear search input">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
           </div>
 
           <!-- Category filter buttons -->
           <div class="cert-filters-scroll" role="tablist" aria-label="Certificate categories">
-            <button class="cert-filter-btn active" data-category="all" role="tab" aria-selected="true">
+            <button type="button" class="cert-filter-btn active" data-category="all" role="tab" aria-selected="true">
               <span>All Documents</span>
               <span class="cert-filter-count">14</span>
             </button>
-            <button class="cert-filter-btn" data-category="Achievements" role="tab" aria-selected="false">
+            <button type="button" class="cert-filter-btn" data-category="Achievements" role="tab" aria-selected="false">
               <span>Achievements</span>
               <span class="cert-filter-count">4</span>
             </button>
-            <button class="cert-filter-btn" data-category="Internships" role="tab" aria-selected="false">
+            <button type="button" class="cert-filter-btn" data-category="Internships" role="tab" aria-selected="false">
               <span>Internships</span>
               <span class="cert-filter-count">5</span>
             </button>
-            <button class="cert-filter-btn" data-category="Additional Courses" role="tab" aria-selected="false">
+            <button type="button" class="cert-filter-btn" data-category="Additional Courses" role="tab" aria-selected="false">
               <span>Additional Courses</span>
               <span class="cert-filter-count">3</span>
             </button>
-            <button class="cert-filter-btn" data-category="Extracurricular" role="tab" aria-selected="false">
+            <button type="button" class="cert-filter-btn" data-category="Extracurricular" role="tab" aria-selected="false">
               <span>Extracurricular</span>
               <span class="cert-filter-count">2</span>
             </button>
@@ -1489,7 +1489,7 @@ CLINICAL EVIDENCE SYNTHESIS:
        ================================================================= -->
   <div id="project-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Project Details" data-lenis-prevent>
     <div class="modal-dialog" data-lenis-prevent>
-      <button id="modal-close-btn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
       <div id="modal-dynamic-content" data-lenis-prevent>
         <!-- Injected via projects-modal.js -->
       </div>
@@ -1645,6 +1645,6 @@ CLINICAL EVIDENCE SYNTHESIS:
   <script src="js/liquid-button.js" defer></script>
   <script src="js/main.js" defer></script>
   <!-- Progressive Feature Loader (Lazy-loads Modals, Certs, AI Lab, Audio & Email on demand/idle) -->
-  <script src="js/progressive-loader.js?v=1" defer></script>
+  <script src="js/progressive-loader.js?v=2" defer></script>
 </body>
 </html>

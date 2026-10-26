@@ -1,7 +1,7 @@
 [
   {
     "id": "cert-chakravyuh-2026",
-    "title": "2nd Prize Winner — CHAKRAVYUH 1.0 National Hackathon",
+    "title": "2nd Prize Winner \u2014 CHAKRAVYUH 1.0 National Hackathon",
     "category": "Achievements",
     "issuer": "GITA Autonomous College & Sri Sri University",
     "issueDate": "January 31, 2026",
@@ -10,7 +10,7 @@
     "documentPath": "assets/certificates/chakravyuh-hackathon-2nd-prize.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/chakravyuh-hackathon-2nd-prize-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/chakravyuh-hackathon-2nd-prize-thumb.jpg",
-    "fileSizeBytes": 738421,
+    "fileSizeBytes": 565869,
     "docType": "pdf",
     "pages": 2,
     "skills": [
@@ -22,7 +22,7 @@
     "description": "Won 2nd Prize in a 36-hour National Level Hackathon among collegiate teams across India. Engineered the Human-AI Memory Continuity System, featuring temporal context graphs and state snapshotting to eliminate conversational amnesia in distributed AI interactions.",
     "publicationStatus": "published",
     "featured": true,
-    "badge": "🏆 2nd Prize Winner"
+    "badge": "\ud83c\udfc6 2nd Prize Winner"
   },
   {
     "id": "cert-msme-genai-2026",
@@ -35,7 +35,7 @@
     "documentPath": "assets/certificates/cttc-msme-generative-ai.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/cttc-msme-generative-ai-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/cttc-msme-generative-ai-thumb.jpg",
-    "fileSizeBytes": 502982,
+    "fileSizeBytes": 432033,
     "docType": "pdf",
     "pages": 2,
     "skills": [
@@ -55,7 +55,7 @@
   },
   {
     "id": "cert-ibm-agentic-ai-2025",
-    "title": "Agentic AI Architect — Project Based Learning",
+    "title": "Agentic AI Architect \u2014 Project Based Learning",
     "category": "Additional Courses",
     "issuer": "IBM SkillsBuild & CSRBOX Foundation",
     "issueDate": "August 7, 2025",
@@ -74,7 +74,7 @@
       "Multi-Agent Systems",
       "Task Orchestration"
     ],
-    "description": "4-week intensive IBM SkillsBuild Project Based Learning Program (July 4 – August 7, 2025) on 'Agentic AI: From Learner to Builder – Become an AI Agent Architect'. Designed and implemented autonomous multi-agent task orchestration workflows.",
+    "description": "4-week intensive IBM SkillsBuild Project Based Learning Program (July 4 \u2013 August 7, 2025) on 'Agentic AI: From Learner to Builder \u2013 Become an AI Agent Architect'. Designed and implemented autonomous multi-agent task orchestration workflows.",
     "publicationStatus": "published",
     "featured": true,
     "badge": "IBM Certified"
@@ -106,7 +106,7 @@
   },
   {
     "id": "cert-ocac-fullstack-2025",
-    "title": "Software Engineering — Full Stack Development Internship",
+    "title": "Software Engineering \u2014 Full Stack Development Internship",
     "category": "Internships",
     "issuer": "Odisha Computer Application Centre (OCAC), Govt. of Odisha",
     "issueDate": "August 2, 2025",
@@ -115,7 +115,7 @@
     "documentPath": "assets/certificates/ocac-fullstack-software-engineering.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/ocac-fullstack-software-engineering-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/ocac-fullstack-software-engineering-thumb.jpg",
-    "fileSizeBytes": 219304,
+    "fileSizeBytes": 219147,
     "docType": "pdf",
     "pages": 1,
     "skills": [
@@ -142,7 +142,7 @@
     "documentPath": "assets/certificates/cttc-msme-python-programming.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/cttc-msme-python-programming-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/cttc-msme-python-programming-thumb.jpg",
-    "fileSizeBytes": 426577,
+    "fileSizeBytes": 426382,
     "docType": "pdf",
     "pages": 2,
     "skills": [
@@ -169,7 +169,7 @@
     "documentPath": "assets/certificates/cttc-msme-c-programming.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/cttc-msme-c-programming-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/cttc-msme-c-programming-thumb.jpg",
-    "fileSizeBytes": 602935,
+    "fileSizeBytes": 476019,
     "docType": "pdf",
     "pages": 2,
     "skills": [
@@ -196,7 +196,7 @@
     "documentPath": "assets/certificates/scaler-future-software-engineering-ai.png",
     "thumbnailPath": "assets/certificates/thumbnails/scaler-future-software-engineering-ai-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/scaler-future-software-engineering-ai-thumb.jpg",
-    "fileSizeBytes": 237964,
+    "fileSizeBytes": 234145,
     "docType": "image",
     "pages": 1,
     "skills": [
@@ -221,7 +221,7 @@
     "documentPath": "assets/certificates/be10x-ai-tools-workshop.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/be10x-ai-tools-workshop-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/be10x-ai-tools-workshop-thumb.jpg",
-    "fileSizeBytes": 206534,
+    "fileSizeBytes": 177125,
     "docType": "pdf",
     "pages": 1,
     "skills": [
@@ -238,7 +238,7 @@
   },
   {
     "id": "cert-ideathon-ssu-2026",
-    "title": "IDEATHON 2026 — AI & Data Science Innovation",
+    "title": "IDEATHON 2026 \u2014 AI & Data Science Innovation",
     "category": "Extracurricular",
     "issuer": "School of AI & Data Science, Sri Sri University & IBM ICE",
     "issueDate": "February 24, 2026",
@@ -264,7 +264,7 @@
   },
   {
     "id": "cert-ssuimun-g20-2023",
-    "title": "SSUIMUN G20 Summit — Model United Nations Delegate",
+    "title": "SSUIMUN G20 Summit \u2014 Model United Nations Delegate",
     "category": "Extracurricular",
     "issuer": "Sri Sri University International Model United Nations (SSUIMUN)",
     "issueDate": "September 12, 2023",
@@ -273,7 +273,7 @@
     "documentPath": "assets/certificates/ssuimun-g20-summit-delegate.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/ssuimun-g20-summit-delegate-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/ssuimun-g20-summit-delegate-thumb.jpg",
-    "fileSizeBytes": 84384,
+    "fileSizeBytes": 84256,
     "docType": "pdf",
     "pages": 1,
     "skills": [
@@ -289,7 +289,7 @@
   },
   {
     "id": "cert-ssu-btech-transcript",
-    "title": "Official B.Tech Academic Transcript (Semesters I – VI)",
+    "title": "Official B.Tech Academic Transcript (Semesters I \u2013 VI)",
     "category": "Achievements",
     "issuer": "Faculty of Engineering & Technology, Sri Sri University",
     "issueDate": "July 20, 2026",
@@ -298,7 +298,7 @@
     "documentPath": "assets/certificates/sri-sri-university-btech-transcript.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/sri-sri-university-btech-transcript-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/sri-sri-university-btech-transcript-thumb.jpg",
-    "fileSizeBytes": 1715156,
+    "fileSizeBytes": 1714951,
     "docType": "pdf",
     "pages": 6,
     "skills": [
@@ -325,7 +325,7 @@
     "documentPath": "assets/certificates/cbse-class-xii-marksheet-certificate.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/cbse-class-xii-marksheet-certificate-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/cbse-class-xii-marksheet-certificate-thumb.jpg",
-    "fileSizeBytes": 1316524,
+    "fileSizeBytes": 592501,
     "docType": "pdf",
     "pages": 1,
     "skills": [
@@ -351,7 +351,7 @@
     "documentPath": "assets/certificates/cbse-class-x-marksheet-certificate.pdf",
     "thumbnailPath": "assets/certificates/thumbnails/cbse-class-x-marksheet-certificate-thumb.webp",
     "thumbnailFallback": "assets/certificates/thumbnails/cbse-class-x-marksheet-certificate-thumb.jpg",
-    "fileSizeBytes": 570567,
+    "fileSizeBytes": 375120,
     "docType": "pdf",
     "pages": 1,
     "skills": [
@@ -364,6 +364,6 @@
     "description": "Secondary School Examination (2021) Marks Statement cum Certificate from CBSE. Flawless A1 grades across all 5 subjects: Odia (98), English (95), Social Science (94), Science (93), and Mathematics (91).",
     "publicationStatus": "published",
     "featured": false,
-    "badge": "CBSE Class X • All A1"
+    "badge": "CBSE Class X \u2022 All A1"
   }
 ]

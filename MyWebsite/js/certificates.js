@@ -278,6 +278,34 @@
     modalCloseBtn: null
   };
 
+  let isModalOpening = false;
+
+  function closeCertificateModal() {
+    if (!dom.modalOverlay || !dom.modalOverlay.classList.contains('active')) return;
+    
+    // Explicitly destroy any active iframe to immediately free GPU/raster memory
+    const iframes = dom.modalOverlay.querySelectorAll('iframe');
+    iframes.forEach((f) => {
+      try {
+        f.onload = null;
+        f.onerror = null;
+        f.src = 'about:blank';
+        f.remove();
+      } catch (e) {}
+    });
+
+    if (window.closeModal && typeof window.closeModal === 'function') {
+      window.closeModal();
+    } else {
+      dom.modalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      if (dom.modalContent) dom.modalContent.innerHTML = '';
+      if (window.lenis && typeof window.lenis.start === 'function') {
+        window.lenis.start();
+      }
+    }
+  }
+
   function init() {
     dom.grid = document.getElementById('cert-grid-container');
     dom.searchInput = document.getElementById('cert-search-input');
@@ -301,7 +329,8 @@
     }
 
     if (dom.searchClear) {
-      dom.searchClear.addEventListener('click', () => {
+      dom.searchClear.addEventListener('click', (e) => {
+        e.preventDefault();
         if (dom.searchInput) {
           dom.searchInput.value = '';
           searchQuery = '';
@@ -314,10 +343,40 @@
 
     // Attach filter button events
     dom.filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const cat = btn.getAttribute('data-category');
         setFilter(cat);
       });
+    });
+
+    // Modal close listeners attached directly inside Certificates module
+    if (dom.modalCloseBtn) {
+      dom.modalCloseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeCertificateModal();
+      });
+    }
+
+    if (dom.modalOverlay) {
+      dom.modalOverlay.addEventListener('click', (e) => {
+        if (e.target === dom.modalOverlay) {
+          closeCertificateModal();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCertificateModal();
+      }
+    });
+
+    // Handle mobile back button gracefully without reloading
+    window.addEventListener('popstate', () => {
+      if (dom.modalOverlay && dom.modalOverlay.classList.contains('active')) {
+        closeCertificateModal();
+      }
     });
 
     // Global delegation for View Certificate buttons (including Timeline buttons)
@@ -338,7 +397,6 @@
           navigator.clipboard.writeText(textToCopy).then(() => {
             showCopyToast(`Copied ID: ${textToCopy}`);
           }).catch(() => {
-            // Fallback
             showCopyToast(`ID: ${textToCopy}`);
           });
         }
@@ -425,7 +483,7 @@
           <p class="cert-empty-desc">
             No certificates found matching <strong>"${escapeHtml(searchQuery)}"</strong> in this category.
           </p>
-          <button class="btn btn-secondary btn-sm" onclick="window.CertificatesEngine && window.CertificatesEngine.resetFilters()">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.CertificatesEngine && window.CertificatesEngine.resetFilters()">
             <span>Reset Search & Filters</span>
           </button>
         </div>
@@ -442,7 +500,7 @@
         <div class="cert-id-chip" title="Credential ID">
           <span class="cert-id-label">ID:</span>
           <span>${escapeHtml(cert.credentialId)}</span>
-          <button class="cert-copy-id-btn" data-copy-id="${escapeHtml(cert.credentialId)}" aria-label="Copy Credential ID" title="Copy to clipboard">
+          <button type="button" class="cert-copy-id-btn" data-copy-id="${escapeHtml(cert.credentialId)}" aria-label="Copy Credential ID" title="Copy to clipboard">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           </button>
         </div>
@@ -465,7 +523,7 @@
           <div class="cert-thumb-wrap" data-open-cert="${cert.id}" role="button" tabindex="0" aria-label="View Certificate: ${escapeHtml(cert.title)}">
             <picture>
               <source srcset="${cert.thumbnailPath}" type="image/webp" />
-              <img src="${cert.thumbnailFallback}" alt="${escapeHtml(cert.title)} Document Preview" class="cert-thumb-img" loading="lazy" width="640" height="420" />
+              <img src="${cert.thumbnailFallback}" alt="${escapeHtml(cert.title)} Document Preview" class="cert-thumb-img" loading="lazy" width="640" height="420" decoding="async" />
             </picture>
             <div class="cert-thumb-overlay">
               <span class="cert-preview-badge">
@@ -497,7 +555,7 @@
             </div>
 
             <div class="cert-actions">
-              <button class="cert-btn-primary" data-open-cert="${cert.id}">
+              <button type="button" class="cert-btn-primary" data-open-cert="${cert.id}">
                 <span>View Document</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </button>
@@ -519,6 +577,10 @@
    * Certificate Viewer Modal Implementation
    */
   function openCertificateModal(certId, triggerEl) {
+    if (isModalOpening) return;
+    isModalOpening = true;
+    setTimeout(() => { isModalOpening = false; }, 350);
+
     const cert = CERTIFICATES_DATA.find(c => c.id === certId);
     if (!cert) return;
 
@@ -530,8 +592,20 @@
 
     if (!dom.modalOverlay || !dom.modalContent) return;
 
+    // Ensure any previously active iframe in modal is completely destroyed
+    const prevIframes = dom.modalContent.querySelectorAll('iframe');
+    prevIframes.forEach((f) => {
+      try {
+        f.onload = null;
+        f.onerror = null;
+        f.src = 'about:blank';
+        f.remove();
+      } catch (e) {}
+    });
+
     const isPdf = cert.docType === 'pdf';
     const filename = cert.documentPath.split('/').pop();
+    const isMobile = window.innerWidth < 768 || (('ontouchstart' in window) && window.innerWidth < 900);
 
     const skillsHtml = cert.skills.map(s => 
       `<span class="tech-tag" style="font-size: 0.72rem;">${escapeHtml(s)}</span>`
@@ -541,14 +615,14 @@
       <div style="display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-highlight); margin-top: 0.35rem;">
         <span style="color: var(--text-muted);">CREDENTIAL ID:</span>
         <strong style="color: #fff; letter-spacing: 0.05em;">${escapeHtml(cert.credentialId)}</strong>
-        <button class="cert-copy-id-btn" data-copy-id="${escapeHtml(cert.credentialId)}" aria-label="Copy ID" title="Copy to clipboard">
+        <button type="button" class="cert-copy-id-btn" data-copy-id="${escapeHtml(cert.credentialId)}" aria-label="Copy ID" title="Copy to clipboard">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
         </button>
       </div>
     ` : '';
 
     const verifyBtnHtml = cert.verificationUrl ? `
-      <a href="${escapeHtml(cert.verificationUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+      <a href="${escapeHtml(cert.verificationUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" type="button">
         <span>Verify Link</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       </a>
@@ -557,32 +631,76 @@
     // Document viewport area
     let viewerContent = '';
     if (isPdf) {
-      viewerContent = `
-        <div class="modal-stagger-2" style="width: 100%; height: min(74vh, 780px); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass); background: #0c0d14; position: relative;">
-          <iframe 
-            src="${cert.documentPath}#toolbar=1&navpanes=0" 
-            width="100%" 
-            height="100%" 
-            title="${escapeHtml(cert.title)}"
-            style="border: none; display: block;" 
-            loading="lazy"
-          >
-            <p style="padding: 2rem; color: #fff; text-align: center;">
-              Your browser does not support inline PDFs. 
-              <a href="${cert.documentPath}" target="_blank" class="btn btn-primary btn-sm" style="margin-top: 1rem; display: inline-block;">
-                Download or View PDF (${filename})
+      if (isMobile) {
+        // Mobile-Safe Document Preview Stage: Prevents WebKit / Chrome memory crashes
+        viewerContent = `
+          <div class="modal-stagger-2 cert-mobile-preview-stage" style="width: 100%; border-radius: 12px; border: 1px solid var(--border-glass); background: #0c0d14; padding: clamp(1rem, 3vw, 1.5rem); text-align: center;">
+            <div style="position: relative; max-width: 520px; margin: 0 auto 1.25rem auto; border-radius: 8px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.7); background: #07080c;">
+              <picture>
+                <source srcset="${cert.thumbnailPath}" type="image/webp" />
+                <img 
+                  src="${cert.thumbnailFallback}" 
+                  alt="${escapeHtml(cert.title)} Official Document" 
+                  style="width: 100%; height: auto; max-height: 48vh; object-fit: contain; display: block;" 
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
+              <div style="position: absolute; bottom: 0.75rem; right: 0.75rem; background: rgba(8, 9, 14, 0.88); border: 1px solid var(--accent-primary); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-highlight); letter-spacing: 0.05em; backdrop-filter: blur(8px);">
+                ${cert.docType.toUpperCase()}${cert.pages > 1 ? ` • ${cert.pages} PAGES` : ''}
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; max-width: 360px; margin: 0 auto;">
+              <a href="${cert.documentPath}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" type="button" style="width: 100%; justify-content: center;">
+                <span>Open Full PDF (New Tab) ↗</span>
               </a>
-            </p>
-          </iframe>
-        </div>
-      `;
+              <a href="${cert.documentPath}" download="${filename}" class="btn btn-secondary" type="button" style="width: 100%; justify-content: center;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download Official PDF (${filename})</span>
+              </a>
+              <button type="button" class="btn btn-secondary btn-sm cert-load-inline-btn" data-load-cert-inline="${cert.id}" style="width: 100%; justify-content: center; font-size: 0.72rem; opacity: 0.85; margin-top: 0.2rem;">
+                <span>Load Embedded Viewer</span>
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        // Desktop High-Performance Embedded Viewer with Loading Spinner
+        viewerContent = `
+          <div class="modal-stagger-2 cert-desktop-viewer" style="width: 100%; height: min(74vh, 780px); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass); background: #0c0d14; position: relative;">
+            <div id="cert-doc-spinner" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0c0d14; z-index: 2; transition: opacity 0.3s ease;">
+              <div style="width: 38px; height: 38px; border: 3px solid rgba(212, 175, 55, 0.2); border-top-color: var(--accent-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-highlight); margin-top: 1rem; letter-spacing: 0.05em;">Loading Official Document...</span>
+            </div>
+            <iframe 
+              id="cert-iframe-el"
+              src="${cert.documentPath}#toolbar=1&navpanes=0" 
+              width="100%" 
+              height="100%" 
+              title="${escapeHtml(cert.title)}"
+              style="border: none; display: block; opacity: 0; transition: opacity 0.35s ease;" 
+              loading="lazy"
+            >
+              <div style="padding: 2.5rem; color: #fff; text-align: center;">
+                <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">Inline PDF preview is not supported by your browser.</p>
+                <a href="${cert.documentPath}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="display: inline-block;">
+                  Open Document in New Tab (${filename})
+                </a>
+              </div>
+            </iframe>
+          </div>
+        `;
+      }
     } else {
+      // Standalone Image Document Viewer
       viewerContent = `
         <div class="modal-stagger-2" style="width: 100%; min-height: 400px; max-height: min(74vh, 780px); border-radius: 12px; overflow: auto; border: 1px solid var(--border-glass); background: #0c0d14; display: flex; align-items: center; justify-content: center; padding: 1rem;">
           <img 
             src="${cert.documentPath}" 
             alt="${escapeHtml(cert.title)}" 
             style="max-width: 100%; max-height: min(70vh, 740px); object-fit: contain; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);" 
+            loading="lazy"
           />
         </div>
       `;
@@ -619,12 +737,12 @@
 
           <!-- Quick Action Buttons -->
           <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-            <a href="${cert.documentPath}" download="${filename}" class="btn btn-primary btn-sm">
+            <a href="${cert.documentPath}" download="${filename}" class="btn btn-primary btn-sm" type="button">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span>Download (${cert.docType.toUpperCase()})</span>
             </a>
             
-            <a href="${cert.documentPath}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+            <a href="${cert.documentPath}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" type="button">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               <span>Open in New Tab</span>
             </a>
@@ -650,6 +768,47 @@
         </div>
       </div>
     `;
+
+    // Wire up desktop iframe loading spinner fade
+    const iframeEl = document.getElementById('cert-iframe-el');
+    const spinnerEl = document.getElementById('cert-doc-spinner');
+    if (iframeEl && spinnerEl) {
+      iframeEl.onload = () => {
+        iframeEl.style.opacity = '1';
+        spinnerEl.style.opacity = '0';
+        setTimeout(() => { if (spinnerEl) spinnerEl.style.display = 'none'; }, 300);
+      };
+      setTimeout(() => {
+        if (spinnerEl && spinnerEl.style.display !== 'none') {
+          iframeEl.style.opacity = '1';
+          spinnerEl.style.opacity = '0';
+          setTimeout(() => { if (spinnerEl) spinnerEl.style.display = 'none'; }, 300);
+        }
+      }, 3500);
+    }
+
+    // Wire mobile on-demand inline loader
+    const inlineBtn = dom.modalContent.querySelector('.cert-load-inline-btn');
+    if (inlineBtn) {
+      inlineBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const stage = dom.modalContent.querySelector('.cert-mobile-preview-stage');
+        if (stage) {
+          stage.innerHTML = `
+            <div style="width: 100%; height: min(65vh, 580px); border-radius: 8px; overflow: hidden; background: #000; position: relative;">
+              <iframe 
+                src="${cert.documentPath}#toolbar=1" 
+                width="100%" 
+                height="100%" 
+                style="border: none;" 
+                title="${escapeHtml(cert.title)}"
+                loading="lazy"
+              ></iframe>
+            </div>
+          `;
+        }
+      });
+    }
 
     // Open Modal with GSAP / Lenis pause
     dom.modalOverlay.classList.add('active');
@@ -743,6 +902,7 @@
   window.CertificatesEngine = {
     data: CERTIFICATES_DATA,
     open: openCertificateModal,
+    close: closeCertificateModal,
     setFilter: setFilter,
     resetFilters: resetFilters
   };
