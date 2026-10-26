@@ -16,17 +16,22 @@
   // 2. Reading Progress Bar Element Reference
   let progressBar = null;
 
-  // 3. Initialize Lenis Smooth Momentum Scroll Engine (Quick & Smooth)
+  // 3. Initialize Lenis Smooth Momentum Scroll Engine (Desktop Only)
   let lenis = null;
-  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth < 768);
-  if (!prefersReducedMotion && typeof window.Lenis !== 'undefined') {
+  const perfCfg = window.PortfolioPerfConfig || {
+    isMobile: window.innerWidth < 768,
+    lenis: { enabled: window.innerWidth >= 768 && !prefersReducedMotion }
+  };
+  const shouldEnableLenis = (perfCfg.lenis && perfCfg.lenis.enabled) && typeof window.Lenis !== 'undefined';
+
+  if (shouldEnableLenis) {
     lenis = new window.Lenis({
-      duration: isTouchDevice ? 1.0 : 0.85, // Snappy & responsive momentum
+      duration: 0.85, // Snappy & responsive momentum
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1.15,
-      touchMultiplier: 1.0, // Natural 1:1 touch response on touchscreens
-      syncTouch: false, // Preserve native 120Hz touch scrolling on mobile
+      touchMultiplier: 1.0,
+      syncTouch: false,
       infinite: false,
     });
 
@@ -473,17 +478,20 @@
       onScrollUpdate(window.scrollY, 0, 0);
     }
 
-    // I. GSAP Coordinated Entrance Timeline & ScrollTrigger Refresh
+    // I. GSAP Coordinated Entrance Timeline (Desktop Enhancements) & ScrollTrigger Refresh
     if (typeof window.gsap !== 'undefined' && !prefersReducedMotion) {
       try {
-        const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out' } });
-        heroTl
-          .from('.hero-status-pill', { opacity: 0, y: -16, duration: 0.65, delay: 0.15 })
-          .from('.hero-title-monumental', { opacity: 0, y: 24, duration: 0.8 }, '-=0.45')
-          .from('.hero-eyebrow-tech', { opacity: 0, y: 16, duration: 0.6 }, '-=0.5')
-          .from('.hero-editorial-desc', { opacity: 0, y: 20, duration: 0.65 }, '-=0.5')
-          .from('.hero-ctas', { opacity: 0, y: 18, duration: 0.6 }, '-=0.45')
-          .from('.stat-item', { opacity: 0, y: 16, stagger: 0.08, duration: 0.5 }, '-=0.4');
+        const isMobile = window.PortfolioPerfConfig ? window.PortfolioPerfConfig.isMobile : (window.innerWidth < 768);
+        if (!isMobile) {
+          const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out' } });
+          heroTl
+            .from('.hero-status-pill', { opacity: 0.3, y: -14, duration: 0.5, delay: 0.05 })
+            .from('.hero-title-monumental', { y: 18, duration: 0.65 }, '-=0.35')
+            .from('.hero-eyebrow-tech', { opacity: 0.3, y: 12, duration: 0.5 }, '-=0.4')
+            .from('.hero-editorial-desc', { opacity: 0.3, y: 14, duration: 0.5 }, '-=0.4')
+            .from('.hero-ctas', { opacity: 0.3, y: 14, duration: 0.5 }, '-=0.35')
+            .from('.stat-item', { opacity: 0.3, y: 12, stagger: 0.06, duration: 0.45 }, '-=0.3');
+        }
 
         if (typeof window.ScrollTrigger !== 'undefined') {
           let resizeTimer = null;

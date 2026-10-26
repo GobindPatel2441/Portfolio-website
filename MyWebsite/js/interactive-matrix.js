@@ -1,8 +1,8 @@
 /**
  * INTERACTIVE CONSTELLATION & MATRIX CANVAS
- * Inspired by ThreeUI (dot-matrix, constellation-field)
  * High-performance, tactile mouse gravity, connecting neural threads,
  * and dynamic adaptation to the selected background theme.
+ * Adaptive Mobile-First Profile with Battery & CPU Throttling
  */
 
 function initInteractiveMatrix() {
@@ -16,13 +16,25 @@ function initInteractiveMatrix() {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  function getConfig() {
+    return window.PortfolioPerfConfig || {
+      isMobile: window.innerWidth < 768,
+      dpr: window.innerWidth < 768 ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5),
+      matrix: {
+        spacing: window.innerWidth < 768 ? Math.max(72, Math.floor(window.innerWidth / 12)) : Math.max(55, Math.floor(window.innerWidth / 24)),
+        sparkCount: window.innerWidth < 768 ? 10 : 28,
+        interactiveRadius: window.innerWidth < 768 ? 120 : 180
+      }
+    };
+  }
+
   let width = 0;
   let height = 0;
   let dpr = 1;
 
   function updateDpr() {
-    const isMobile = window.innerWidth < 768 || !window.matchMedia('(pointer: fine)').matches;
-    dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+    const cfg = getConfig();
+    dpr = cfg.dpr || 1;
   }
   updateDpr();
 
@@ -83,15 +95,15 @@ function initInteractiveMatrix() {
     particles = [];
     sparks = [];
 
-    const isMobile = width < 768;
-    // Structured Grid Points (Dot Matrix) with lower density on mobile to preserve battery
-    const spacing = isMobile ? Math.max(68, Math.floor(width / 14)) : Math.max(55, Math.floor(width / 24));
+    const cfg = getConfig();
+    const spacing = (cfg.matrix && cfg.matrix.spacing) ? cfg.matrix.spacing : Math.max(55, Math.floor(width / 24));
+    mouse.radius = (cfg.matrix && cfg.matrix.interactiveRadius) ? cfg.matrix.interactiveRadius : (cfg.isMobile ? 120 : 180);
+
     const cols = Math.ceil(width / spacing) + 1;
     const rows = Math.ceil(height / spacing) + 1;
 
     for (let c = 0; c < cols; c++) {
       for (let r = 0; r < rows; r++) {
-        // Base coordinate with subtle organic jitter
         const baseX = c * spacing;
         const baseY = r * spacing;
         particles.push({
@@ -101,21 +113,20 @@ function initInteractiveMatrix() {
           y: baseY,
           vx: 0,
           vy: 0,
-          size: (c % 2 === 0 && r % 2 === 0) ? 1.6 : 1.1,
+          size: (c % 2 === 0 && r % 2 === 0) ? 1.5 : 1.0,
           phase: Math.random() * Math.PI * 2
         });
       }
     }
 
-    // Drifting Spark Embers (scaled by device capability)
-    const sparkCount = isMobile ? Math.min(14, Math.floor(width / 50)) : Math.min(32, Math.floor(width / 40));
+    const sparkCount = (cfg.matrix && cfg.matrix.sparkCount) ? cfg.matrix.sparkCount : (cfg.isMobile ? 10 : 28);
     for (let i = 0; i < sparkCount; i++) {
       sparks.push({
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.35,
         vy: -0.2 - Math.random() * 0.45,
-        size: 0.8 + Math.random() * 1.6,
+        size: 0.8 + Math.random() * 1.5,
         alpha: Math.random() * 0.7,
         pulseSpeed: 0.015 + Math.random() * 0.02
       });
@@ -127,6 +138,10 @@ function initInteractiveMatrix() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resize, 150);
   }, { passive: true });
+
+  window.addEventListener('portfolio:profile-change', () => {
+    resize();
+  });
 
   window.addEventListener('mousemove', (e) => {
     mouse.targetX = e.clientX;
@@ -157,6 +172,7 @@ function initInteractiveMatrix() {
   let time = 0;
   let isRunning = true;
   let rafId = null;
+  let frameCount = 0;
 
   document.addEventListener('visibilitychange', () => {
     isRunning = !document.hidden;
@@ -172,6 +188,18 @@ function initInteractiveMatrix() {
   function render() {
     if (!isRunning) return;
 
+    const cfg = getConfig();
+
+    // On mobile devices, when there is no touch interaction and minimal scroll velocity,
+    // skip every other frame (30fps idle) to halve GPU draw calls and extend battery.
+    frameCount++;
+    if (cfg.isMobile && !mouse.isHovered && Math.abs(window.scrollVelocity || 0) < 0.1) {
+      if (frameCount % 2 !== 0) {
+        rafId = requestAnimationFrame(render);
+        return;
+      }
+    }
+
     time += 0.015;
 
     // Smooth cursor lerp
@@ -183,8 +211,8 @@ function initInteractiveMatrix() {
     const themeKey = getCurrentThemeKey();
     const colors = themeColors[themeKey] || themeColors.gold;
 
-    // 1. Draw Subtle Radial Torch Around Mouse
-    if (mouse.x > 0 && mouse.y > 0) {
+    // 1. Draw Subtle Radial Torch Around Mouse (Desktop only for performance)
+    if (!cfg.isMobile && mouse.x > 0 && mouse.y > 0) {
       const radialGrad = ctx.createRadialGradient(
         mouse.x, mouse.y, 10,
         mouse.x, mouse.y, mouse.radius
@@ -197,6 +225,7 @@ function initInteractiveMatrix() {
 
     // 2. Update and Draw Matrix Nodes
     const activeNodes = [];
+    const maxActiveNodes = cfg.isMobile ? 12 : 28;
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
@@ -216,7 +245,9 @@ function initInteractiveMatrix() {
         const angle = Math.atan2(dy, dx);
         p.vx -= Math.cos(angle) * force * 0.08;
         p.vy -= Math.sin(angle) * force * 0.08;
-        activeNodes.push({ p, dist });
+        if (activeNodes.length < maxActiveNodes) {
+          activeNodes.push({ p, dist });
+        }
       }
 
       // Spring back to base position
@@ -231,7 +262,7 @@ function initInteractiveMatrix() {
       // Draw dot
       const isNear = dist < mouse.radius;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, isNear ? p.size * 1.5 : p.size, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, isNear ? p.size * 1.4 : p.size, 0, Math.PI * 2);
       ctx.fillStyle = isNear ? colors.dotActive : colors.dot;
       ctx.fill();
     }
@@ -284,7 +315,6 @@ function initInteractiveMatrix() {
       ctx.globalAlpha = sparkAlpha;
 
       if (Math.abs(velocity) > 2) {
-        // Draw kinetic speed streak
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
         ctx.lineTo(s.x, s.y + velocity * 1.8);

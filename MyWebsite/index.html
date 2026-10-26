@@ -27,18 +27,14 @@
   <!-- High-Performance Font Preconnect & Stylesheet Link -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700&display=swap" />
 
-  <!-- Preload Critical LCP Hero Image -->
-  <link rel="preload" as="image" href="assets/gobind-patel.webp" type="image/webp" fetchpriority="high" />
+  <!-- Preload Critical LCP Hero Image (Responsive Media Query) -->
+  <link rel="preload" as="image" href="assets/gobind-patel-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/gobind-patel.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/main.css?v=6" />
-  <link rel="stylesheet" href="css/components.css?v=21" />
-  <link rel="stylesheet" href="css/certificates.css?v=1" />
-  <link rel="stylesheet" href="css/animations.css?v=10" />
-  <link rel="stylesheet" href="css/responsive.css?v=21" />
-  <link rel="stylesheet" href="css/ambient-audio.css?v=2" />
+  <!-- Unified High-Performance Stylesheet Bundle (Cached & Minified) -->
+  <link rel="stylesheet" href="css/bundle.min.css?v=27" />
 </head>
 <body>
 
@@ -94,6 +90,7 @@
       <a href="#hero" class="nav-brand" aria-label="Gobind Patel Home">
         <div class="brand-monogram">
           <picture>
+            <source media="(max-width: 768px)" srcset="assets/gp-logo-animated-mobile.webp" type="image/webp" />
             <source srcset="assets/gp-logo-animated.webp" type="image/webp" />
             <img src="assets/gp-logo-animated.gif" alt="GP. Logo" class="brand-monogram-gif" width="34" height="34" decoding="async" />
           </picture>
@@ -145,77 +142,8 @@
       <div class="container">
         <div class="hero-grid">
           
-          <!-- Hero Column 1: Monumental Narrative & Description (Left on Desktop, Below on Mobile) -->
-          <div class="hero-content reveal-init reveal-left delay-1">
-            <div class="hero-status-pill reveal-init delay-1">
-              <span class="status-dot"></span>
-              <span class="shiny-text">AVAILABLE FOR AI/ML & SOFTWARE ROLES • CLASS OF 2027</span>
-            </div>
-
-            <!-- Monumental Condensed Title with Pure CSS Multi-Phrase Typing Engine -->
-            <h1 class="hero-title-monumental">
-              <span class="title-line-1 reveal-init delay-1">I ARCHITECT</span>
-              <div class="css-typewriter-wrapper reveal-init delay-2">
-                <!-- Zero-Layout-Shift Ghost Width Reservation -->
-                <span class="css-typewriter-ghost">CORE JAVA ARCHITECTURES.</span>
-                <span class="css-typewriter-phrase phrase-1">INTELLIGENT SYSTEMS.</span>
-                <span class="css-typewriter-phrase phrase-2">MULTIMODAL AI AGENTS.</span>
-                <span class="css-typewriter-phrase phrase-3">CLINICAL RAG ENGINES.</span>
-                <span class="css-typewriter-phrase phrase-4">CORE JAVA ARCHITECTURES.</span>
-              </div>
-            </h1>
-
-            <!-- Subtitle Technologies -->
-            <div class="hero-eyebrow-tech reveal-init delay-2">
-              <span>AI & GENERATIVE SYSTEMS</span>
-              <span class="bullet-dot">•</span>
-              <span>CORE JAVA & DISTRIBUTED BACKEND</span>
-              <span class="bullet-dot">•</span>
-              <span>FULL STACK</span>
-            </div>
-
-            <!-- Bespoke Human Narrative -->
-            <p class="hero-editorial-desc reveal-init delay-3">
-              I'm <strong>Gobind Patel</strong> — a B.Tech Computer Science & Engineering (AI/ML) scholar at <strong>Sri Sri University</strong> (CGPA: 8.89). I bridge multimodal vision telemetry with empathetic LLM reasoning, high-throughput vector RAG pipelines, and resilient enterprise architectures.
-            </p>
-
-            <div class="hero-ctas reveal-init delay-4">
-              <a href="#projects" class="btn btn-primary">
-                <span>EXPLORE MY WORK ↗</span>
-              </a>
-
-              <a href="#ai-terminal" class="btn btn-terminal">
-                <span>INTERACTIVE AI LAB ↗</span>
-              </a>
-
-              <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-secondary">
-                <span>DOWNLOAD RESUME ↓</span>
-              </a>
-            </div>
-
-            <!-- 4-Item Concise Metrics Strip -->
-            <div class="hero-stats">
-              <div class="stat-item reveal-init delay-1">
-                <div class="stat-value" data-target="8.89" data-decimal="true">8.89</div>
-                <div class="stat-label">B.Tech CGPA</div>
-              </div>
-              <div class="stat-item reveal-init delay-2">
-                <div class="stat-value" data-target="2" data-suffix="nd Prize">2nd Prize</div>
-                <div class="stat-label">Chakravyuh Hackathon</div>
-              </div>
-              <div class="stat-item reveal-init delay-3">
-                <div class="stat-value" data-target="11" data-suffix="+">11+</div>
-                <div class="stat-label">Indic Dialects AI</div>
-              </div>
-              <div class="stat-item reveal-init delay-4">
-                <div class="stat-value" data-target="15" data-suffix="ms">&lt; 15ms</div>
-                <div class="stat-label">FAISS Vector Latency</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hero Column 2: Cinematic Portrait Frame (Right on Desktop, Top on Mobile) -->
-          <div class="portrait-container reveal-init reveal-right delay-2">
+          <!-- Hero Column 2: Cinematic Portrait Frame (Top on Mobile, Right on Desktop via grid-area: portrait) -->
+          <div class="portrait-container">
             <div class="portrait-conic-glow"></div>
 
             <div class="liquid-glass-card">
@@ -225,13 +153,14 @@
               <div class="portrait-stage">
                 <div class="portrait-img-wrapper">
                   <picture>
+                    <source media="(max-width: 768px)" srcset="assets/gobind-patel-mobile.webp" type="image/webp" />
                     <source srcset="assets/gobind-patel.webp" type="image/webp" />
-                    <img src="assets/gobind-patel.png" alt="Gobind Patel" class="portrait-img" width="1024" height="1536" fetchpriority="high" decoding="async" />
+                    <img src="assets/gobind-patel.webp" alt="Gobind Patel" class="portrait-img" width="540" height="810" fetchpriority="high" decoding="async" />
                   </picture>
                 </div>
 
                 <!-- Floating Trophy Badge Overlay (Top) -->
-                <div class="portrait-floating-badge badge-top-right floating-anim-1 reveal-init delay-3">
+                <div class="portrait-floating-badge badge-top-right floating-anim-1">
                   <div class="badge-icon-box" aria-hidden="true">🏆</div>
                   <div class="badge-text-group">
                     <div class="badge-text-title">2ND PRIZE WINNER</div>
@@ -240,7 +169,7 @@
                 </div>
 
                 <!-- Floating Tech Badge Overlay (Bottom) -->
-                <div class="portrait-floating-badge badge-bottom-left floating-anim-2 reveal-init delay-4">
+                <div class="portrait-floating-badge badge-bottom-left floating-anim-2">
                   <div class="badge-icon-box" aria-hidden="true">⚡</div>
                   <div class="badge-text-group">
                     <div class="badge-text-title">AI/ML &amp; CORE JAVA</div>
@@ -260,6 +189,76 @@
               </div>
             </div>
           </div>
+
+          <!-- Hero Column 1: Monumental Narrative & Description (Below on Mobile, Left on Desktop via grid-area: content) -->
+          <div class="hero-content">
+            <div class="hero-status-pill">
+              <span class="status-dot"></span>
+              <span class="shiny-text">AVAILABLE FOR AI/ML & SOFTWARE ROLES • CLASS OF 2027</span>
+            </div>
+
+            <!-- Monumental Condensed Title with Pure CSS Multi-Phrase Typing Engine -->
+            <h1 class="hero-title-monumental">
+              <span class="title-line-1">I ARCHITECT</span>
+              <div class="css-typewriter-wrapper">
+                <!-- Zero-Layout-Shift Ghost Width Reservation -->
+                <span class="css-typewriter-ghost">CORE JAVA ARCHITECTURES.</span>
+                <span class="css-typewriter-phrase phrase-1">INTELLIGENT SYSTEMS.</span>
+                <span class="css-typewriter-phrase phrase-2">MULTIMODAL AI AGENTS.</span>
+                <span class="css-typewriter-phrase phrase-3">CLINICAL RAG ENGINES.</span>
+                <span class="css-typewriter-phrase phrase-4">CORE JAVA ARCHITECTURES.</span>
+              </div>
+            </h1>
+
+            <!-- Subtitle Technologies -->
+            <div class="hero-eyebrow-tech">
+              <span>AI & GENERATIVE SYSTEMS</span>
+              <span class="bullet-dot">•</span>
+              <span>CORE JAVA & DISTRIBUTED BACKEND</span>
+              <span class="bullet-dot">•</span>
+              <span>FULL STACK</span>
+            </div>
+
+            <!-- Bespoke Human Narrative -->
+            <p class="hero-editorial-desc">
+              I'm <strong>Gobind Patel</strong> — a B.Tech Computer Science & Engineering (AI/ML) scholar at <strong>Sri Sri University</strong> (CGPA: 8.89). I bridge multimodal vision telemetry with empathetic LLM reasoning, high-throughput vector RAG pipelines, and resilient enterprise architectures.
+            </p>
+
+            <div class="hero-ctas">
+              <a href="#projects" class="btn btn-primary">
+                <span>EXPLORE MY WORK ↗</span>
+              </a>
+
+              <a href="#ai-terminal" class="btn btn-terminal">
+                <span>INTERACTIVE AI LAB ↗</span>
+              </a>
+
+              <a href="assets/Gobind_Patel_Resume.pdf" download="Gobind_Patel_Resume.pdf" class="btn btn-secondary">
+                <span>DOWNLOAD RESUME ↓</span>
+              </a>
+            </div>
+
+            <!-- 4-Item Concise Metrics Strip -->
+            <div class="hero-stats">
+              <div class="stat-item">
+                <div class="stat-value" data-target="8.89" data-decimal="true">8.89</div>
+                <div class="stat-label">B.Tech CGPA</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" data-target="2" data-suffix="nd Prize">2nd Prize</div>
+                <div class="stat-label">Chakravyuh Hackathon</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" data-target="11" data-suffix="+">11+</div>
+                <div class="stat-label">Indic Dialects AI</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" data-target="15" data-suffix="ms">&lt; 15ms</div>
+                <div class="stat-label">FAISS Vector Latency</div>
+              </div>
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -1627,33 +1626,25 @@ CLINICAL EVIDENCE SYNTHESIS:
   <!-- Progressive Viewport Bottom Edge Blur Dissolve -->
   <div class="progressive-blur-bottom" aria-hidden="true"></div>
 
-  <!-- JavaScript Modules & Animation Engines (Deferred for High Performance) -->
+  <!-- JavaScript Modules & Core Animation Engines (Deferred for High Performance) -->
+  <script src="js/portfolio-perf-config.js?v=1" defer></script>
   <script src="js/gsap.min.js" defer></script>
   <script src="js/ScrollTrigger.min.js" defer></script>
   <script src="js/lenis.min.js" defer></script>
-  <script src="js/three.min.js" defer></script>
-  <script src="js/vanta.net.min.js" defer></script>
-  <script src="js/global-particle-background.js?v=2" defer></script>
-  <script src="js/interactive-matrix.js?v=3" defer></script>
+  <script src="js/global-particle-background.js?v=3" defer></script>
+  <script src="js/interactive-matrix.js?v=4" defer></script>
   <script src="js/decrypted-text.js" defer></script>
   <script src="js/click-spark.js" defer></script>
-  <script src="js/cloud-shader.js" defer></script>
+  <script src="js/cloud-shader.js?v=2" defer></script>
   <script src="js/liquid-glass.js" defer></script>
-  <script src="js/ai-terminal.js?v=2" defer></script>
-  <script src="js/projects-modal.js?v=9" defer></script>
-  <script src="js/scroll-orchestrator.js?v=7" defer></script>
-  <script src="js/command-menu.js" defer></script>
+  <script src="js/scroll-orchestrator.js?v=8" defer></script>
   <script src="js/scramble-text.js" defer></script>
   <script src="js/tilt-card.js?v=2" defer></script>
   <script src="js/magnetic-button.js" defer></script>
-  <script src="js/custom-cursor.js?v=4" defer></script>
+  <script src="js/custom-cursor.js?v=5" defer></script>
   <script src="js/liquid-button.js" defer></script>
-  <script src="js/sound-effects.js?v=2" defer></script>
-  <script src="js/ambient-audio.js?v=3" defer></script>
-  <script src="js/certificates.js?v=1" defer></script>
-  <!-- EmailJS Integration (Lazy-loaded on demand via email-dispatch.js) -->
-  <script src="js/email-config.js" defer></script>
-  <script src="js/email-dispatch.js" defer></script>
   <script src="js/main.js" defer></script>
+  <!-- Progressive Feature Loader (Lazy-loads Modals, Certs, AI Lab, Audio & Email on demand/idle) -->
+  <script src="js/progressive-loader.js?v=1" defer></script>
 </body>
 </html>

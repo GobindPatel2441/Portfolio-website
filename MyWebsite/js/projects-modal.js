@@ -964,6 +964,9 @@ const response = await fetch("http://localhost:11434/api/generate", {
       closed = true;
       modalOverlay.classList.remove('active');
       document.body.style.overflow = '';
+      if (modalContent) {
+        modalContent.innerHTML = '';
+      }
       if (window.lenis && typeof window.lenis.start === 'function') {
         window.lenis.start();
       }

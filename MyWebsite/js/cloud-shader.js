@@ -1,24 +1,37 @@
 /**
  * ===================================================================
  * GOBIND PATEL — PROCEDURAL ATMOSPHERIC CLOUD SHADER
- * Inspired by Aceternity UI Cloud Shader (ui.aceternity.com/components/cloud-shader)
  * Volumetric Drifting Clouds • Multi-Octave Noise • Theme Palette Coupling
- * 60 FPS GPU-Accelerated Canvas Engine with Mobile Tiering & Visibility Throttle
+ * GPU-Accelerated Canvas Engine with Adaptive Mobile Profile & Visibility Throttle
  * ===================================================================
  */
 
 (function () {
   'use strict';
 
-  // Check prefers-reduced-motion
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     return;
+  }
+
+  function getConfig() {
+    return window.PortfolioPerfConfig || {
+      isMobile: window.innerWidth < 768,
+      dpr: window.innerWidth < 768 ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5),
+      cloudShader: {
+        enabled: true,
+        cloudCount: window.innerWidth < 768 ? 3 : 7,
+        opacity: window.innerWidth < 768 ? '0.25' : '0.55'
+      }
+    };
   }
 
   function initCloudShader() {
     if (!document.body) return;
 
-    const isMobile = window.innerWidth < 768 || !window.matchMedia('(pointer: fine)').matches;
+    const cfg = getConfig();
+    if (cfg.cloudShader && cfg.cloudShader.enabled === false) return;
+
+    const isMobile = cfg.isMobile;
 
     const canvas = document.createElement('canvas');
     canvas.id = 'ambient-cloud-canvas';
@@ -29,11 +42,10 @@
     canvas.style.height = '100vh';
     canvas.style.pointerEvents = 'none';
     canvas.style.zIndex = '0';
-    canvas.style.opacity = isMobile ? '0.35' : '0.55';
+    canvas.style.opacity = (cfg.cloudShader && cfg.cloudShader.opacity) ? cfg.cloudShader.opacity : (isMobile ? '0.25' : '0.55');
     canvas.style.mixBlendMode = 'screen';
     canvas.style.transition = 'opacity 0.8s ease';
 
-    // Insert before the global particle background so the neural network hovers above the atmospheric clouds
     const bgTarget = document.getElementById('global-particle-background') || document.getElementById('interactive-matrix-canvas');
     if (bgTarget && bgTarget.parentNode) {
       bgTarget.parentNode.insertBefore(canvas, bgTarget);
@@ -46,33 +58,32 @@
 
     let width = 0;
     let height = 0;
-    let dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+    let dpr = cfg.dpr || 1;
 
-    // Theme palettes synchronized with data-theme
     const THEME_CLOUDS = {
       gold: {
-        cloud1: 'rgba(212, 175, 55, 0.12)',   // Warm gold
-        cloud2: 'rgba(140, 109, 79, 0.14)',   // Bronze
-        cloud3: 'rgba(247, 231, 196, 0.08)',  // Cream highlights
-        cloud4: 'rgba(40, 32, 20, 0.18)',     // Dark amber
+        cloud1: 'rgba(212, 175, 55, 0.12)',
+        cloud2: 'rgba(140, 109, 79, 0.14)',
+        cloud3: 'rgba(247, 231, 196, 0.08)',
+        cloud4: 'rgba(40, 32, 20, 0.18)',
       },
       obsidian: {
-        cloud1: 'rgba(160, 160, 175, 0.10)',  // Cool silver
-        cloud2: 'rgba(90, 95, 110, 0.12)',    // Slate
-        cloud3: 'rgba(220, 225, 240, 0.07)',  // Moonlit white
-        cloud4: 'rgba(25, 28, 38, 0.16)',     // Midnight
+        cloud1: 'rgba(160, 160, 175, 0.10)',
+        cloud2: 'rgba(90, 95, 110, 0.12)',
+        cloud3: 'rgba(220, 225, 240, 0.07)',
+        cloud4: 'rgba(25, 28, 38, 0.16)',
       },
       emerald: {
-        cloud1: 'rgba(16, 185, 129, 0.12)',   // Pure emerald
-        cloud2: 'rgba(5, 150, 105, 0.14)',    // Deep jade
-        cloud3: 'rgba(110, 231, 183, 0.08)',  // Mint
-        cloud4: 'rgba(6, 78, 59, 0.18)',      // Pine
+        cloud1: 'rgba(16, 185, 129, 0.12)',
+        cloud2: 'rgba(5, 150, 105, 0.14)',
+        cloud3: 'rgba(110, 231, 183, 0.08)',
+        cloud4: 'rgba(6, 78, 59, 0.18)',
       },
       cyber: {
-        cloud1: 'rgba(56, 189, 248, 0.14)',   // Celestial cyan
-        cloud2: 'rgba(30, 64, 175, 0.16)',    // Cobalt
-        cloud3: 'rgba(192, 132, 252, 0.09)',  // Lavender neon
-        cloud4: 'rgba(30, 27, 75, 0.12)',     // Deep navy
+        cloud1: 'rgba(56, 189, 248, 0.14)',
+        cloud2: 'rgba(30, 64, 175, 0.16)',
+        cloud3: 'rgba(192, 132, 252, 0.09)',
+        cloud4: 'rgba(30, 27, 75, 0.12)',
       }
     };
 
@@ -80,20 +91,20 @@
       return document.documentElement.getAttribute('data-theme') || 'gold';
     }
 
-    // Mobile adapts cloud count to preserve frame rate & battery
-    const CLOUD_COUNT = isMobile ? 4 : 7;
     let clouds = [];
 
     function initClouds() {
+      const currentCfg = getConfig();
+      const count = (currentCfg.cloudShader && currentCfg.cloudShader.cloudCount) ? currentCfg.cloudShader.cloudCount : (currentCfg.isMobile ? 3 : 7);
       clouds = [];
-      for (let i = 0; i < CLOUD_COUNT; i++) {
+      for (let i = 0; i < count; i++) {
         clouds.push({
           x: Math.random() * width,
           y: Math.random() * height,
           baseRadius: Math.max(width, height) * (0.28 + Math.random() * 0.22),
           currentRadius: 0,
-          vx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.35),
-          vy: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.25),
+          vx: (Math.random() - 0.5) * (currentCfg.isMobile ? 0.15 : 0.35),
+          vy: (Math.random() - 0.5) * (currentCfg.isMobile ? 0.12 : 0.25),
           phase: Math.random() * Math.PI * 2,
           pulseSpeed: 0.0008 + Math.random() * 0.0012,
           layerIndex: i % 4,
@@ -102,50 +113,49 @@
     }
 
     function resize() {
+      const currentCfg = getConfig();
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dpr = currentCfg.dpr || 1;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      canvas.style.opacity = (currentCfg.cloudShader && currentCfg.cloudShader.opacity) ? currentCfg.cloudShader.opacity : (currentCfg.isMobile ? '0.25' : '0.55');
       initClouds();
     }
+
+    resize();
 
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(resize, 150);
     }, { passive: true });
-    resize();
 
-    // Mouse interaction only on desktop pointer devices
-    let mouseX = width / 2;
-    let mouseY = height / 2;
-    let targetMouseX = width / 2;
-    let targetMouseY = height / 2;
+    window.addEventListener('portfolio:profile-change', () => {
+      resize();
+    });
 
+    let mouseX = -1000;
+    let mouseY = -1000;
     if (!isMobile) {
-      window.addEventListener(
-        'mousemove',
-        (e) => {
-          targetMouseX = e.clientX;
-          targetMouseY = e.clientY;
-        },
-        { passive: true }
-      );
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
     }
 
     let lastTime = performance.now();
     let isRunning = true;
     let rafId = null;
+    let frameIndex = 0;
 
-    function render(currentTime) {
-      const dt = Math.min(32, currentTime - lastTime);
-      lastTime = currentTime;
-
-      if (!isMobile) {
-        mouseX += (targetMouseX - mouseX) * 0.04;
-        mouseY += (targetMouseY - mouseY) * 0.04;
-      }
+    function render(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -155,13 +165,15 @@
 
       ctx.globalCompositeOperation = 'lighter';
 
+      const currentCfg = getConfig();
+
       for (let idx = 0; idx < clouds.length; idx++) {
         const c = clouds[idx];
-        c.phase += c.pulseSpeed * dt;
+        c.phase += c.pulseSpeed * dt * (currentCfg.isMobile ? 0.6 : 1.0);
         const pulse = Math.sin(c.phase) * 0.12;
         const radius = c.baseRadius * (1 + pulse);
 
-        if (!isMobile) {
+        if (!currentCfg.isMobile) {
           const dxToMouse = c.x - mouseX;
           const dyToMouse = c.y - mouseY;
           const distToMouse = Math.hypot(dxToMouse, dyToMouse);
@@ -205,11 +217,17 @@
 
     function loop(now) {
       if (!isRunning) return;
+      const currentCfg = getConfig();
+      frameIndex++;
+      // On mobile, skip every other frame (30fps) for background cloud shader
+      if (currentCfg.isMobile && frameIndex % 2 !== 0) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
       render(now);
       rafId = requestAnimationFrame(loop);
     }
 
-    // Visibility-aware execution to preserve mobile GPU & battery
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         isRunning = false;

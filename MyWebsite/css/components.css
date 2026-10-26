@@ -482,9 +482,19 @@
 .hero-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
+  grid-template-areas: "content portrait";
   gap: clamp(1.5rem, 3.5vw, 3.5rem);
   align-items: center;
 }
+
+.hero-content {
+  grid-area: content;
+}
+
+.portrait-container {
+  grid-area: portrait;
+}
+
 
 .hero-status-pill {
   display: inline-flex;

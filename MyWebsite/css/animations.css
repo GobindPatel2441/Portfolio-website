@@ -132,6 +132,22 @@ html.lenis, html.lenis body {
   will-change: transform, opacity;
 }
 
+/* Critical Above-the-fold Hero Content: Instant Rendering for Sub-Second FCP & LCP */
+#hero .reveal-init,
+.hero-content.reveal-init,
+.portrait-container.reveal-init,
+#hero .reveal-init.delay-1,
+#hero .reveal-init.delay-2,
+#hero .reveal-init.delay-3,
+#hero .reveal-init.delay-4 {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
+  transition-delay: 0s !important;
+}
+
+
 @media (min-width: 1024px) {
   .reveal-init.reveal-left {
     transform: translateX(-24px);

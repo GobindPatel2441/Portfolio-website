@@ -2,25 +2,17 @@
  * GLOBAL PERSISTENT CINEMATIC PARTICLE & NETWORK BACKGROUND
  * Vanta.NET (Three.js WebGL Engine)
  * 
- * Provides a continuous, persistent 3D floating gold particle and neural
- * network background across all portfolio sections (Hero, About, Projects,
- * AI Lab, Skills, Timeline, Contact, and Footer).
- * 
  * Features:
- * - Persistent across the entire document (never resets or flashes on scroll)
- * - Adaptive particle and connection density based on device performance budget
+ * - Persistent across the entire document
+ * - Adaptive performance profiles: Desktop Full 3D vs Mobile Lightweight Fallback
  * - Dynamic theme coordination with the portfolio atmosphere switcher
- * - Tab visibility throttling to save battery and GPU when inactive
+ * - Tab visibility and viewport suspension to save battery and GPU
  * - Full prefers-reduced-motion compliance
- * - Non-blocking pointer events (never interferes with cards, buttons, or inputs)
+ * - Non-blocking pointer events
  */
 (function () {
   'use strict';
 
-  const prefersReducedMotion = () =>
-    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Theme-coordinated vertex colors
   const THEME_COLORS = {
     gold: 0xd4af37,      // Pure cinematic gold
     obsidian: 0xc8c8c8,  // Minimalist platinum
@@ -31,58 +23,20 @@
   const BG_COLOR = 0x08080a; // Obsidian surface
 
   let vantaEffect = null;
-  let currentTier = null;
+  let isLoadingScripts = false;
   let resizeTimer = null;
+
+  function getConfig() {
+    return window.PortfolioPerfConfig || {
+      isMobile: window.innerWidth < 768,
+      vanta: { enabled: window.innerWidth >= 768 },
+      prefersReducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    };
+  }
 
   function getCurrentThemeColor() {
     const themeKey = document.documentElement.getAttribute('data-theme') || 'gold';
     return THEME_COLORS[themeKey] || THEME_COLORS.gold;
-  }
-
-  function getDeviceTier() {
-    const w = window.innerWidth;
-    if (w < 768) return 'mobile';
-    if (w < 1024) return 'tablet';
-    if (w < 1920) return 'desktop';
-    return 'ultrawide';
-  }
-
-  function getTierConfig(tier) {
-    switch (tier) {
-      case 'mobile':
-        return {
-          points: 6.00,
-          maxDistance: 18.00,
-          spacing: 21.00,
-          scale: 1.00,
-          scaleMobile: 0.85
-        };
-      case 'tablet':
-        return {
-          points: 8.00,
-          maxDistance: 20.00,
-          spacing: 19.00,
-          scale: 1.00,
-          scaleMobile: 0.90
-        };
-      case 'desktop':
-        return {
-          points: 10.00,
-          maxDistance: 22.00,
-          spacing: 18.00,
-          scale: 1.00,
-          scaleMobile: 1.00
-        };
-      case 'ultrawide':
-      default:
-        return {
-          points: 11.00,
-          maxDistance: 24.00,
-          spacing: 18.00,
-          scale: 1.00,
-          scaleMobile: 1.00
-        };
-    }
   }
 
   function getOrCreateContainer() {
@@ -97,56 +51,109 @@
     return container;
   }
 
+  // Asynchronous lazy loader for Three.js & Vanta.NET on desktop
+  function ensureVantaDependencies(callback) {
+    if (typeof window.VANTA !== 'undefined' && typeof window.VANTA.NET === 'function' && typeof window.THREE !== 'undefined') {
+      return callback();
+    }
+    if (isLoadingScripts) return;
+    isLoadingScripts = true;
+
+    function loadScript(src, cb) {
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = false;
+      s.onload = cb;
+      s.onerror = () => {
+        isLoadingScripts = false;
+        console.warn('Failed to load WebGL background script:', src);
+      };
+      document.head.appendChild(s);
+    }
+
+    if (typeof window.THREE === 'undefined') {
+      loadScript('js/three.min.js', () => {
+        if (typeof window.VANTA === 'undefined' || typeof window.VANTA.NET !== 'function') {
+          loadScript('js/vanta.net.min.js', () => {
+            isLoadingScripts = false;
+            callback();
+          });
+        } else {
+          isLoadingScripts = false;
+          callback();
+        }
+      });
+    } else if (typeof window.VANTA === 'undefined' || typeof window.VANTA.NET !== 'function') {
+      loadScript('js/vanta.net.min.js', () => {
+        isLoadingScripts = false;
+        callback();
+      });
+    }
+  }
+
   function initGlobalBackground() {
-    if (prefersReducedMotion()) return;
-    if (typeof window.VANTA === 'undefined' || typeof window.VANTA.NET !== 'function') {
-      console.warn('Vanta.NET library not loaded; skipping global background initialization.');
+    const cfg = getConfig();
+    if (cfg.prefersReducedMotion) return;
+
+    // Mobile profile optimization:
+    // Skip heavy WebGL Three.js on narrow mobile devices;
+    // The interactive-matrix canvas handles the particle aesthetic with zero GPU strain.
+    if (!cfg.vanta || !cfg.vanta.enabled) {
+      if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+        vantaEffect.destroy();
+        vantaEffect = null;
+      }
       return;
     }
 
-    const container = getOrCreateContainer();
-    const tier = getDeviceTier();
-    currentTier = tier;
-    const config = getTierConfig(tier);
-    const color = getCurrentThemeColor();
-
-    try {
-      if (vantaEffect && typeof vantaEffect.destroy === 'function') {
-        vantaEffect.destroy();
-      }
-
-      vantaEffect = window.VANTA.NET({
-        el: container,
-        mouseControls: false,
-        touchControls: false,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: config.scale,
-        scaleMobile: config.scaleMobile,
-        color: color,
-        backgroundColor: BG_COLOR,
-        points: config.points,
-        maxDistance: config.maxDistance,
-        spacing: config.spacing,
-        showDots: true,
-        forceAnimate: true
-      });
-
-      // Expose globally for testing and programmatic coordination
-      window.GlobalParticleBackground = {
-        instance: vantaEffect,
-        updateTheme: updateThemeColor,
-        pause: () => vantaEffect && vantaEffect.pause && vantaEffect.pause(),
-        play: () => vantaEffect && vantaEffect.play && vantaEffect.play(),
-        destroy: () => {
-          if (vantaEffect && vantaEffect.destroy) vantaEffect.destroy();
-          vantaEffect = null;
-        }
+    ensureVantaDependencies(() => {
+      const container = getOrCreateContainer();
+      const color = getCurrentThemeColor();
+      const vantaCfg = (cfg.vanta) || {
+        points: 10.0,
+        maxDistance: 22.0,
+        spacing: 18.0,
+        scale: 1.0,
+        scaleMobile: 0.85
       };
-    } catch (err) {
-      console.warn('Global particle background WebGL init fallback:', err);
-    }
+
+      try {
+        if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+          vantaEffect.destroy();
+        }
+
+        vantaEffect = window.VANTA.NET({
+          el: container,
+          mouseControls: false,
+          touchControls: false,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: vantaCfg.scale || 1.0,
+          scaleMobile: vantaCfg.scaleMobile || 0.85,
+          color: color,
+          backgroundColor: BG_COLOR,
+          points: vantaCfg.points || 10.0,
+          maxDistance: vantaCfg.maxDistance || 22.0,
+          spacing: vantaCfg.spacing || 18.0,
+          showDots: true,
+          forceAnimate: false
+        });
+
+        window.GlobalParticleBackground = {
+          instance: vantaEffect,
+          updateTheme: updateThemeColor,
+          pause: () => vantaEffect && vantaEffect.pause && vantaEffect.pause(),
+          play: () => vantaEffect && vantaEffect.play && vantaEffect.play(),
+          destroy: () => {
+            if (vantaEffect && vantaEffect.destroy) vantaEffect.destroy();
+            vantaEffect = null;
+          }
+        };
+      } catch (err) {
+        console.warn('Global particle background WebGL init fallback:', err);
+      }
+    });
   }
 
   function updateThemeColor() {
@@ -167,7 +174,7 @@
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
-  // 2. Pause when tab/window is hidden to preserve battery and GPU
+  // 2. Tab visibility throttling to save battery and GPU when inactive
   document.addEventListener('visibilitychange', () => {
     if (!vantaEffect) return;
     if (document.hidden) {
@@ -177,22 +184,37 @@
     }
   });
 
-  // 3. Debounced window resize to adaptively rescale tiers
+  // 3. Profile change listener (Desktop <-> Mobile transitions)
+  window.addEventListener('portfolio:profile-change', (e) => {
+    const isMobile = e.detail && e.detail.isMobile;
+    if (isMobile) {
+      if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+        vantaEffect.destroy();
+        vantaEffect = null;
+      }
+    } else {
+      initGlobalBackground();
+    }
+  });
+
+  // 4. Debounced window resize
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (!vantaEffect) return;
-      const newTier = getDeviceTier();
-      if (newTier !== currentTier) {
-        // Re-initialize with tier-optimized density
-        initGlobalBackground();
-      } else if (vantaEffect.resize) {
+      if (!vantaEffect) {
+        const cfg = getConfig();
+        if (cfg.vanta && cfg.vanta.enabled) {
+          initGlobalBackground();
+        }
+        return;
+      }
+      if (typeof vantaEffect.resize === 'function') {
         vantaEffect.resize();
       }
     }, 250);
   }, { passive: true });
 
-  // 4. Reduced-motion preference change listener
+  // 5. Reduced-motion preference change listener
   if (window.matchMedia) {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motionQuery.addEventListener) {
@@ -207,7 +229,7 @@
     }
   }
 
-  // 5. Cleanup on unload
+  // 6. Cleanup on unload
   window.addEventListener('beforeunload', () => {
     if (vantaEffect && typeof vantaEffect.destroy === 'function') {
       vantaEffect.destroy();
