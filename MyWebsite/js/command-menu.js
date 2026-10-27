@@ -6,6 +6,8 @@
 (function () {
   'use strict';
 
+  if (window.CommandMenuEngine) return;
+
   const COMMANDS = [
     // Sections
     { label: 'Go to Hero / Intro', section: '#hero', group: 'Navigation', keywords: ['home', 'top', 'intro', 'start'] },
@@ -62,7 +64,7 @@
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'cmd-toast';
-      toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(20,20,25,0.92);color:#fff;padding:0.6rem 1.4rem;border-radius:8px;font-size:0.85rem;font-family:var(--font-mono);z-index:100000;pointer-events:none;opacity:0;transition:opacity 0.3s;border:1px solid var(--border-glass);backdrop-filter:blur(12px);';
+      toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(20,20,25,0.92);color:#fff;padding:0.6rem 1.4rem;border-radius:8px;font-size:0.85rem;font-family:var(--font-mono);z-index:100000;pointer-events:none;opacity:0;transition:opacity 0.3s;border:1px solid var(--border-glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);';
       document.body.appendChild(toast);
     }
     toast.textContent = msg;

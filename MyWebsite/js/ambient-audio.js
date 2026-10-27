@@ -11,6 +11,8 @@
 (function () {
   'use strict';
 
+  if (window.PortfolioAmbientAudio) return;
+
   // -------------------------------------------------------------
   // 1. CONFIGURATION & STATE
   // -------------------------------------------------------------
@@ -373,24 +375,23 @@
       });
     }
 
-    // 2. Pill Click: Toggle popover panel (or play if clicking play button)
-    if (dom.pill) {
-      dom.pill.addEventListener('click', (e) => {
-        if (dom.expandBtn && (e.target === dom.expandBtn || dom.expandBtn.contains(e.target))) {
-          e.stopPropagation();
-          togglePopover();
-          return;
-        }
-        if (dom.actionBtn && (e.target === dom.actionBtn || dom.actionBtn.contains(e.target))) {
-          return;
-        }
+    // 2. Expand Chevron Button: Toggle popover panel
+    if (dom.expandBtn) {
+      dom.expandBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         togglePopover();
       });
     }
 
-    if (dom.expandBtn) {
-      dom.expandBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+    // 3. Pill Click: Toggle popover panel when clicking body/title
+    if (dom.pill) {
+      dom.pill.addEventListener('click', (e) => {
+        if (dom.actionBtn && (e.target === dom.actionBtn || dom.actionBtn.contains(e.target))) {
+          return;
+        }
+        if (dom.expandBtn && (e.target === dom.expandBtn || dom.expandBtn.contains(e.target))) {
+          return;
+        }
         togglePopover();
       });
     }

@@ -646,7 +646,7 @@
                   decoding="async"
                 />
               </picture>
-              <div style="position: absolute; bottom: 0.75rem; right: 0.75rem; background: rgba(8, 9, 14, 0.88); border: 1px solid var(--accent-primary); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-highlight); letter-spacing: 0.05em; backdrop-filter: blur(8px);">
+              <div style="position: absolute; bottom: 0.75rem; right: 0.75rem; background: rgba(8, 9, 14, 0.88); border: 1px solid var(--accent-primary); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-highlight); letter-spacing: 0.05em; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
                 ${cert.docType.toUpperCase()}${cert.pages > 1 ? ` • ${cert.pages} PAGES` : ''}
               </div>
             </div>

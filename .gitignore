@@ -52,4 +52,5 @@ security/
 strix_runs/
 pentagi_runs/
 *.sarif
-
+test-results/
+playwright-report/

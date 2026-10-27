@@ -515,7 +515,8 @@
     left: 0;
     right: 0;
     width: 100%;
-    padding: 0.45rem 0.85rem;
+    padding: max(0.45rem, env(safe-area-inset-top, 0.45rem)) 0.85rem 0.45rem 0.85rem;
+    box-sizing: border-box;
   }
 
   .navbar {
@@ -539,13 +540,20 @@
     height: 30px;
   }
 
-  /* Mobile Hamburger Toggle becomes visible */
+  /* Mobile Hamburger Toggle becomes visible & stays above open drawer */
   .mobile-menu-toggle {
     display: flex !important;
+    position: relative !important;
+    z-index: 10006 !important;
     width: 38px;
     height: 38px;
     min-width: 38px;
     min-height: 38px;
+    touch-action: manipulation;
+  }
+
+  .mobile-menu-toggle svg {
+    pointer-events: none;
   }
 
   /* Navigation Links transform into full-screen glassmorphic drawer */
@@ -614,6 +622,8 @@
   }
 
   .nav-actions {
+    position: relative !important;
+    z-index: 10005 !important;
     gap: 0.45rem;
   }
 }
@@ -696,7 +706,8 @@
   }
 
   .portrait-container {
-    max-width: 290px;
+    width: min(340px, calc(100vw - 2.5rem));
+    max-width: 340px;
     margin: 0 auto;
   }
 
@@ -706,8 +717,10 @@
   }
 
   .liquid-glass-card {
-    max-width: 300px;
+    width: 100%;
+    max-width: 340px;
     padding: 0.85rem;
+    box-sizing: border-box;
   }
 
   .badge-top-right {
@@ -1100,10 +1113,22 @@
     max-height: 80vh;
   }
 
-  /* Audio Floating Controller */
+  /* Audio Floating Controller — Centered with safe margins to prevent layout shift */
   .ambient-audio-dock {
-    bottom: 1.25rem;
-    right: 1.25rem;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    bottom: max(1.15rem, env(safe-area-inset-bottom, 1.15rem)) !important;
+    width: auto !important;
+    max-width: calc(100vw - 2rem) !important;
+  }
+
+  .ambient-audio-popover {
+    left: 50% !important;
+    right: auto !important;
+    width: min(340px, calc(100vw - 2rem)) !important;
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -1209,12 +1234,15 @@
   }
 
   .portrait-container {
-    max-width: 275px;
+    width: min(340px, calc(100vw - 2rem));
+    max-width: 340px;
   }
 
   .liquid-glass-card {
-    max-width: 275px;
+    width: 100%;
+    max-width: 340px;
     padding: 0.75rem;
+    box-sizing: border-box;
   }
 
   .portrait-floating-badge {
@@ -1384,31 +1412,34 @@
   }
 
   .portrait-container {
-    max-width: 240px;
+    width: min(300px, calc(100vw - 1.25rem));
+    max-width: 300px;
   }
 
   .liquid-glass-card {
-    max-width: 240px;
+    width: 100%;
+    max-width: 300px;
     padding: 0.65rem;
+    box-sizing: border-box;
   }
 
   .portrait-floating-badge {
-    padding: 0.22rem 0.4rem;
+    padding: 0.25rem 0.45rem;
     gap: 0.35rem;
   }
 
   .badge-icon-box {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     font-size: 0.75rem;
   }
 
   .badge-text-title {
-    font-size: 0.58rem;
+    font-size: 0.64rem;
   }
 
   .badge-text-sub {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
   }
 
   .badge-top-right {

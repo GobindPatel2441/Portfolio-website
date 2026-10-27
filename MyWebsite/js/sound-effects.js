@@ -12,6 +12,8 @@
 (function () {
   'use strict';
 
+  if (window.PortfolioAudio) return;
+
   // -------------------------------------------------------------
   // 1. CONFIGURATION & VERSIONED PERSISTENCE
   // -------------------------------------------------------------

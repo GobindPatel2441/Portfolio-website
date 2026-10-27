@@ -45,6 +45,10 @@
   }
 
   function loadAudioEngines(cb) {
+    if (window.PortfolioAmbientAudio) {
+      if (cb) cb();
+      return;
+    }
     loadScript('js/sound-effects.js?v=2', () => {
       loadScript('js/ambient-audio.js?v=3', cb);
     });
@@ -57,6 +61,10 @@
   }
 
   function loadCommandMenu(cb) {
+    if (window.CommandMenuEngine) {
+      if (cb) cb();
+      return;
+    }
     loadScript('js/command-menu.js', cb);
   }
 

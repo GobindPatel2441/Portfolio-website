@@ -1,0 +1,29 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "An **Awwwards-caliber personal portfolio website** designed and engineered for **Gobind Patel** (B.Tech Computer Science & Engineering [AI/ML] at Sri Sri University, Cuttack).",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium-desktop",
+    "test:firefox": "playwright test --project=firefox-desktop",
+    "test:webkit": "playwright test --project=webkit-desktop",
+    "test:mobile": "playwright test --project=mobile-chrome --project=mobile-safari",
+    "build:css": "node scripts/build-css.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GobindPatel2441/Portfolio-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GobindPatel2441/Portfolio-website/issues"
+  },
+  "homepage": "https://github.com/GobindPatel2441/Portfolio-website#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
+}

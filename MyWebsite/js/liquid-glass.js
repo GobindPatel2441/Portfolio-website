@@ -5,6 +5,9 @@
  */
 
 function initLiquidGlass() {
+  if (window.__liquidGlassInitialized) return;
+  window.__liquidGlassInitialized = true;
+
   const glassCard = document.querySelector('.liquid-glass-card');
   const specular = document.querySelector('.glass-specular');
   const isFinePointer = window.matchMedia('(pointer: fine)').matches;
@@ -65,14 +68,17 @@ function initLiquidGlass() {
         const mode = btn.dataset.mode;
         if (mode === 'crystal') {
           glassCard.style.backdropFilter = 'blur(28px) saturate(200%)';
+          glassCard.style.webkitBackdropFilter = 'blur(28px) saturate(200%)';
           glassCard.style.background = 'rgba(18, 24, 38, 0.45)';
           glassCard.style.borderColor = 'rgba(255, 255, 255, 0.18)';
         } else if (mode === 'frosted') {
           glassCard.style.backdropFilter = 'blur(45px) saturate(140%)';
+          glassCard.style.webkitBackdropFilter = 'blur(45px) saturate(140%)';
           glassCard.style.background = 'rgba(15, 20, 32, 0.75)';
           glassCard.style.borderColor = 'rgba(255, 255, 255, 0.25)';
         } else if (mode === 'holo') {
           glassCard.style.backdropFilter = 'blur(24px) saturate(250%)';
+          glassCard.style.webkitBackdropFilter = 'blur(24px) saturate(250%)';
           glassCard.style.background = 'linear-gradient(135deg, rgba(0,242,254,0.12), rgba(138,43,226,0.12))';
           glassCard.style.borderColor = 'rgba(0, 242, 254, 0.5)';
         }
