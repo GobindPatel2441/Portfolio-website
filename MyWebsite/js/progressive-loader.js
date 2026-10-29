@@ -111,8 +111,11 @@
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          if (id === 'projects' || id === 'experience') {
+          if (id === 'projects') {
             loadProjectsModal();
+          } else if (id === 'experience') {
+            loadProjectsModal();
+            loadCertificates();
           } else if (id === 'certifications') {
             loadCertificates();
           } else if (id === 'ai-terminal') {

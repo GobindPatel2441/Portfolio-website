@@ -523,7 +523,7 @@
           <div class="cert-thumb-wrap" data-open-cert="${cert.id}" role="button" tabindex="0" aria-label="View Certificate: ${escapeHtml(cert.title)}">
             <picture>
               <source srcset="${cert.thumbnailPath}" type="image/webp" />
-              <img src="${cert.thumbnailFallback}" alt="${escapeHtml(cert.title)} Document Preview" class="cert-thumb-img" loading="lazy" width="640" height="420" decoding="async" />
+              <img src="${cert.thumbnailFallback}" alt="${escapeHtml(cert.title)} Document Preview" class="cert-thumb-img" loading="lazy" width="640" height="420" decoding="async" onerror="this.onerror=null; this.style.opacity='0.6';" />
             </picture>
             <div class="cert-thumb-overlay">
               <span class="cert-preview-badge">
@@ -571,6 +571,180 @@
     }).join('');
 
     dom.grid.innerHTML = cardsHtml;
+    animateCertificateCards(dom.grid);
+  }
+
+  /**
+   * Optimized Fast Certificate Entrance Controller
+   * - Target duration: ~0.35s
+   * - Target stagger: ~0.06s
+   * - Vertical movement: ~16px (y: 16 -> 0)
+   * - Subtle, smooth easing: power2.out / cubic-bezier(0.16, 1, 0.3, 1)
+   * - Proactive trigger: starts when cards approach viewport (start: 'top 92%')
+   * - Instant/snappy on filter & search change (0.30s duration, 0.04s stagger)
+   * - Automatically clears inline styles & will-change upon completion to keep hover effects 100% intact
+   * - Accessible: respects prefers-reduced-motion
+   */
+  function animateCertificateCards(container) {
+    if (!container) return;
+    const cards = Array.from(container.querySelectorAll('.cert-card'));
+    if (cards.length === 0) return;
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      cards.forEach(card => {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+      });
+      return;
+    }
+
+    // Check if cards are already inside the visible viewport (e.g. after user interacts with filters or search)
+    const firstRect = cards[0].getBoundingClientRect();
+    const isAlreadyInView = firstRect.top < (window.innerHeight || document.documentElement.clientHeight) && firstRect.bottom > 0;
+
+    // A. Use GSAP & ScrollTrigger if available (Primary Engine)
+    if (typeof window.gsap !== 'undefined') {
+      // Clean up any existing ScrollTrigger instances for cert-card to prevent duplicate triggers
+      if (typeof window.ScrollTrigger !== 'undefined') {
+        const allTriggers = window.ScrollTrigger.getAll();
+        allTriggers.forEach(st => {
+          if (st.vars && st.vars.id && String(st.vars.id).startsWith('cert-card')) {
+            st.kill();
+          }
+        });
+      }
+
+      if (isAlreadyInView) {
+        // Fast, immediate staggered entrance when user actively filters or searches
+        window.gsap.fromTo(cards,
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.30,
+            stagger: 0.04,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onStart: () => {
+              cards.forEach(c => { c.style.willChange = 'transform, opacity'; });
+            },
+            onComplete: () => {
+              cards.forEach(c => {
+                c.style.willChange = '';
+                c.style.transform = '';
+                c.style.opacity = '';
+              });
+            }
+          }
+        );
+      } else if (typeof window.ScrollTrigger !== 'undefined') {
+        // Scroll-triggered batch entrance: triggers as soon as cards approach the viewport (top 92%)
+        window.ScrollTrigger.batch(cards, {
+          id: 'cert-card-batch',
+          start: 'top 92%',
+          once: true,
+          onEnter: (batch) => {
+            window.gsap.fromTo(batch,
+              { opacity: 0, y: 16 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.35,
+                stagger: 0.06,
+                ease: 'power2.out',
+                overwrite: 'auto',
+                onStart: () => {
+                  batch.forEach(c => { c.style.willChange = 'transform, opacity'; });
+                },
+                onComplete: () => {
+                  batch.forEach(c => {
+                    c.style.willChange = '';
+                    c.style.transform = '';
+                    c.style.opacity = '';
+                  });
+                }
+              }
+            );
+          }
+        });
+      } else {
+        // Standalone GSAP
+        window.gsap.fromTo(cards,
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.35,
+            stagger: 0.06,
+            ease: 'power2.out',
+            onComplete: () => {
+              cards.forEach(c => {
+                c.style.willChange = '';
+                c.style.transform = '';
+                c.style.opacity = '';
+              });
+            }
+          }
+        );
+      }
+      return;
+    }
+
+    // B. Lightweight Native IntersectionObserver Fallback (if GSAP is not loaded)
+    if ('IntersectionObserver' in window) {
+      if (isAlreadyInView) {
+        cards.forEach((card, idx) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(14px)';
+          card.style.transition = 'opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1), transform 0.30s cubic-bezier(0.16, 1, 0.3, 1)';
+          card.style.willChange = 'transform, opacity';
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+            setTimeout(() => {
+              card.style.willChange = '';
+              card.style.transition = '';
+              card.style.transform = '';
+              card.style.opacity = '';
+            }, 320);
+          }, idx * 40);
+        });
+      } else {
+        const obs = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry, idx) => {
+            if (entry.isIntersecting) {
+              const card = entry.target;
+              setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                  card.style.willChange = '';
+                  card.style.transition = '';
+                  card.style.transform = '';
+                  card.style.opacity = '';
+                }, 380);
+              }, idx * 60);
+              observer.unobserve(card);
+            }
+          });
+        }, { rootMargin: '100px 0px 50px 0px', threshold: 0.05 });
+
+        cards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(16px)';
+          card.style.transition = 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+          card.style.willChange = 'transform, opacity';
+          obs.observe(card);
+        });
+      }
+    } else {
+      // Immediate visibility guarantee
+      cards.forEach(card => {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+      });
+    }
   }
 
   /**
