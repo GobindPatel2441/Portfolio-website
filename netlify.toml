@@ -5,6 +5,9 @@
 [build]
   publish = "MyWebsite"
 
+# -------------------------------------------------------------------
+# 1. GLOBAL BASE SECURITY HEADERS
+# -------------------------------------------------------------------
 [[headers]]
   for = "/*"
   [headers.values]
@@ -29,52 +32,104 @@
     # Robust Content Security Policy (CSP) tailored for Three.js, Vanta, EmailJS, and Google Fonts
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://api.emailjs.com https://cdn.jsdelivr.net; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
 
-# PDF Assets & Resume Document Delivery
+# -------------------------------------------------------------------
+# 2. HTML ENTRY POINTS (MUST REVALIDATE TO DISCOVER NEW DEPLOYS)
+# -------------------------------------------------------------------
 [[headers]]
-  for = "/assets/*.pdf"
+  for = "/"
   [headers.values]
-    Content-Type = "application/pdf"
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/assets/certificates/*.pdf"
+  for = "/*.html"
   [headers.values]
-    Content-Type = "application/pdf"
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-[[headers]]
-  for = "/assets/certificates/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Ensure sw.js is always refreshed and unregisters stale service workers
+# -------------------------------------------------------------------
+# 3. PASSIVE CLEANUP SERVICE WORKER (NEVER CACHE)
+# -------------------------------------------------------------------
 [[headers]]
   for = "/sw.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "no-cache, no-store, must-revalidate"
 
-# Static CSS and JS assets (7 days with stale-while-revalidate)
+# -------------------------------------------------------------------
+# 4. DATA ASSETS & JSON MANIFESTS
+# -------------------------------------------------------------------
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# -------------------------------------------------------------------
+# 5. CSS STYLESHEETS (STABLE FILENAMES — REVALIDATION POLICY)
+# -------------------------------------------------------------------
 [[headers]]
   for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
+# -------------------------------------------------------------------
+# 6. JAVASCRIPT MODULES & SCRIPTS (STABLE FILENAMES — REVALIDATION POLICY)
+# -------------------------------------------------------------------
 [[headers]]
   for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-# Media assets (WebP, PNG, GIF, SVG)
+# -------------------------------------------------------------------
+# 7. PDF ASSETS, RESUME & CERTIFICATES (UPDATE-SAFE REVALIDATION)
+# -------------------------------------------------------------------
+[[headers]]
+  for = "/*.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/certificates/*.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# -------------------------------------------------------------------
+# 8. IMAGES & VISUAL MEDIA (STABLE FILENAMES — REVALIDATION POLICY)
+# -------------------------------------------------------------------
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=2592000, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-# Audio soundtrack
+[[headers]]
+  for = "/assets/certificates/thumbnails/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# -------------------------------------------------------------------
+# 9. AUDIO ASSETS & SOUNDTRACK (UPDATE-SAFE REVALIDATION)
+# -------------------------------------------------------------------
 [[headers]]
   for = "/assets/audio/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-
+[[headers]]
+  for = "/assets/audio/sfx/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

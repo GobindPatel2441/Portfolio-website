@@ -235,12 +235,19 @@ function initMainApp() {
   };
 
   // -------------------------------------------------------------
-  // 9. STALE SERVICE WORKER CLEANUP (SAFE PASSIVE CHECK)
+  // 9. STALE SERVICE WORKER & CACHE STORAGE CLEANUP (SAFE PASSIVE CHECK)
   // -------------------------------------------------------------
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
       for (const reg of registrations) {
         reg.unregister().catch(() => {});
+      }
+    }).catch(() => {});
+  }
+  if ('caches' in window && typeof window.caches.keys === 'function') {
+    window.caches.keys().then((keys) => {
+      for (const key of keys) {
+        window.caches.delete(key).catch(() => {});
       }
     }).catch(() => {});
   }
