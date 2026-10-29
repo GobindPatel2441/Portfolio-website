@@ -174,7 +174,7 @@
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
-  // 2. Tab visibility throttling to save battery and GPU when inactive
+  // 2. Tab visibility and hero viewport throttling to save battery and GPU
   document.addEventListener('visibilitychange', () => {
     if (!vantaEffect) return;
     if (document.hidden) {
@@ -183,6 +183,24 @@
       if (typeof vantaEffect.play === 'function') vantaEffect.play();
     }
   });
+
+  // Pause Vanta rendering when scrolled far down past the hero
+  if (typeof IntersectionObserver !== 'undefined') {
+    const heroEl = document.getElementById('hero');
+    if (heroEl) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!vantaEffect) return;
+          if (entry.isIntersecting) {
+            if (typeof vantaEffect.play === 'function') vantaEffect.play();
+          } else {
+            if (typeof vantaEffect.pause === 'function') vantaEffect.pause();
+          }
+        });
+      }, { threshold: 0.02 });
+      heroObserver.observe(heroEl);
+    }
+  }
 
   // 3. Profile change listener (Desktop <-> Mobile transitions)
   window.addEventListener('portfolio:profile-change', (e) => {
@@ -237,9 +255,17 @@
     }
   });
 
+  function scheduleVantaStartup() {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => initGlobalBackground(), { timeout: 1000 });
+    } else {
+      setTimeout(initGlobalBackground, 300);
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlobalBackground);
+    document.addEventListener('DOMContentLoaded', scheduleVantaStartup);
   } else {
-    initGlobalBackground();
+    scheduleVantaStartup();
   }
 })();

@@ -13,13 +13,13 @@
   const SPRING_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
   function initTiltCards() {
-    // Apply to bento skill cards, about pillar cards, timeline cards
-    const selectors = '.bento-skill-card, .timeline-card.spotlight-card, .contact-card';
-    const cards = document.querySelectorAll(selectors);
-
     // Only on pointer fine devices (desktop)
     if (!window.matchMedia('(pointer: fine)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Apply to bento skill cards, about pillar cards, timeline cards
+    const selectors = '.bento-skill-card, .timeline-card.spotlight-card, .contact-card';
+    const cards = document.querySelectorAll(selectors);
 
     cards.forEach(card => {
       // Add perspective container style

@@ -131,17 +131,27 @@
     });
   }
 
-  // 4. Idle Warm-up: 1.2s post-load loads all remaining modules seamlessly
+  // 4. Staggered Idle Warm-up: Loads remaining modules sequentially in idle frames
   const warmUpAll = () => {
-    const idleFn = window.requestIdleCallback || ((fn) => setTimeout(fn, 250));
-    idleFn(() => {
-      loadProjectsModal();
-      loadCertificates();
-      loadAiTerminal();
-      loadAudioEngines();
-      loadEmailDispatch();
-      loadCommandMenu();
-    });
+    const modules = [
+      loadProjectsModal,
+      loadCertificates,
+      loadAiTerminal,
+      loadCommandMenu,
+      loadEmailDispatch,
+      loadAudioEngines
+    ];
+    let idx = 0;
+    function loadNext() {
+      if (idx >= modules.length) return;
+      const fn = modules[idx++];
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(() => fn(() => setTimeout(loadNext, 180)), { timeout: 2000 });
+      } else {
+        setTimeout(() => fn(loadNext), 250);
+      }
+    }
+    loadNext();
   };
 
   if (document.readyState === 'complete') {

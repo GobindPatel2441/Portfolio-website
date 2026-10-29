@@ -229,7 +229,7 @@
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     // Cmd+K / Ctrl+K to open
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault();
       if (isOpen) close(); else open();
       return;
@@ -285,5 +285,5 @@
   });
 
   // Expose for navbar trigger
-  window.CommandMenu = { open, close, toggle: () => isOpen ? close() : open(), isOpen: () => isOpen };
+  window.CommandMenu = window.CommandMenuEngine = { open, close, toggle: () => isOpen ? close() : open(), isOpen: () => isOpen };
 })();

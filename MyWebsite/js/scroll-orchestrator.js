@@ -483,7 +483,7 @@
       try {
         const isMobile = window.PortfolioPerfConfig ? window.PortfolioPerfConfig.isMobile : (window.innerWidth < 768);
         if (!isMobile) {
-          const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out' } });
+          const heroTl = window.gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
           heroTl
             .from('.hero-status-pill', { opacity: 0.3, y: -14, duration: 0.5, delay: 0.05 })
             .from('.hero-title-monumental', { y: 18, duration: 0.65 }, '-=0.35')

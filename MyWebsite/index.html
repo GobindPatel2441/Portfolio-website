@@ -24,17 +24,22 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-  <!-- High-Performance Font Preconnect & Stylesheet Link -->
+  <!-- Preload Critical Fonts for Instant LCP & Zero Layout Shift -->
+  <link rel="preload" href="fonts/bebas-neue-v16-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/plus-jakarta-sans-v12-latin-regular.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Non-Blocking Progressive Fallback for Extended Character Sets -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700&display=swap" /></noscript>
 
   <!-- Preload Critical LCP Hero Image (Responsive Media Query) -->
   <link rel="preload" as="image" href="assets/gobind-patel-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
   <link rel="preload" as="image" href="assets/gobind-patel.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
 
   <!-- Unified High-Performance Stylesheet Bundle (Cached & Minified) -->
-  <link rel="stylesheet" href="css/bundle.min.css?v=27" />
+  <link rel="stylesheet" href="css/bundle.min.css?v=28" />
 </head>
 <body>
 
@@ -155,7 +160,7 @@
                   <picture>
                     <source media="(max-width: 768px)" srcset="assets/gobind-patel-mobile.webp" type="image/webp" />
                     <source srcset="assets/gobind-patel.webp" type="image/webp" />
-                    <img src="assets/gobind-patel.webp" alt="Gobind Patel" class="portrait-img" width="540" height="810" fetchpriority="high" decoding="async" />
+                    <img src="assets/gobind-patel.webp" alt="Gobind Patel" class="portrait-img" width="400" height="490" fetchpriority="high" decoding="async" />
                   </picture>
                 </div>
 
@@ -1643,9 +1648,6 @@ CLINICAL EVIDENCE SYNTHESIS:
   <script src="js/magnetic-button.js" defer></script>
   <script src="js/custom-cursor.js?v=5" defer></script>
   <script src="js/liquid-button.js" defer></script>
-  <script src="js/sound-effects.js?v=2" defer></script>
-  <script src="js/ambient-audio.js?v=3" defer></script>
-  <script src="js/command-menu.js" defer></script>
   <script src="js/main.js" defer></script>
   <!-- Progressive Feature Loader (Lazy-loads Modals, Certs, AI Lab & Email on demand/idle) -->
   <script src="js/progressive-loader.js?v=2" defer></script>

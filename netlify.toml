@@ -133,3 +133,13 @@
   for = "/assets/audio/sfx/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# -------------------------------------------------------------------
+# 10. SELF-HOSTED CORE WEBFONTS (WOFF2 WEBFONTS — REVALIDATION POLICY)
+# -------------------------------------------------------------------
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Content-Type = "font/woff2"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
