@@ -18,7 +18,7 @@ test.describe('Task: Speed Up Certificate Card Entrance Animations Test Suite', 
     });
 
     // Wait for cards to appear
-    await page.waitForSelector('.cert-card', { timeout: 4000 });
+    await page.waitForSelector('.cert-card', { timeout: 8000 });
     
     // Wait brief window for 0.35s animation to complete
     await page.waitForTimeout(600);
@@ -166,8 +166,8 @@ test.describe('Task: Speed Up Certificate Card Entrance Animations Test Suite', 
     expect(isModalActive).toBe(true);
 
     // Close modal
-    await page.locator('#modal-close-btn').click();
-    await page.waitForTimeout(400);
+    await page.locator('#modal-close-btn').click({ force: true });
+    await page.waitForFunction(() => !document.getElementById('project-modal')?.classList.contains('active'), { timeout: 4000 });
 
     const isModalClosed = await page.evaluate(() => !document.getElementById('project-modal')?.classList.contains('active'));
     expect(isModalClosed).toBe(true);

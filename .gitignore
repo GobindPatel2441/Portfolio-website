@@ -4,18 +4,37 @@ desktop.ini
 .DS_Store
 
 # Reference & inspiration downloads (local reference archives - never tracked)
+Reference/ani/
+Reference/browseradapt/
+Reference/buttonsound/
+Reference/cache/
+Reference/certification/
+Reference/email/
+Reference/ex/
+Reference/git/
+Reference/offlinegame/
+Reference/projectreadme/
+Reference/quickload/
+Reference/responsive/
+Reference/scratch/
+Reference/security/
+Reference/test-results/
 /email/
 /ex/
 /git/
 /projectreadme/
 /responsive/
 /ani/
+/browseradapt/
+/cache/
 email/
 ex/
 git/
 projectreadme/
 responsive/
 ani/
+browseradapt/
+cache/
 certification/
 buttonsound/
 /buttonsound/

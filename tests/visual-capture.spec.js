@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
-const outDir = path.join(__dirname, '..', 'artifacts', 'screenshots');
+const outDir = path.join(__dirname, '..', 'Reference', 'artifacts', 'screenshots');
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }
