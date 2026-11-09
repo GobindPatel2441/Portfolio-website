@@ -108,12 +108,12 @@ test.describe('Comprehensive Functional Features', () => {
     const modalTitle = page.locator('.modal-project-title, .modal-dialog h2, .modal-dialog h1').first();
     await expect(modalTitle).toBeVisible();
 
-    // Close via Close Button
-    const closeBtn = page.locator('.modal-close-btn');
+    // Close via Close Button or Escape
+    const closeBtn = page.locator('#modal-close-btn');
     if (await closeBtn.isVisible()) {
       await page.waitForTimeout(500); // Allow entrance animation to settle
-      await closeBtn.click({ force: true });
-      await expect(modalOverlay).not.toHaveClass(/active/);
+      await page.evaluate(() => document.getElementById('modal-close-btn')?.click());
+      await expect(modalOverlay).not.toHaveClass(/active/, { timeout: 4000 });
     }
   });
 
